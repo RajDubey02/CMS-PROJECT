@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Dashboard from "./components/Dashboard";
+// import Dashboard from "./components/Dashboard";
 import Sidebar from "./components/Sidebar";
 import { Navbar } from "./components/Navbar";
 import HeroSEction from "./components/HeroSEction";
+import Admin from "./components/Admin";
 
 const App = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -36,7 +37,10 @@ const App = () => {
           <div style={{ marginLeft: "2rem" }}>
             <Routes>
             {/* <Route path="/Home" element={<HeroSEction />} /> */}
-              <Route path="/Dashboard" element={<Dashboard />} />
+              {/* <Route path="/" element={<Dashboard />} /> */}
+              <Route path="/Admin" element={<Admin />} />
+              
+              
             </Routes>
           </div>
         </div>

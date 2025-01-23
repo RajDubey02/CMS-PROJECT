@@ -33,6 +33,7 @@ const NavLeft = styled.div`
     border-radius: 3rem;
     border-color: transparent;
     padding-left: 0.5rem;
+    outline: transparent;
   }
 
   & > button {
