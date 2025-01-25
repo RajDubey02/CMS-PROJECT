@@ -10,12 +10,15 @@ export const Nav=styled.div`
 
 
     height: 6rem;
-    background-color: #e1dede;
+    /* background-color: #e1dede; */
     & h3{
+      display: flex;
+      justify-content: center;
     box-sizing: border-box;
     width: 80vw;
     /* margin-bottom: 2rem; */
     margin: 1rem;
+    font-size: 1.7rem;
     
 }
 `

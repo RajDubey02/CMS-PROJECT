@@ -8,7 +8,7 @@ import {
   TableData,
   Button,
   Input,
-} from "../style/ManageOrderStyles";
+} from "../styles/ManageOrderStyles";
 import jsPDF from "jspdf";
 
 const ManageOrdersPage = () => {
