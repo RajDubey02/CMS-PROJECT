@@ -19,13 +19,16 @@ const AddOrderPage = () => {
   const { orders, setOrders } = useContext(OrderContext);
   const [table, setTable] = useState("");
   const [currentOrder, setCurrentOrder] = useState([
-    { product: "", quantity: 1, rate: 0, amount: 0 },
+    { product: "", quantity: 1, rate: 0, amount: 0, description: "" },
   ]);
   const [summary, setSummary] = useState({
     grossAmount: 0,
+    serviceChargeRate: 0,
+    vatRate: 0,
+    discountPercentage: 0,
     serviceCharge: 0,
     vat: 0,
-    discount: 0,
+    discountAmount: 0,
     netAmount: 0,
   });
 
@@ -39,26 +42,43 @@ const AddOrderPage = () => {
     }
 
     setCurrentOrder(updatedOrders);
-    calculateSummary(updatedOrders);
+    calculateSummary(updatedOrders, summary.discountPercentage);
   };
 
-  const calculateSummary = (orders, discount = summary.discount) => {
+  const calculateSummary = (
+    orders,
+    discountPercentage = summary.discountPercentage,
+    serviceChargeRate = summary.serviceChargeRate,
+    vatRate = summary.vatRate
+  ) => {
     const grossAmount = orders.reduce((sum, order) => sum + parseFloat(order.amount || 0), 0);
-    const serviceCharge = grossAmount * 0.03;
-    const vat = grossAmount * 0.13;
-    const netAmount = grossAmount + serviceCharge + vat - discount;
+    const serviceCharge = (grossAmount * summary.serviceChargeRate) / 100;
+    const vat = (grossAmount * summary.vatRate) / 100;
+    const discountAmount = (grossAmount * discountPercentage) / 100;
+    const netAmount = grossAmount + serviceCharge + vat - discountAmount;
 
-    setSummary({ grossAmount, serviceCharge, vat, discount, netAmount });
+    setSummary({
+      ...summary,
+      grossAmount,
+      serviceCharge,
+      vat,
+      discountPercentage,
+      discountAmount,
+      netAmount,
+    });
   };
 
   const addRow = () => {
-    setCurrentOrder([...currentOrder, { product: "", quantity: 1, rate: 0, amount: 0 }]);
+    setCurrentOrder([
+      ...currentOrder,
+      { product: "", quantity: 1, rate: 0, amount: 0, description: "" },
+    ]);
   };
 
   const removeRow = (index) => {
     const updatedOrders = currentOrder.filter((_, i) => i !== index);
     setCurrentOrder(updatedOrders);
-    calculateSummary(updatedOrders);
+    calculateSummary(updatedOrders, summary.discountPercentage,summary.serviceChargeRate,summary.vatRate);
   };
 
   const handleSubmitOrder = () => {
@@ -80,14 +100,25 @@ const AddOrderPage = () => {
 
     setOrders([...orders, newOrder]);
     setTable("");
-    setCurrentOrder([{ product: "", quantity: 1, rate: 0, amount: 0 }]);
+    setCurrentOrder([{ product: "", quantity: 1, rate: 0, amount: 0, description: "" }]);
     setSummary({
       grossAmount: 0,
+      serviceChargeRate: 0,
+      vatRate: 0,
+      discountPercentage: 0,
       serviceCharge: 0,
       vat: 0,
-      discount: 0,
+      discountAmount: 0,
       netAmount: 0,
     });
+  };
+
+  const handleRateChange = (field, value) => {
+    setSummary({
+      ...summary,
+      [field]: parseFloat(value) || 0,
+    });
+    calculateSummary(currentOrder, summary.discountPercentage,summary.serviceChargeRate,summary.vatRate);
   };
 
   return (
@@ -100,6 +131,7 @@ const AddOrderPage = () => {
           <option value="Table 2">Table 2</option>
           <option value="Table 3">Table 3</option>
           <option value="Table 4">Table 4</option>
+          <option value="Table 5">Table 5</option>
         </Select>
         <TableWrapper>
           <Table>
@@ -109,6 +141,7 @@ const AddOrderPage = () => {
                 <TableData as="th">Qty</TableData>
                 <TableData as="th">Rate</TableData>
                 <TableData as="th">Amount</TableData>
+                <TableData as="th">Description</TableData>
                 <TableData as="th"></TableData>
               </TableRow>
             </thead>
@@ -126,6 +159,8 @@ const AddOrderPage = () => {
                       <option value="Cappuccino">Cappuccino</option>
                       <option value="Latte">Latte</option>
                       <option value="Sandwich">Sandwich</option>
+                      <option value="Burger">Burger</option>
+                      <option value="Cake">Cake</option>
                     </Select>
                   </TableData>
                   <TableData>
@@ -150,6 +185,16 @@ const AddOrderPage = () => {
                   </TableData>
                   <TableData>{order.amount.toFixed(2)}</TableData>
                   <TableData>
+                    <Input
+                      type="text"
+                      placeholder="Add description or addons"
+                      value={order.description}
+                      onChange={(e) =>
+                        handleOrderChange(index, "description", e.target.value)
+                      }
+                    />
+                  </TableData>
+                  <TableData>
                     <Button onClick={() => removeRow(index)} red>
                       Remove
                     </Button>
@@ -170,20 +215,44 @@ const AddOrderPage = () => {
             <span>{summary.grossAmount.toFixed(2)}</span>
           </SummaryItem>
           <SummaryItem>
-            <label>S-Charge (3%):</label>
+            <label>S-Charge (%):</label>
+            <Input
+              type="number"
+              value={summary.serviceChargeRate}
+              onChange={(e) =>
+                handleRateChange("serviceChargeRate", e.target.value)
+              }
+            />
+          </SummaryItem>
+          <SummaryItem>
+            <label>S-Charge Amount:</label>
             <span>{summary.serviceCharge.toFixed(2)}</span>
           </SummaryItem>
           <SummaryItem>
-            <label>VAT (13%):</label>
+            <label>VAT (%):</label>
+            <Input
+              type="number"
+              value={summary.vatRate}
+              onChange={(e) => handleRateChange("vatRate", e.target.value)}
+            />
+          </SummaryItem>
+          <SummaryItem>
+            <label>VAT Amount:</label>
             <span>{summary.vat.toFixed(2)}</span>
           </SummaryItem>
           <SummaryItem>
-            <label>Discount:</label>
+            <label>Discount (%):</label>
             <Input
               type="number"
-              value={summary.discount}
-              onChange={(e) => calculateSummary(currentOrder, parseFloat(e.target.value) || 0)}
+              value={summary.discountPercentage}
+              onChange={(e) =>
+                calculateSummary(currentOrder, parseFloat(e.target.value) || 0)
+              }
             />
+          </SummaryItem>
+          <SummaryItem>
+            <label>Discount Amount:</label>
+            <span>{summary.discountAmount.toFixed(2)}</span>
           </SummaryItem>
           <SummaryItem>
             <label>Net Amount:</label>

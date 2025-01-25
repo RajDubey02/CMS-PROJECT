@@ -40,7 +40,7 @@ export const FormWrapper = styled.div`
 
 export const Title = styled.h1`
   text-align: center;
-  color: rgba(115, 55, 13, 0.81);
+  color: rgba(181, 82, 10, 0.81);
   margin-bottom: 20px;
 
   @media (max-width: 768px) {
@@ -146,7 +146,7 @@ export const Button = styled.button`
   margin: 5px;
 
   &:hover {
-    background: ${(props) => (props.red ? "#ff0000" : "#582607")};
+    background: ${(props) => (props.red ? "#ff0000" : "#b04808")};
   }
 
   @media (max-width: 768px) {

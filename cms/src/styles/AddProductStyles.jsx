@@ -14,7 +14,7 @@ export const Navbar = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: rgba(234, 104, 18, 0.87);
+  /* background-color: rgba(234, 104, 18, 0.87); */
   padding: 15px 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   color: #fff;
@@ -49,7 +49,7 @@ export const PageTitle = styled.h2`
 `;
 
 export const FormContainer = styled.div`
-min-width: 80vw;
+ min-width: 90vw;
 
   background: #fff;
   padding: 20px;

@@ -414,7 +414,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             </div>
             <SubOrder isOpen={activeDropdown === "Menu"}>
               
-              <NavLinkStyled to="/Menu/add-Product">
+              <NavLinkStyled to="/AddProduct">
                <CirclePlus size={20}  />
               Add Product
              

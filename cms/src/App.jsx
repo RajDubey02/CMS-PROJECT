@@ -5,6 +5,12 @@ import Sidebar from "./components/Sidebar";
 import { Navbar } from "./components/Navbar";
 import HeroSEction from "./components/HeroSEction";
 import Admin from "./components/Admin";
+import AddProduct from "./components/AddProduct";
+import AddOrderPage from "./components/AddOrderPage";
+import ManageOrdersPage from "./components/ManageOrdersPage";
+import  {OrderProvider}  from "./components/OrderContext";
+
+
 
 const App = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -39,7 +45,22 @@ const App = () => {
             {/* <Route path="/Home" element={<HeroSEction />} /> */}
               {/* <Route path="/" element={<Dashboard />} /> */}
               <Route path="/Admin" element={<Admin />} />
+              < Route path = "/AddProduct" element= {<AddProduct/>}/>
+
+              {/* Orders  */}
               
+              <Route
+              path="/orders/*"
+              element={
+                <OrderProvider>
+                  <Routes>
+                    <Route path="add" element={<AddOrderPage />} />
+                    <Route path="manage" element={<ManageOrdersPage />} />
+                  </Routes>
+                </OrderProvider>
+              }
+            />
+            {/* --------------------------- */}
               
             </Routes>
           </div>
