@@ -5,6 +5,16 @@ import Sidebar from "./components/Sidebar";
 import { Navbar } from "./components/Navbar";
 import HeroSEction from "./components/HeroSEction";
 import Admin from "./components/Admin";
+// import AddOrderPage from "./components/AddOrderPage";
+import AddProduct from "./components/AddProduct";
+// import ManageOrdersPage from "./components/ManageOrdersPage";
+import ManageProduct from "./components/ManageProduct";
+import AddOrderPage from "./components/AddOrderPage";
+import ManageOrdersPage from "./components/ManageOrdersPage";
+import  {OrderProvider}  from "./components/OrderContext";
+import CategoryManagement from "./components/CategoryManagement";
+import Table from "./components/Table";
+
 import AddProduct from "./components/AddProduct";
 import AddOrderPage from "./components/AddOrderPage";
 import ManageOrdersPage from "./components/ManageOrdersPage";
@@ -30,21 +40,40 @@ const App = () => {
             marginLeft: isSidebarOpen ? "250px" : "0",
             transition: "margin-left 0.3s ease",
           }}
-          
-        > 
-        <div>
-        <Navbar toggleSidebar={toggleSidebar} />
-           <Routes>
-          
-         <Route path="/" element={<HeroSEction />} />
 
-          </Routes>
-  </div>
+        >
+          <div>
+            <Navbar toggleSidebar={toggleSidebar} />
+            <Routes>
+
+              <Route path="/" element={<HeroSEction />} />
+
+            </Routes>
+          </div>
           <div style={{ marginLeft: "2rem" }}>
             <Routes>
-            {/* <Route path="/Home" element={<HeroSEction />} /> */}
+              {/* <Route path="/Home" element={<HeroSEction />} /> */}
               {/* <Route path="/" element={<Dashboard />} /> */}
               <Route path="/Admin" element={<Admin />} />
+            
+
+  {/* <Route path="/AddOrderPage" element={<AddOrderPage />} /> */}
+              <Route path="/AddProduct" element={<AddProduct />} />
+              <Route path="/ManageProduct" element={<ManageProduct />} />
+              <Route path="/CategoryManagement" element={<CategoryManagement />} />
+              <Route path="/Table" element={<Table />} />
+              <Route
+              path="/orders/*"
+              element={
+                <OrderProvider>
+                  <Routes>
+                    <Route path="add" element={<AddOrderPage />} />
+                    <Route path="manage" element={<ManageOrdersPage />} />
+                  </Routes>
+                </OrderProvider>
+              }
+            />
+
               < Route path = "/AddProduct" element= {<AddProduct/>}/>
 
               {/* Orders  */}
