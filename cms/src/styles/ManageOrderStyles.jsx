@@ -7,13 +7,11 @@ export const Container = styled.div`
   padding: 20px;
   background: #f9f9f9;
   border-radius: 8px;
+  /* box-shadow: 0 4px 6px rgba(201, 141, 21, 0.1); */
 
-  &:hover {
-    box-shadow: 0 5px 8px rgba(56, 54, 51, 0.815);
-  }
 
-  @media (max-width: 768px) {
-    padding: 15px;
+  &:hover{
+    box-shadow:  0 5px 8px rgba(56, 54, 51, 0.815);
   }
 `;
 
@@ -23,14 +21,6 @@ export const Title = styled.h2`
   font-size: 1.8rem;
   color: #333;
   margin-bottom: 20px;
-
-  @media (max-width: 768px) {
-    font-size: 1.5rem;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 1.3rem;
-  }
 `;
 
 // Styled table
@@ -42,16 +32,6 @@ export const Table = styled.table`
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
-  @media (max-width: 768px) {
-    font-size: 0.9rem;
-  }
-
-  @media (max-width: 480px) {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
-  }
 `;
 
 // Styled table rows
@@ -59,7 +39,6 @@ export const TableRow = styled.tr`
   &:nth-child(even) {
     background: #f7f7f7;
   }
-
   &:hover {
     background: #eaf4fc;
   }
@@ -77,16 +56,6 @@ export const TableData = styled.td`
     font-weight: bold;
     background: #f0f0f0;
     text-transform: uppercase;
-  }
-
-  @media (max-width: 768px) {
-    padding: 8px;
-    font-size: 0.9rem;
-  }
-
-  @media (max-width: 480px) {
-    padding: 6px;
-    font-size: 0.8rem;
   }
 `;
 
@@ -110,16 +79,6 @@ export const Button = styled.button`
     background: #ddd;
     cursor: not-allowed;
   }
-
-  @media (max-width: 768px) {
-    padding: 6px 12px;
-    font-size: 0.9rem;
-  }
-
-  @media (max-width: 480px) {
-    padding: 4px 10px;
-    font-size: 0.8rem;
-  }
 `;
 
 // Input field for editing
@@ -134,15 +93,5 @@ export const Input = styled.input`
     outline: none;
     border-color: #4caf50;
     box-shadow: 0 0 4px rgba(76, 175, 80, 0.4);
-  }
-
-  @media (max-width: 768px) {
-    padding: 5px 10px;
-    font-size: 0.9rem;
-  }
-
-  @media (max-width: 480px) {
-    padding: 4px 8px;
-    font-size: 0.8rem;
   }
 `;

@@ -8,9 +8,8 @@ import {
   TableData,
   Button,
   Input,
-} from "../styles/ManageOrderStyles";
-import { Printer , FilePenLine , Trash2} from 'lucide-react';
-// import jsPDF from "jspdf";
+} from "../style/ManageOrderStyles";
+import jsPDF from "jspdf";
 
 const ManageOrdersPage = () => {
   const { orders, setOrders } = useContext(OrderContext);
@@ -76,7 +75,6 @@ const ManageOrdersPage = () => {
           <TableRow>
             <TableData as="th">Table</TableData>
             <TableData as="th">Status</TableData>
-            <TableData as="th">Products</TableData>
             <TableData as="th">Quantity</TableData>
             <TableData as="th">Amount</TableData>
             <TableData as="th">Actions</TableData>
@@ -110,16 +108,6 @@ const ManageOrdersPage = () => {
                 )}
               </TableData>
               <TableData>
-                <ul>
-                  {order.items.map((item, idx) => (
-                    <li key={idx}>
-                      {item.product} 
-                      
-                    </li>
-                  ))}
-                </ul>
-              </TableData>
-              <TableData>
                 {order.items.reduce((sum, item) => sum + item.quantity, 0)}
               </TableData>
               <TableData>
@@ -130,10 +118,10 @@ const ManageOrdersPage = () => {
                   <Button onClick={() => handleSaveEdit(index)}>Save</Button>
                 ) : (
                   <>
-                    <Button onClick={() => handlePrint(order)}><Printer /></Button>
-                    <Button onClick={() => handleEdit(index)}><FilePenLine /></Button>
+                    <Button onClick={() => handlePrint(order)}>Print</Button>
+                    <Button onClick={() => handleEdit(index)}>Edit</Button>
                     <Button red onClick={() => handleDelete(index)}>
-                      <Trash2 />
+                      Delete
                     </Button>
                   </>
                 )}
