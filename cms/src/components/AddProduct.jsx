@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
   Container,
-  Navbar,
   PageTitle,
   FormContainer,
   Label,
@@ -16,15 +15,30 @@ import {
   ButtonGroup,
   ImageUploadSection,
 } from "../styles/AddProductStyles";
-import { Bold, Italic, Underline, Quote, Home, ArrowLeft } from "lucide-react";
+import { Bold, Italic, Underline, Quote, ArrowLeft } from "lucide-react";
 
 const AddProduct = ({ history }) => {
+  const initialProductData = {
+    image: "",
+    name: "",
+    price: "",
+    description: "",
+    category: [],
+    active: "Yes",
+  };
+
   const [productData, setProductData] = useState(() => {
     const savedData = localStorage.getItem("productData");
-    return savedData
-      ? JSON.parse(savedData)
-      : { image: "", name: "", price: "", description: "", category: [], active: "Yes" };
+    return savedData ? JSON.parse(savedData) : initialProductData;
   });
+
+  const [categories, setCategories] = useState([]);
+
+  // Load categories from localStorage
+  useEffect(() => {
+    const savedCategories = JSON.parse(localStorage.getItem("categories")) || [];
+    setCategories(savedCategories);
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("productData", JSON.stringify(productData));
@@ -37,8 +51,15 @@ const AddProduct = ({ history }) => {
       reader.onloadend = () => {
         setProductData((prev) => ({ ...prev, image: reader.result }));
       };
+      reader.onerror = () => {
+        console.error("Error reading file. Please try again.");
+      };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleRemoveImage = () => {
+    setProductData((prev) => ({ ...prev, image: "" }));
   };
 
   const handleInputChange = (e) => {
@@ -77,41 +98,29 @@ const AddProduct = ({ history }) => {
     }
   };
 
-  const handleSaveProduct = async () => {
-    try {
-      const response = await fetch("/api/products", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(productData),
-      });
-      if (response.ok) {
-        localStorage.removeItem("productData");
-        history.push("/products");
-      } else {
-        console.error("Failed to save product");
-      }
-    } catch (error) {
-      console.error(error);
+  const validateForm = () => {
+    const { image, name, price, description } = productData;
+    if (!image || !name || !price || !description) {
+      alert("Please fill out all required fields before saving.");
+      return false;
     }
+    return true;
+  };
+
+  const handleSaveProduct = () => {
+    if (!validateForm()) return;
+
+    const existingProducts = JSON.parse(localStorage.getItem("products")) || [];
+    const updatedProducts = [...existingProducts, { ...productData, id: Date.now() }];
+
+    localStorage.setItem("products", JSON.stringify(updatedProducts));
+    localStorage.removeItem("productData");
+    setProductData(initialProductData); // Reset form
+    history.push("/manage-products"); // Redirect to manage products
   };
 
   return (
     <Container>
-      <div>
-
-     
-      <Navbar>
-        <div>
-          <h1>Manage Products</h1>
-        </div>
-        <div className="breadcrumb">
-          <Home size={16} />
-          <span>Home</span>
-          <span>/</span>
-          <span>Products</span>
-        </div>
-      </Navbar>
-
       <FormContainer>
         <PageTitle>Add Product</PageTitle>
 
@@ -119,17 +128,27 @@ const AddProduct = ({ history }) => {
           <Label>Image</Label>
           <ImageUploadSection>
             {productData.image ? (
-              <img src={productData.image} alt="Product preview" />
+              <div>
+                <img src={productData.image} alt="Product preview" />
+              </div>
             ) : (
               <div className="placeholder">No image uploaded</div>
             )}
           </ImageUploadSection>
-          <UploadButton>
-            <input type="file" accept="image/*" onChange={handleImageUpload} hidden />
-            Upload Image
-          </UploadButton>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" , marginTop:"1rem"}}>
+            <UploadButton>
+              <input type="file" accept="image/*" onChange={handleImageUpload} hidden />
+              Upload Image
+            </UploadButton>
+            {productData.image && (
+              <Button onClick={handleRemoveImage} className="remove-button">
+                Remove Image
+              </Button>
+            )}
+          </div>
         </div>
 
+        <br />
         <div>
           <Label>Product Name</Label>
           <Input
@@ -175,21 +194,24 @@ const AddProduct = ({ history }) => {
             placeholder="Enter description"
           />
         </div>
+        <br />
 
         <div>
           <Label>Category</Label>
           <MultiSelect>
             <select onChange={handleCategoryChange}>
               <option value="">Select category</option>
-              <option value="electronics">Electronics</option>
-              <option value="clothing">Clothing</option>
-              <option value="food">Food</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.name}>
+                  {category.name}
+                </option>
+              ))}
             </select>
             <div className="tags">
               {productData.category.map((cat) => (
                 <span key={cat} className="tag">
                   {cat}
-                  <Button onClick={() => handleCategoryRemove(cat)}>×</Button>
+                  <Button onClick={() => handleCategoryRemove(cat)}>x </Button>
                 </span>
               ))}
             </div>
@@ -205,14 +227,13 @@ const AddProduct = ({ history }) => {
         </div>
 
         <ButtonGroup>
-          <ActionButton className="secondary" onClick={() => history.push("/products")}>
+          <ActionButton className="secondary" onClick={() => history.push("/manage-products")}>
             <ArrowLeft size={16} />
             Back to Products
           </ActionButton>
           <ActionButton onClick={handleSaveProduct}>Save Product</ActionButton>
         </ButtonGroup>
       </FormContainer>
-      </div>
     </Container>
   );
 };

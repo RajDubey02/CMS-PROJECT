@@ -1,36 +1,56 @@
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
+// Container for categories
 export const CategoryContainer = styled.div`
-  padding: 20px;
-  box-sizing: border-box;
+  padding: 2rem;
+  background-color: #f9f9f9;
 
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
 `;
 
-export const Nav=styled.div`
+// Navigation wrapper for buttons and links
+export const Nav = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
 
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+`;
 
-    height: 6rem;
-    /* background-color: #e1dede; */
-    & h3{
-      display: flex;
-      justify-content: center;
-    box-sizing: border-box;
-    width: 80vw;
-    /* margin-bottom: 2rem; */
-    margin: 1rem;
-    font-size: 1.7rem;
-    
-}
-`
+// Styled button component
+export const Button = styled.button`
+  background-color: #de8602;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin-right: 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  &:hover {
+    background-color: #e16405;
+  }
 
+  @media (max-width: 768px) {
+    padding: 0.5rem 0.8rem;
+    margin-bottom: 8px;
+  }
+`;
+
+// Styled table component
 export const Table = styled.table`
-
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
-
+  margin-bottom: 1rem;
+  
   th, td {
-    padding: 12px;
+    padding: 1rem;
     border: 1px solid #ddd;
     text-align: left;
   }
@@ -39,119 +59,124 @@ export const Table = styled.table`
     background-color: #f4f4f4;
   }
 
-  tr:hover {
-    background-color: #f1f1f1;
-  }
-`;
-
-export const Button = styled.button`
-  padding: 8px 16px;
-  font-size: 14px;
-  margin: 0 1rem 1rem 1rem;
-  background-color: rgba(234, 104, 18, 0.81);
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-right: 8px;
-
-  &:hover {
-    background-color: rgb(234, 104, 18);
-  }
-
-
-  &.danger {
-    background-color: #dc3545;
-
-    &:hover {
-      background-color: #c82333;
+  @media (max-width: 768px) {
+    th, td {
+      padding: 0.8rem;
     }
   }
 `;
 
-export const SaveButton = styled.button`
- padding: 8px 16px;
- font-size: 14px;
- color: white;
- border: none;
- background-color: rgba(234, 104, 18, 0.81);
-
-`;
+// Input component
 export const Input = styled.input`
-  padding: 8px;
-  font-size: 14px;
-  border: 1px solid #ccc;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
   border-radius: 4px;
-  width: 250px;
+  width: 300px;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
+// Modal container
 export const ModalContainer = styled.div`
-  display: block;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1050;
-  padding-top: 60px;
 `;
 
+// Modal content area
 export const ModalContent = styled.div`
   background-color: white;
-  margin: auto;
-  padding: 20px;
-  max-width: 500px;
+  padding: 2rem;
   border-radius: 8px;
+  width: 400px;
+
+  @media (max-width: 768px) {
+    width: 90%;
+    padding: 1rem;
+  }
 `;
 
+// Modal header
 export const ModalHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 10px;
 `;
 
+// Modal body
 export const ModalBody = styled.div`
-  margin-top: 20px;
-
+  margin-top: 1rem;
   div {
-    margin-bottom: 15px;
-
-    label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: bold;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 8px;
-      font-size: 14px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
+    Input {
+      margin-top: 1rem;
+      padding: 1rem;
     }
   }
 `;
 
+// Modal footer
 export const ModalFooter = styled.div`
+  margin-top: 1rem;
   display: flex;
   justify-content: flex-end;
-  margin-top: 20px;
+`;
 
-  button {
-    padding: 8px 16px;
-    font-size: 14px;
-    background-color: rgba(234, 104, 18, 0.81);
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-left: 8px;
+// Pagination wrapper
+export const PaginationWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+`;
 
-    &:hover {
-        background-color: rgb(234, 104, 18);
-    }
+// Pagination button
+export const PaginationButton = styled(Button)`
+  margin: 0 0.5rem;
+  background-color: ${(props) => (props.active ? "#007bff" : "#ddd")};
+
+  &:disabled {
+    background-color: #ccc;
   }
 `;
+
+// Centering wrapper
+export const Center = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  width: 100%;
+  border: none;
+
+  @media (max-width: 768px) {
+    margin-top: 1rem;
+  }
+`;
+
+// Styled NavLink with button styling
+export const NavLinkStyled = styled(NavLink)`
+  text-decoration: none;
+  background-color: #de8602;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin-right: 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  
+  &:hover {
+    background-color: #e16405;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.5rem 0.8rem;
+    margin-bottom: 8px;
+  }
+`;
+

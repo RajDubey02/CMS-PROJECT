@@ -94,7 +94,7 @@ export const TableData = styled.td`
 export const Button = styled.button`
   padding: 8px 16px;
   font-size: 1rem;
-  margin: 0 5px;
+  margin:  0 5px;
   border: none;
   border-radius: 4px;
   color: #fff;

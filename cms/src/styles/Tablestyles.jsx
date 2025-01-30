@@ -6,6 +6,7 @@ export const Parent = styled.div`
   display: flex;
   flex-direction: column;
   font-family: Arial, sans-serif;
+  margin-top: 2rem;
 
   @media (max-width: 768px) {
     height: auto;
@@ -16,7 +17,7 @@ export const Header = styled.div`
   text-align: center;
   margin-bottom: 20px;
 
-  h2 {
+  h2 {margin-bottom: 2rem;
     font-size: 2rem;
     color: #343a40;
   }
@@ -31,6 +32,7 @@ export const Header = styled.div`
 export const SearchBar = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 10px;
   margin-bottom: 20px;
 
@@ -66,7 +68,10 @@ export const SearchBar = styled.div`
     flex-direction: column;
     gap: 10px;
     input {
-      width: 100%;
+      width: 95%;
+    }
+    button{
+      width: 27%;
     }
   }
 `;

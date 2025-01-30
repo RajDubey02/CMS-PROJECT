@@ -163,3 +163,113 @@ export const ButtonGroup = styled.div`
     }
   }
 `;
+
+
+
+
+
+
+// export const Container = styled.div`
+//   padding: 20px;
+//   background-color: #f9f9f9;
+//   min-height: 100vh;
+// `;
+
+// export const Navbar = styled.div`
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+//   padding: 15px 20px;
+//   background-color: #ea6812;
+//   color: white;
+
+//   .primary {
+//     background-color: white;
+//     color: #ea6812;
+//     border: none;
+//     border-radius: 4px;
+//     padding: 10px 15px;
+//     cursor: pointer;
+
+//     &:hover {
+//       background-color: #ffe3d5;
+//     }
+//   }
+// `;
+
+// export const PageTitle = styled.h2`
+//   margin: 20px 0;
+//   color: #333;
+// `;
+
+// export const Table = styled.table`
+//   width: 100%;
+//   border-collapse: collapse;
+//   background: white;
+//   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+//   border-radius: 8px;
+//   overflow: hidden;
+
+//   th, td {
+//     padding: 10px 15px;
+//     text-align: left;
+//     border-bottom: 1px solid #eee;
+//   }
+
+//   th {
+//     background-color: #f4f4f4;
+//     font-weight: bold;
+//   }
+
+//   tr:hover {
+//     background-color: #f9f9f9;
+//   }
+// `;
+
+// export const TableHeader = styled.thead`
+//   background-color: #f4f4f4;
+// `;
+
+// export const TableRow = styled.tr``;
+
+// export const TableCell = styled.td`
+//   &:first-child {
+//     text-align: center;
+//   }
+
+//   img {
+//     width: 50px;
+//     height: 50px;
+//     object-fit: cover;
+//     border-radius: 4px;
+//   }
+// `;
+
+// export const ActionButton = styled.button`
+//   background: none;
+//   border: none;
+//   color: #ea6812;
+//   cursor: pointer;
+
+//   &:hover {
+//     color: #cf5a0f;
+//   }
+
+//   svg {
+//     display: inline-block;
+//   }
+// `;
+
+// export const ButtonGroup = styled.div`
+//   display: flex;
+//   gap: 10px;
+// `;
+
+// export const Modal = styled.div`
+//   /* Styling for modals (if needed) */
+// `;
+
+// export const Input = styled.input`
+//   /* Additional reusable input styles (if needed) */
+// `;
+

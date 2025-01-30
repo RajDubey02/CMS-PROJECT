@@ -135,6 +135,22 @@ export const Select = styled.select`
     font-size: 0.8rem;
   }
 `;
+export const Select1 = styled.select`
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 20%;
+
+  @media (max-width: 768px) {
+    padding: 6px;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 4px;
+    font-size: 0.8rem;
+  }
+`;
 
 export const Button = styled.button`
   background: ${(props) => (props.red ? "#ef3333" : "rgba(187, 94, 31, 0.81)")};
@@ -189,4 +205,27 @@ export const SummaryItem = styled.div`
   @media (max-width: 480px) {
     font-size: 0.8rem;
   }
+`;
+
+// Error and Success Message Styling
+export const ErrorMessage = styled.div`
+  color: red;
+  background-color: #f8d7da;
+  padding: 10px;
+  border: 1px solid #f5c6cb;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  font-weight: bold;
+  text-align: center;
+`;
+
+export const SuccessMessage = styled.div`
+  color: green;
+  background-color: #d4edda;
+  padding: 10px;
+  border: 1px solid #c3e6cb;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  font-weight: bold;
+  text-align: center;
 `;

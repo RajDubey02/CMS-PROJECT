@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
 import {
   CategoryContainer,
   Table,
+  NavLinkStyled,
   Button,
   Nav,
   ModalContainer,
@@ -10,21 +12,26 @@ import {
   ModalBody,
   Input,
   ModalFooter,
+  PaginationWrapper,
+  PaginationButton,
+  Center
 } from "../styles/CategoryManagementStyles";
-import { Pencil } from 'lucide-react';
-import { Trash2 } from 'lucide-react';
+import { Pencil, Trash2 } from 'lucide-react';
 
 const CategoryManagement = () => {
-  const [categories, setCategories] = useState([
-    { id: 1, name: "Tacos", status: "Active" },
-    { id: 2, name: "BBQ Platters", status: "Active" },
-    { id: 3, name: "Pasta", status: "Inactive" },
-  ]);
+  const [categories, setCategories] = useState(
+    JSON.parse(localStorage.getItem("categories")) || [
+      { id: 1, name: "Tacos", status: "Active" },
+      { id: 2, name: "BBQ Platters", status: "Active" },
+      { id: 3, name: "Pasta", status: "Inactive" },
+    ]
+  );
   const [modalData, setModalData] = useState({ id: null, name: "", status: "Active" });
   const [search, setSearch] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [entriesPerPage, setEntriesPerPage] = useState(1000); // Default to show 1000 entries
+  const [entriesPerPage, setEntriesPerPage] = useState(5);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const handleAddCategory = () => {
     if (!modalData.name) {
@@ -32,18 +39,20 @@ const CategoryManagement = () => {
       return;
     }
 
+    let updatedCategories;
     if (isEditing) {
-      setCategories((prev) =>
-        prev.map((cat) =>
-          cat.id === modalData.id ? { ...cat, name: modalData.name, status: modalData.status } : cat
-        )
+      updatedCategories = categories.map((cat) =>
+        cat.id === modalData.id ? { ...cat, name: modalData.name, status: modalData.status } : cat
       );
     } else {
-      setCategories((prev) => [
-        ...prev,
+      updatedCategories = [
+        ...categories,
         { id: Date.now(), name: modalData.name, status: modalData.status },
-      ]);
+      ];
     }
+
+    setCategories(updatedCategories);
+    localStorage.setItem("categories", JSON.stringify(updatedCategories));
 
     resetModal();
   };
@@ -62,17 +71,25 @@ const CategoryManagement = () => {
 
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you want to delete this category?")) {
-      setCategories((prev) => prev.filter((cat) => cat.id !== id));
+      const updatedCategories = categories.filter((cat) => cat.id !== id);
+      setCategories(updatedCategories);
+      localStorage.setItem("categories", JSON.stringify(updatedCategories));
     }
   };
 
-  // First filter by search term
   const searchFiltered = categories.filter((cat) =>
     cat.name.toLowerCase().includes(search.toLowerCase())
   );
 
-  // Then limit the number of entries shown
-  const filteredCategories = searchFiltered.slice(0, entriesPerPage);
+  const totalPages = Math.ceil(searchFiltered.length / entriesPerPage);
+  const paginatedCategories = searchFiltered.slice(
+    (currentPage - 1) * entriesPerPage,
+    currentPage * entriesPerPage
+  );
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   return (
     <CategoryContainer>
@@ -82,17 +99,14 @@ const CategoryManagement = () => {
           <Button onClick={() => { setIsEditing(false); setIsModalVisible(true); }}>Add Category</Button>
         </div>
       </Nav>
+
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '1rem 0' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <span>Show</span>
           <select 
             value={entriesPerPage}
             onChange={(e) => setEntriesPerPage(Number(e.target.value))}
-            style={{
-              padding: '0.25rem',
-              borderRadius: '4px',
-              border: '1px solid #ddd'
-            }}
+            style={{ padding: '0.25rem', borderRadius: '4px', border: '1px solid #ddd' }}
           >
             <option value={5}>5</option>
             <option value={10}>10</option>
@@ -101,7 +115,6 @@ const CategoryManagement = () => {
             <option value={100}>100</option>
             <option value={250}>250</option>
             <option value={500}>500</option>
-            <option value={1000}>1000</option>
           </select>
           <span>entries</span>
         </div>
@@ -112,6 +125,7 @@ const CategoryManagement = () => {
           onChange={(e) => setSearch(e.target.value)}
         />
       </div>
+
       <Table>
         <thead>
           <tr>
@@ -121,7 +135,7 @@ const CategoryManagement = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredCategories.map((category) => (
+          {paginatedCategories.map((category) => (
             <tr key={category.id}>
               <td>{category.name}</td>
               <td>
@@ -137,9 +151,44 @@ const CategoryManagement = () => {
           ))}
         </tbody>
       </Table>
+
       <div style={{ margin: '1rem 0' }}>
-        <p>Showing {filteredCategories.length} of {searchFiltered.length} entries</p>
+        <p>Showing {paginatedCategories.length} of {searchFiltered.length} entries</p>
       </div>
+
+      <PaginationWrapper>
+        <PaginationButton 
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </PaginationButton>
+
+        {[...Array(totalPages).keys()].map((num) => (
+          <PaginationButton 
+            key={num} 
+            onClick={() => handlePageChange(num + 1)}
+            active={currentPage === num + 1}
+          >
+            {num + 1}
+          </PaginationButton>
+        ))}
+
+        <PaginationButton
+          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </PaginationButton>
+      </PaginationWrapper>
+      <Center>
+
+      {/* <Button  ></Button> */}
+      <NavLinkStyled to="/AddProduct">
+            Go To Add Products
+            </NavLinkStyled>
+
+      </Center>
 
       {/* Modal for Add/Edit Category */}
       {isModalVisible && (
@@ -154,7 +203,7 @@ const CategoryManagement = () => {
             <ModalBody>
               <div>
                 <label htmlFor="categoryName">Category Name</label>
-                <input
+                <Input 
                   type="text"
                   value={modalData.name}
                   onChange={(e) =>
@@ -162,9 +211,9 @@ const CategoryManagement = () => {
                   }
                 />
               </div>
-              <div>
-                <label htmlFor="categoryStatus">Status</label>
-                <select
+              <div  style={{marginTop:"2rem"}}>
+                <label htmlFor="categoryStatus" >Status</label>
+                <select style={{marginLeft:"1.4rem",padding:"0.5rem",}}
                   value={modalData.status}
                   onChange={(e) =>
                     setModalData((prev) => ({ ...prev, status: e.target.value }))

@@ -164,7 +164,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
            
             <NavLinkStyled to="/User">
                 <UserPlus size={20} />
-                User</NavLinkStyled>
+               Add User</NavLinkStyled>
              </SubMenu>
           </NavItem>
           <NavItem>
@@ -259,7 +259,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
               <Table size={20} />
               Table
             </NavLinkStyled>
-            <NavLinkStyled to="/staff">
+            <NavLinkStyled to="/ManageUser">
               <Users size={20} />
               Staff
             </NavLinkStyled>
