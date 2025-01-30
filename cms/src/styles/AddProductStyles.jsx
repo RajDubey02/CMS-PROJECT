@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   display: flex;
+<<<<<<< HEAD
   justify-content: center;
   padding: 20px;
   background-color: #f9f9f9;
@@ -9,6 +10,36 @@ export const Container = styled.div`
   min-width: 97%;
   box-sizing: border-box;
   width: 100%;
+=======
+  justify-content: space-between;
+  align-items: center;
+  /* background-color: rgba(234, 104, 18, 0.87); */
+  padding: 15px 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: #fff;
+  font-weight: 500;
+
+  h1 {
+    font-size: 18px;
+    /* color: #333; */
+    margin: 0;
+  }
+
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #666;
+
+    span {
+      margin: 0 5px;
+    }
+
+    svg {
+      margin-right: 5px;
+    }
+  }
+>>>>>>> 949fc95336c1cbbeaaee1e04586c4245ed5f2ebd
 `;
 
 // export const Navbar = styled.nav`
@@ -63,8 +94,14 @@ export const PageTitle = styled.h2`
 `;
 
 export const FormContainer = styled.div`
+<<<<<<< HEAD
   min-width: 80vw;
   /* background: #fff; */
+=======
+ min-width: 90vw;
+
+  background: #fff;
+>>>>>>> 949fc95336c1cbbeaaee1e04586c4245ed5f2ebd
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);

@@ -11,8 +11,12 @@ import ManageOrdersPage from "./components/ManageOrdersPage";
 import { OrderProvider } from "./components/OrderContext";
 import CategoryManagement from "./components/CategoryManagement";
 import Table from "./components/Table";
-import User from "./components/User";
-import ManageUser from "./components/ManageUser";
+
+import AddProduct from "./components/AddProduct";
+import AddOrderPage from "./components/AddOrderPage";
+import ManageOrdersPage from "./components/ManageOrdersPage";
+import  {OrderProvider}  from "./components/OrderContext";
+
 
 
 const App = () => {
