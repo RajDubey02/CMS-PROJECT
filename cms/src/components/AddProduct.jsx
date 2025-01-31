@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   Container,
   PageTitle,
@@ -27,22 +28,21 @@ const AddProduct = ({ history }) => {
     active: "Yes",
   };
 
-  const [productData, setProductData] = useState(() => {
-    const savedData = localStorage.getItem("productData");
-    return savedData ? JSON.parse(savedData) : initialProductData;
-  });
-
+  const [productData, setProductData] = useState(initialProductData);
   const [categories, setCategories] = useState([]);
 
-  // Load categories from localStorage
+  // Fetch categories from the backend
   useEffect(() => {
-    const savedCategories = JSON.parse(localStorage.getItem("categories")) || [];
-    setCategories(savedCategories);
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/categories");
+        setCategories(response.data); // Assuming response is an array of category objects
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+    fetchCategories();
   }, []);
-
-  useEffect(() => {
-    localStorage.setItem("productData", JSON.stringify(productData));
-  }, [productData]);
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -50,9 +50,6 @@ const AddProduct = ({ history }) => {
       const reader = new FileReader();
       reader.onloadend = () => {
         setProductData((prev) => ({ ...prev, image: reader.result }));
-      };
-      reader.onerror = () => {
-        console.error("Error reading file. Please try again.");
       };
       reader.readAsDataURL(file);
     }
@@ -67,17 +64,19 @@ const AddProduct = ({ history }) => {
     setProductData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Handle category selection
   const handleCategoryChange = (e) => {
-    const value = e.target.value;
-    if (value && !productData.category.includes(value)) {
-      setProductData((prev) => ({ ...prev, category: [...prev.category, value] }));
+    const selectedCategoryId = e.target.value;
+    if (selectedCategoryId && !productData.category.includes(selectedCategoryId)) {
+      setProductData((prev) => ({ ...prev, category: [...prev.category, selectedCategoryId] }));
     }
   };
 
-  const handleCategoryRemove = (category) => {
+  // Remove category
+  const handleCategoryRemove = (categoryId) => {
     setProductData((prev) => ({
       ...prev,
-      category: prev.category.filter((cat) => cat !== category),
+      category: prev.category.filter((id) => id !== categoryId),
     }));
   };
 
@@ -98,27 +97,37 @@ const AddProduct = ({ history }) => {
     }
   };
 
-  const validateForm = () => {
-    const { image, name, price, description } = productData;
-    if (!image || !name || !price || !description) {
-      alert("Please fill out all required fields before saving.");
-      return false;
+  // const handleSaveProduct = async () => {
+  //   try {
+  //     const response = await axios.post("http://localhost:5000/api/products/add", productData);
+  //     console.log("Backend response:", response.data);
+  //     alert("Product saved successfully!");
+  //     setProductData(initialProductData); // Reset form
+  //   } catch (error) {
+  //     console.error("Error saving product:", error);
+  //     alert("Failed to save product. Please try again.");
+  //   }
+  // };
+  const handleSaveProduct = async () => {
+    try {
+      const response = await axios.post("http://localhost:5000/api/products", {
+        ...productData,
+        category: productData.category.join(", "), // Convert array to string
+      });
+  
+      console.log("Backend response:", response.data);
+      alert("Product saved successfully!");
+      setProductData(initialProductData); // Reset form
+    } catch (error) {
+      console.error("Error saving product:", error);
+      if (error.response) {
+        alert(`Failed to save product: ${error.response.data.message}`);
+      } else {
+        alert("Failed to save product. Please check the console for errors.");
+      }
     }
-    return true;
   };
-
-  const handleSaveProduct = () => {
-    if (!validateForm()) return;
-
-    const existingProducts = JSON.parse(localStorage.getItem("products")) || [];
-    const updatedProducts = [...existingProducts, { ...productData, id: Date.now() }];
-
-    localStorage.setItem("products", JSON.stringify(updatedProducts));
-    localStorage.removeItem("productData");
-    setProductData(initialProductData); // Reset form
-    history.push("/manage-products"); // Redirect to manage products
-  };
-
+  
   return (
     <Container>
       <FormContainer>
@@ -135,7 +144,7 @@ const AddProduct = ({ history }) => {
               <div className="placeholder">No image uploaded</div>
             )}
           </ImageUploadSection>
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" , marginTop:"1rem"}}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px", marginTop: "1rem" }}>
             <UploadButton>
               <input type="file" accept="image/*" onChange={handleImageUpload} hidden />
               Upload Image
@@ -202,18 +211,23 @@ const AddProduct = ({ history }) => {
             <select onChange={handleCategoryChange}>
               <option value="">Select category</option>
               {categories.map((category) => (
-                <option key={category.id} value={category.name}>
+                <option key={category._id} value={category._id}>
                   {category.name}
                 </option>
               ))}
             </select>
             <div className="tags">
-              {productData.category.map((cat) => (
-                <span key={cat} className="tag">
-                  {cat}
-                  <Button onClick={() => handleCategoryRemove(cat)}>x </Button>
-                </span>
-              ))}
+              {productData.category.map((catId) => {
+                const category = categories.find((c) => c._id === catId);
+                return (
+                  category && (
+                    <span key={catId} className="tag">
+                      {category.name}
+                      <Button onClick={() => handleCategoryRemove(catId)}> X </Button>
+                    </span>
+                  )
+                );
+              })}
             </div>
           </MultiSelect>
         </div>

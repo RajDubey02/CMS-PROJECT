@@ -1,260 +1,5 @@
-// import React, { useState } from 'react';
-// import {
-//   Container,
-//   Navbar,
-//   PageTitle,
-//   Table,
-//   TableHeader,
-//   TableRow,
-//   TableCell,
-//   ActionButton,
-//   Modal,
-//   Input,
-//   ButtonGroup,
-// } from '../styles/ManageProductStyles';
-// import { Plus, Edit, Trash2 } from 'lucide-react';
-
-// const ManageProduct = () => {
-//   const [products, setProducts] = useState([
-//     // Dummy data for products
-//     {
-//       id: 1,
-//       image: 'https://via.placeholder.com/50',
-//       name: 'Product 1',
-//       price: 100,
-//       category: ['Electronics'],
-//       active: 'Yes',
-//     },
-//   ]);
-//   const [isModalOpen, setIsModalOpen] = useState(false);
-//   const [currentProduct, setCurrentProduct] = useState(null);
-
-//   const handleEdit = (product) => {
-//     setCurrentProduct(product);
-//     setIsModalOpen(true);
-//   };
-
-//   const handleDelete = (id) => {
-//     setProducts(products.filter((product) => product.id !== id));
-//   };
-
-//   const handleSave = () => {
-//     if (currentProduct.id) {
-//       // Update existing product
-//       setProducts((prev) =>
-//         prev.map((product) =>
-//           product.id === currentProduct.id ? currentProduct : product
-//         )
-//       );
-//     } else {
-//       // Add new product
-//       setProducts((prev) => [
-//         ...prev,
-//         { ...currentProduct, id: Date.now() },
-//       ]);
-//     }
-//     setIsModalOpen(false);
-//     setCurrentProduct(null);
-//   };
-
-//   return (
-//     <Container>
-//       <Navbar>
-//         <div>
-//           <button className="primary" onClick={() => setIsModalOpen(true)}>
-//             <Plus size={16} /> Add Product
-//           </button>
-//           <button className="secondary">View Product</button>
-//         </div>
-//       </Navbar>
-
-
-
-
-//       <PageTitle>Manage Products</PageTitle>
-
-//       <Table>
-//         <TableHeader>
-//           <TableRow>
-//             <TableCell>Image</TableCell>
-//             <TableCell>Name</TableCell>
-//             <TableCell>Price</TableCell>
-//             <TableCell>Category</TableCell>
-//             <TableCell>Active</TableCell>
-//             <TableCell>Action</TableCell>
-//           </TableRow>
-//         </TableHeader>
-//         <tbody>
-//           {products.map((product) => (
-//             <TableRow key={product.id}>
-//               <TableCell>
-//                 <img src={product.image} alt={product.name} width={50} />
-//               </TableCell>
-//               <TableCell>{product.name}</TableCell>
-//               <TableCell>{product.price}</TableCell>
-//               <TableCell>{product.category.join(', ')}</TableCell>
-//               <TableCell>{product.active}</TableCell>
-//               <TableCell>
-//                 <ActionButton onClick={() => handleEdit(product)}>
-//                   <Edit size={16} />
-//                 </ActionButton>
-//                 <ActionButton onClick={() => handleDelete(product.id)}>
-//                   <Trash2 size={16} />
-//                 </ActionButton>
-//               </TableCell>
-//             </TableRow>
-//           ))}
-//         </tbody>
-//       </Table>
-
-//       <p>Showing {products.length} of {products.length} entries</p>
-
-//       {isModalOpen && (
-//         <Modal>
-//           <h2>{currentProduct?.id ? 'Edit Product' : 'Add Product'}</h2>
-
-//           <div>
-//             <label>Product Name</label>
-//             <Input
-//               type="text"
-//               value={currentProduct?.name || ''}
-//               onChange={(e) =>
-//                 setCurrentProduct((prev) => ({ ...prev, name: e.target.value }))
-//               }
-//             />
-//           </div>
-
-//           <div>
-//             <label>Price</label>
-//             <Input
-//               type="number"
-//               value={currentProduct?.price || ''}
-//               onChange={(e) =>
-//                 setCurrentProduct((prev) => ({ ...prev, price: e.target.value }))
-//               }
-//             />
-//           </div>
-
-//           <div>
-//             <label>Description</label>
-//             <textarea
-//               value={currentProduct?.description || ''}
-//               onChange={(e) =>
-//                 setCurrentProduct((prev) => ({
-//                   ...prev,
-//                   description: e.target.value,
-//                 }))
-//               }
-//             ></textarea>
-//           </div>
-
-//           <ButtonGroup>
-//             <button onClick={() => setIsModalOpen(false)}>Cancel</button>
-//             <button onClick={handleSave}>Save</button>
-//           </ButtonGroup>
-//         </Modal>
-//       )}
-      
-
-//     </Container>
-//   );
-// };
-
-// export default ManageProduct;
-
-
-
-
-
-// import React, { useState, useEffect } from "react";
-// import {
-//   Container,
-//   Navbar,
-//   PageTitle,
-//   Table,
-//   TableHeader,
-//   TableRow,
-//   TableCell,
-//   ActionButton,
-//   Modal,
-//   Input,
-//   ButtonGroup,
-// } from "../styles/ManageProductStyles";
-// import { Plus, Edit, Trash2 } from "lucide-react";
-
-// const ManageProduct = () => {
-//   const [products, setProducts] = useState([]);
-
-//   useEffect(() => {
-//     const savedProducts = JSON.parse(localStorage.getItem("products")) || [];
-//     setProducts(savedProducts);
-//   }, []);
-
-//   const handleDelete = (id) => {
-//     const updatedProducts = products.filter((product) => product.id !== id);
-//     setProducts(updatedProducts);
-//     localStorage.setItem("products", JSON.stringify(updatedProducts));
-//   };
-
-//   return (
-//     <Container>
-//       <Navbar>
-//         <div>
-//           <button className="primary" onClick={() => alert("Redirect to Add Product page!")}>
-//             <Plus size={16} /> Add Product
-//           </button>
-//         </div>
-//       </Navbar>
-
-//       <PageTitle>Manage Products</PageTitle>
-
-//       <Table>
-//         <TableHeader>
-//           <TableRow>
-//             <TableCell>Image</TableCell>
-//             <TableCell>Name</TableCell>
-//             <TableCell>Price</TableCell>
-//             <TableCell>Category</TableCell>
-//             <TableCell>Active</TableCell>
-//             <TableCell>Action</TableCell>
-//           </TableRow>
-//         </TableHeader>
-//         <tbody>
-//           {products.map((product) => (
-//             <TableRow key={product.id}>
-//               <TableCell>
-//                 <img src={product.image} alt={product.name} width={50} />
-//               </TableCell>
-//               <TableCell>{product.name}</TableCell>
-//               <TableCell>{product.price}</TableCell>
-//               <TableCell>{product.category.join(", ")}</TableCell>
-//               <TableCell>{product.active}</TableCell>
-//               <TableCell>
-//                 <ActionButton>
-//                   <Edit size={16} />
-//                 </ActionButton>
-//                 <ActionButton onClick={() => handleDelete(product.id)}>
-//                   <Trash2 size={16} />
-//                 </ActionButton>
-//               </TableCell>
-//             </TableRow>
-//           ))}
-//         </tbody>
-//       </Table>
-
-//       <p>Showing {products.length} of {products.length} entries</p>
-//     </Container>
-//   );
-// };
-
-// export default ManageProduct;
-
-
-
-
-
-
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   Container,
   Navbar,
@@ -264,166 +9,198 @@ import {
   TableRow,
   TableCell,
   ActionButton,
+  ModalOverlay,
   Modal,
+  CloseButton,
   Input,
+  FileInput,
+  ImagePreview,
+  Select,
   ButtonGroup,
 } from "../styles/ManageProductStyles";
-import { Plus, Edit, Trash2 } from "lucide-react";
+import { Plus, Edit, Trash2, X, IndianRupee } from "lucide-react";
 
 const ManageProduct = () => {
   const [products, setProducts] = useState([]);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [imagePreview, setImagePreview] = useState("");
+  const [currentProduct, setCurrentProduct] = useState({
+    _id: null,
+    image: "",
+    name: "",
+    price: "",
+    description: "",
+    category: "",
+    active: "Yes",
+  });
 
   useEffect(() => {
-    const savedProducts = JSON.parse(localStorage.getItem("products")) || [];
-    setProducts(savedProducts);
+    fetchProducts();
+    fetchCategories();
   }, []);
 
-  const handleDelete = (id) => {
-    const updatedProducts = products.filter((product) => product.id !== id);
-    setProducts(updatedProducts);
-    localStorage.setItem("products", JSON.stringify(updatedProducts));
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/api/products");
+      setProducts(response.data);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
   };
 
-  const handleEditClick = (product) => {
-    setSelectedProduct({ ...product });
-    setIsEditModalOpen(true);
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/api/categories");
+      setCategories(response.data);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
   };
 
-  const handleModalClose = () => {
-    setIsEditModalOpen(false);
-    setSelectedProduct(null);
+  const handleEdit = (product) => {
+    setCurrentProduct({
+      _id: product._id,
+      image: product.image,
+      name: product.name,
+      price: product.price,
+      description: product.description,
+      category: product.category ? product.category._id : "", // Use ObjectId
+      active: product.active,
+    });
+    setImagePreview(product.image);
+    setIsModalOpen(true);
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setSelectedProduct((prev) => ({ ...prev, [name]: value }));
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this product?")) {
+      try {
+        await axios.delete(`http://localhost:5000/api/products/${id}`);
+        fetchProducts();
+      } catch (error) {
+        console.error("Error deleting product:", error);
+      }
+    }
   };
 
-  const handleSaveChanges = () => {
-    const updatedProducts = products.map((product) =>
-      product.id === selectedProduct.id ? selectedProduct : product
-    );
-    setProducts(updatedProducts);
-    localStorage.setItem("products", JSON.stringify(updatedProducts));
-    handleModalClose();
+  const handleSave = async () => {
+    try {
+      const payload = { ...currentProduct };
+      if (!payload.category) {
+        alert("Please select a category");
+        return;
+      }
+
+      if (payload._id) {
+        await axios.put(`http://localhost:5000/api/products/${payload._id}`, payload);
+      } else {
+        await axios.post("http://localhost:5000/api/products", payload);
+      }
+      fetchProducts();
+      closeModal();
+    } catch (error) {
+      console.error("Error saving product:", error);
+    }
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+        setCurrentProduct((prev) => ({ ...prev, image: reader.result }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setCurrentProduct({
+      _id: null,
+      image: "",
+      name: "",
+      price: "",
+      description: "",
+      category: "",
+      active: "Yes",
+    });
+    setImagePreview("");
   };
 
   return (
     <Container>
       <Navbar>
-        <div>
-          <button className="primary" onClick={() => alert("Redirect to Add Product page!")}>
-            <Plus size={16} /> Add Product
-          </button>
-        </div>
+        <button className="primary" onClick={() => setIsModalOpen(true)}>
+          <Plus size={16} /> Add Product
+        </button>
       </Navbar>
-
       <PageTitle>Manage Products</PageTitle>
-
       <Table>
         <TableHeader>
           <TableRow>
             <TableCell>Image</TableCell>
             <TableCell>Name</TableCell>
+            <TableCell>Description</TableCell>
             <TableCell>Price</TableCell>
             <TableCell>Category</TableCell>
-            <TableCell>Description</TableCell>
             <TableCell>Active</TableCell>
             <TableCell>Action</TableCell>
           </TableRow>
         </TableHeader>
         <tbody>
           {products.map((product) => (
-            <TableRow key={product.id}>
-              <TableCell>
-                <img src={product.image} alt={product.name} width={50} />
-              </TableCell>
+            <TableRow key={product._id}>
+              <TableCell><img src={product.image} alt={product.name} width={50} /></TableCell>
               <TableCell>{product.name}</TableCell>
-              <TableCell>{product.price}</TableCell>
-              <TableCell>{product.category.join(", ")}</TableCell>
               <TableCell>{product.description}</TableCell>
+              <TableCell><IndianRupee size={15} />{product.price}</TableCell>
+              <TableCell>{product.category?.name || "Uncategorized"}</TableCell>
               <TableCell>{product.active}</TableCell>
               <TableCell>
-                <ActionButton onClick={() => handleEditClick(product)}>
-                  <Edit size={16} />
-                </ActionButton>
-                <ActionButton onClick={() => handleDelete(product.id)}>
-                  <Trash2 size={16} />
-                </ActionButton>
+                <ActionButton onClick={() => handleEdit(product)}><Edit size={16} /></ActionButton>
+                <ActionButton onClick={() => handleDelete(product._id)}><Trash2 size={16} /></ActionButton>
               </TableCell>
             </TableRow>
           ))}
         </tbody>
       </Table>
 
-      <p>Showing {products.length} of {products.length} entries</p>
-
-      {isEditModalOpen && (
-        <Modal>
-          <h2>Edit Product</h2>
-          <div>
-            <label>Name</label>
-            <Input
-              type="text"
-              name="name"
-              value={selectedProduct.name}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div>
-            <label>Price</label>
-            <Input
-              type="number"
-              name="price"
-              value={selectedProduct.price}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div>
-            <label>Category</label>
-            <Input
-              type="text"
-              name="category"
-              value={selectedProduct.category.join(", ")}
-              onChange={(e) =>
-                setSelectedProduct((prev) => ({
-                  ...prev,
-                  category: e.target.value.split(",").map((cat) => cat.trim()),
-                }))
-              }
-            />
-          </div>
-          <div>
+      {isModalOpen && (
+        <ModalOverlay>
+          <Modal>
+            <CloseButton onClick={closeModal}><X size={18} /></CloseButton>
+            <h2>{currentProduct._id ? "Edit Product" : "Add Product"}</h2>
+            <label>Product Image</label>
+            <FileInput type="file" accept="image/*" onChange={handleFileChange} />
+            {imagePreview && <ImagePreview src={imagePreview} alt="Preview" />}
+            <label>Product Name</label>
+            <Input type="text" value={currentProduct.name} onChange={(e) => setCurrentProduct((prev) => ({ ...prev, name: e.target.value }))} />
             <label>Description</label>
-            <Input
-              type="text"
-              name="description"
-              value={selectedProduct.description}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div>
-            <label>Active</label>
-            <select
-              name="active"
-              value={selectedProduct.active}
-              onChange={handleInputChange}
-            >
+            <Input type="text" value={currentProduct.description} onChange={(e) => setCurrentProduct((prev) => ({ ...prev, description: e.target.value }))} />
+            <label>Price</label>
+            <Input type="number" value={currentProduct.price} onChange={(e) => setCurrentProduct((prev) => ({ ...prev, price: e.target.value }))} />
+            <label>Category</label>
+            <Select value={currentProduct.category} onChange={(e) => setCurrentProduct((prev) => ({ ...prev, category: e.target.value }))}>
+              <option value="">Select Category</option>
+              {categories.map((cat) => (
+                <option key={cat._id} value={cat._id}>{cat.name}</option>
+              ))}
+            </Select>
+            <label>Active Status</label>
+            <Select value={currentProduct.active} onChange={(e) => setCurrentProduct((prev) => ({ ...prev, active: e.target.value }))}>
               <option value="Yes">Yes</option>
               <option value="No">No</option>
-            </select>
-          </div>
-          <ButtonGroup>
-            <button onClick={handleModalClose}>Cancel</button>
-            <button onClick={handleSaveChanges}>Save Changes</button>
-          </ButtonGroup>
-        </Modal>
+            </Select>
+            <ButtonGroup>
+              <button onClick={closeModal}>Cancel</button>
+              <button onClick={handleSave}>Save</button>
+            </ButtonGroup>
+          </Modal>
+        </ModalOverlay>
       )}
     </Container>
   );
 };
-
 export default ManageProduct;
-
