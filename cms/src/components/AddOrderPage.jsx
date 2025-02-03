@@ -1,26 +1,28 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import axios from "axios";
 import {
   Container,
   FormWrapper,
   Title,
-  Select,
-  Input,
-  Button,
   TableWrapper,
   Table,
   TableRow,
   TableData,
+  Input,
+  Select,
+  Select1,
+  Button,
   SummarySection,
   SummaryItem,
   ErrorMessage,
   SuccessMessage,
-  Select1,
 } from "../styles/AddOrderStyles";
 import { OrderContext } from "../components/OrderContext";
 
 const AddOrderPage = () => {
   const { orders, setOrders } = useContext(OrderContext);
   const [table, setTable] = useState("");
+  const [tables, setTables] = useState([]); // Stores fetched tables
   const [currentOrder, setCurrentOrder] = useState([
     { product: "", quantity: 1, rate: 0, amount: 0, description: "" },
   ]);
@@ -36,8 +38,15 @@ const AddOrderPage = () => {
   });
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [isEditing, setIsEditing] = useState(false);
 
+  // Fetch tables from backend
+  useEffect(() => {
+    axios.get("http://localhost:5000/api/tables")
+      .then(response => setTables(response.data))
+      .catch(error => console.error("Error fetching tables:", error));
+  }, []);
+
+  // Handle order changes
   const handleOrderChange = (index, field, value) => {
     const updatedOrders = [...currentOrder];
     updatedOrders[index][field] = value;
@@ -51,56 +60,22 @@ const AddOrderPage = () => {
   };
 
   const handleDiscountChange = (value) => {
-    const discountValue = parseFloat(value) || "";
-    setSummary(prev => ({
-      ...prev,
-      discountPercentage: discountValue
-    }));
-    calculateSummary(currentOrder, discountValue);
+    setSummary(prev => ({ ...prev, discountPercentage: parseFloat(value) || 0 }));
+    calculateSummary(currentOrder, parseFloat(value) || 0);
   };
 
-  const handleRateChange = (field, value) => {
-    const newValue = parseFloat(value) || 0;
-    setSummary(prev => ({
-      ...prev,
-      [field]: newValue
-    }));
-    calculateSummary(currentOrder, summary.discountPercentage, {
-      ...summary,
-      [field]: newValue
-    });
-  };
-
-  const calculateSummary = (
-    orders,
-    discountPercentage = summary.discountPercentage,
-    rates = summary
-  ) => {
-    const grossAmount = orders.reduce(
-      (sum, order) => sum + parseFloat(order.amount || 0),
-      0
-    );
-    const serviceCharge = (grossAmount * rates.serviceChargeRate) / 100;
-    const vat = (grossAmount * rates.vatRate) / 100;
+  const calculateSummary = (orders, discountPercentage = summary.discountPercentage) => {
+    const grossAmount = orders.reduce((sum, order) => sum + (order.amount || 0), 0);
+    const serviceCharge = (grossAmount * summary.serviceChargeRate) / 100;
+    const vat = (grossAmount * summary.vatRate) / 100;
     const discountAmount = (grossAmount * discountPercentage) / 100;
     const netAmount = grossAmount + serviceCharge + vat - discountAmount;
 
-    setSummary(prev => ({
-      ...prev,
-      grossAmount,
-      serviceCharge,
-      vat,
-      discountAmount,
-      netAmount,
-      discountPercentage
-    }));
+    setSummary({ grossAmount, serviceCharge, vat, discountAmount, netAmount, discountPercentage });
   };
 
   const addRow = () => {
-    setCurrentOrder([
-      ...currentOrder,
-      { product: "", quantity: 1, rate: 0, amount: 0, description: "" },
-    ]);
+    setCurrentOrder([...currentOrder, { product: "", quantity: 1, rate: 0, amount: 0, description: "" }]);
   };
 
   const removeRow = (index) => {
@@ -118,21 +93,23 @@ const AddOrderPage = () => {
       return;
     }
 
-    if (currentOrder.some((order) => !order.product || order.quantity <= 0 || order.rate <= 0)) {
+    if (currentOrder.some(order => !order.product || order.quantity <= 0 || order.rate <= 0)) {
       setErrorMessage("Please fill all product details correctly.");
       return;
     }
 
-    const newOrder = {
-      table,
-      items: currentOrder,
-      summary,
-      status: "Pending",
-    };
+    const newOrder = { table, items: currentOrder, summary, status: "Pending" };
 
-    setOrders([...orders, newOrder]);
-    resetForm();
-    setSuccessMessage("Order successfully added!");
+    axios.post("http://localhost:5000/api/orders", newOrder)
+      .then(response => {
+        setOrders([...orders, response.data]);
+        resetForm();
+        setSuccessMessage("Order successfully added!");
+      })
+      .catch(error => {
+        setErrorMessage("Error adding order. Please try again.");
+        console.error(error);
+      });
   };
 
   const resetForm = () => {
@@ -148,7 +125,6 @@ const AddOrderPage = () => {
       discountAmount: 0,
       netAmount: 0,
     });
-    setIsEditing(false);
   };
 
   return (
@@ -161,10 +137,9 @@ const AddOrderPage = () => {
 
         <Select1 value={table} onChange={(e) => setTable(e.target.value)}>
           <option value="">Select Table</option>
-          <option value="Table 1">Table 1</option>
-          <option value="Table 2">Table 2</option>
-          <option value="Table 3">Table 3</option>
-          <option value="Table 4">Table 4</option>
+          {tables.map(tbl => (
+            <option key={tbl._id} value={tbl.name}>{tbl.name}</option>
+          ))}
         </Select1>
 
         <TableWrapper>
@@ -183,10 +158,7 @@ const AddOrderPage = () => {
               {currentOrder.map((order, index) => (
                 <TableRow key={index}>
                   <TableData>
-                    <Select
-                      value={order.product}
-                      onChange={(e) => handleOrderChange(index, "product", e.target.value)}
-                    >
+                    <Select value={order.product} onChange={(e) => handleOrderChange(index, "product", e.target.value)}>
                       <option value="">Select Product</option>
                       <option value="Cappuccino">Cappuccino</option>
                       <option value="Latte">Latte</option>
@@ -196,34 +168,17 @@ const AddOrderPage = () => {
                     </Select>
                   </TableData>
                   <TableData>
-                    <Input
-                      type="number"
-                      min="1"
-                      value={order.quantity}
-                      onChange={(e) => handleOrderChange(index, "quantity", e.target.value)}
-                    />
+                    <Input type="number" min="1" value={order.quantity} onChange={(e) => handleOrderChange(index, "quantity", e.target.value)} />
                   </TableData>
                   <TableData>
-                    <Input
-                      type="number"
-                      min="0"
-                      value={order.rate}
-                      onChange={(e) => handleOrderChange(index, "rate", e.target.value)}
-                    />
+                    <Input type="number" min="0" value={order.rate} onChange={(e) => handleOrderChange(index, "rate", e.target.value)} />
                   </TableData>
                   <TableData>{order.amount.toFixed(2)}</TableData>
                   <TableData>
-                    <Input
-                      type="text"
-                      placeholder="Add description or addons"
-                      value={order.description}
-                      onChange={(e) => handleOrderChange(index, "description", e.target.value)}
-                    />
+                    <Input type="text" placeholder="Add description or addons" value={order.description} onChange={(e) => handleOrderChange(index, "description", e.target.value)} />
                   </TableData>
                   <TableData>
-                    <Button onClick={() => removeRow(index)} red>
-                      Remove
-                    </Button>
+                    <Button red onClick={() => removeRow(index)}>Remove</Button>
                   </TableData>
                 </TableRow>
               ))}
@@ -232,63 +187,16 @@ const AddOrderPage = () => {
         </TableWrapper>
 
         <Button onClick={addRow}>Add Row</Button>
-        <Button onClick={handleSubmitOrder} style={{ marginLeft: "10px" }}>
-          Submit Order
-        </Button>
-        <Button
-          onClick={() => setIsEditing(!isEditing)}
-          style={{ marginLeft: "10px" }}
-        >
-          {isEditing ? "Save Rates" : "Edit Rates"}
-        </Button>
+        <Button onClick={handleSubmitOrder} style={{ marginLeft: "10px" }}>Submit Order</Button>
 
         <SummarySection>
-          <SummaryItem>
-            <label>Gross Amount:</label>
-            <span>{summary.grossAmount.toFixed(2)}</span>
+          <SummaryItem><label>Gross Amount:</label><span>{summary.grossAmount.toFixed(2)}</span></SummaryItem>
+          <SummaryItem><label>Service Charge ({summary.serviceChargeRate}%):</label><span>{summary.serviceCharge.toFixed(2)}</span></SummaryItem>
+          <SummaryItem><label>VAT ({summary.vatRate}%):</label><span>{summary.vat.toFixed(2)}</span></SummaryItem>
+          <SummaryItem><label>Discount (%):</label>
+            <Input type="number" min="0" max="100" value={summary.discountPercentage} onChange={(e) => handleDiscountChange(e.target.value)} />
           </SummaryItem>
-          <SummaryItem>
-            <label>S-Charge ({summary.serviceChargeRate}%):</label>
-            {isEditing ? (
-              <Input
-                type="number"
-                min="0"
-                max="100"
-                value={summary.serviceChargeRate}
-                onChange={(e) => handleRateChange("serviceChargeRate", e.target.value)}
-              />
-            ) : (
-              <span>{summary.serviceCharge.toFixed(2)}</span>
-            )}
-          </SummaryItem>
-          <SummaryItem>
-            <label>VAT ({summary.vatRate}%):</label>
-            {isEditing ? (
-              <Input
-                type="number"
-                min="0"
-                max="100"
-                value={summary.vatRate}
-                onChange={(e) => handleRateChange("vatRate", e.target.value)}
-              />
-            ) : (
-              <span>{summary.vat.toFixed(2)}</span>
-            )}
-          </SummaryItem>
-          <SummaryItem>
-            <label>Discount (%):</label>
-            <Input
-              type="number"
-              min="0"
-              max="100"
-              value={summary.discountPercentage}
-              onChange={(e) => handleDiscountChange(e.target.value)}
-            />
-          </SummaryItem>
-          <SummaryItem>
-            <label>Net Amount:</label>
-            <span>{summary.netAmount.toFixed(2)}</span>
-          </SummaryItem>
+          <SummaryItem><label>Net Amount:</label><span>{summary.netAmount.toFixed(2)}</span></SummaryItem>
         </SummarySection>
       </FormWrapper>
     </Container>

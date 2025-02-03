@@ -4,6 +4,9 @@ const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const categoryRoutes = require("./routes/categoryRoutes");
 const productRoutes = require("./routes/productRoutes");
+const tableRoutes = require("./routes/tableRoutes");
+const addOrderRoutes = require("./routes/addOrderRoutes");
+
 
 dotenv.config();
 connectDB();
@@ -17,6 +20,11 @@ app.use(express.json());
 // Routes
 app.use("/api/categories", categoryRoutes);
 app.use("/api/products", productRoutes);
+
+
+app.use("/api/tables", tableRoutes);
+
+app.use("/api/orders", addOrderRoutes);
 
 app.get("/", (req, res) => {
   res.send("API is running...");

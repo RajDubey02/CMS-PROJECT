@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   Parent,
   Header,
@@ -11,114 +12,96 @@ import {
   AdminSection,
   TableGrid,
   TableSquare,
-} from '../styles/Tablestyles';
-import { Pencil, Trash2 } from 'lucide-react'; // Added icons for Edit and Delete
-import { UtensilsCrossed, } from 'lucide-react';
-import { Utensils } from 'lucide-react';
+} from "../styles/Tablestyles";
+import { Pencil, Trash2, UtensilsCrossed, Utensils } from "lucide-react";
 
 const App = () => {
   const [tables, setTables] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    capacity: '',
-    status: 'active',
-  });
-  const [totalTables, setTotalTables] = useState(0);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [editingIndex, setEditingIndex] = useState(null);
+  const [formData, setFormData] = useState({ name: "", capacity: "", status: "active" });
+  const [searchTerm, setSearchTerm] = useState("");
+  const [editingId, setEditingId] = useState(null);
 
-  // Modal Handlers
-  const openAddTableModal = () => {
+  // Fetch tables from backend
+  useEffect(() => {
+    axios.get("http://localhost:5000/api/tables")
+      .then(response => setTables(response.data))
+      .catch(error => console.error("Error fetching tables:", error));
+  }, []);
+
+  // Open Add/Edit Table Modal
+  const openTableModal = (table = null) => {
     setIsModalOpen(true);
-    setFormData({ name: '', capacity: '', status: 'active' });
-    setEditingIndex(null);
-  };
-
-  const openAdminModal = () => {
-    setIsAdminModalOpen(true);
+    setFormData(table || { name: "", capacity: "", status: "active" });
+    setEditingId(table ? table._id : null);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
-    setIsAdminModalOpen(false);
   };
 
+  // Handle form input changes
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   // Add or Edit Table
-  const saveChanges = () => {
+  const saveTable = () => {
     if (!formData.name || !formData.capacity) {
-      alert('Please fill in all fields.');
+      alert("Please fill in all fields.");
       return;
     }
 
-    const updatedTables = [...tables];
-    if (editingIndex !== null) {
-      updatedTables[editingIndex] = formData;
+    if (editingId) {
+      axios.put(`http://localhost:5000/api/tables/${editingId}`, formData)
+        .then(() => window.location.reload());
     } else {
-      updatedTables.push({ ...formData, availability: true });
+      axios.post("http://localhost:5000/api/tables", formData)
+        .then(() => window.location.reload());
     }
 
-    setTables(updatedTables);
     closeModal();
-  };
-
-  // Add Tables from Admin
-  const handleAdminTableCreation = () => {
-    const newTables = Array.from({ length: totalTables }, (_, i) => ({
-      name: `Table ${i + 1}`,
-      capacity: 4,
-      status: 'active',
-      availability: true,
-    }));
-    setTables(newTables);
-    closeModal();
-  };
-
-  // Toggle Table Availability
-  const toggleTableAvailability = (index) => {
-    const updatedTables = [...tables];
-    updatedTables[index].availability = !updatedTables[index].availability;
-    setTables(updatedTables);
   };
 
   // Delete Table
-  const deleteTable = (index) => {
-    const updatedTables = tables.filter((_, i) => i !== index);
-    setTables(updatedTables);
+  const deleteTable = (id) => {
+    axios.delete(`http://localhost:5000/api/tables/${id}`)
+      .then(() => setTables(tables.filter(table => table._id !== id)));
   };
 
-  // Search Filter
-  const filteredTables = tables.filter((table) =>
+  // Toggle Table Availability
+  const toggleTableAvailability = (id) => {
+    axios.patch(`http://localhost:5000/api/tables/${id}/toggle-availability`)
+      .then(() => setTables(tables.map(table =>
+        table._id === id ? { ...table, availability: !table.availability } : table
+      )));
+  };
+
+  // Filter tables based on search input
+  const filteredTables = tables.filter(table =>
     table.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
     <Parent>
       <Header>
-        <h2>Manage Table</h2>
-        <SearchBar>
-          <input
-            type="text"
-            placeholder="Search tables..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <button onClick={openAddTableModal}>Add Table</button>
-          <button onClick={openAdminModal}>Admin Section</button>
-        </SearchBar>
+        <h2>Manage Tables</h2>
       </Header>
+      <SearchBar>
+        <input 
+          type="text" 
+          placeholder="Search tables..." 
+          value={searchTerm} 
+          onChange={(e) => setSearchTerm(e.target.value)} 
+        />
+        <button onClick={() => openTableModal()}>Add Table</button>
+      </SearchBar>
+
       <AppWrapper>
-        {/* Table List */}
         <Table>
           <thead>
             <tr>
-              <th>Table Name</th>
+              <th>Name</th>
               <th>Capacity</th>
               <th>Availability</th>
               <th>Status</th>
@@ -126,114 +109,64 @@ const App = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredTables.map((table, index) => (
-              <tr key={index}>
+            {filteredTables.map((table) => (
+              <tr key={table._id}>
                 <td>{table.name}</td>
                 <td>{table.capacity}</td>
+                <td>{table.availability ? "Available" : "Occupied"}</td>
                 <td>{table.status}</td>
-                <td>{table.availability ? 'Available' : 'Occupied'}</td>
-                <td >
-                <ModalButtons>
-                  <button onClick={() => toggleTableAvailability(index)}>
-                    {table.availability ?   <Utensils /> : <UtensilsCrossed/>}
-                  </button>
-                  <button onClick={() => {
-                    setEditingIndex(index);
-                    setFormData(table);
-                    setIsModalOpen(true);
-                  }}>
-                    <Pencil />
-                  </button>
-                  <button onClick={() => deleteTable(index)}>
-                    <Trash2 />
-                  </button>
-
-                </ModalButtons>
+                <td>
+                  <ModalButtons>
+                    <button onClick={() => toggleTableAvailability(table._id)}>
+                      {table.availability ? <Utensils /> : <UtensilsCrossed />}
+                    </button>
+                    <button onClick={() => openTableModal(table)}><Pencil /></button>
+                    <button onClick={() => deleteTable(table._id)}><Trash2 /></button>
+                  </ModalButtons>
                 </td>
               </tr>
             ))}
           </tbody>
         </Table>
-
-        {/* Admin Modal */}
-        {isAdminModalOpen && (
-          <Modal>
-            <ModalContent>
-              <h2>Admin Section</h2>
-              <label>
-                Total Tables:
-                <input
-                  type="number"
-                  value={totalTables}
-                  onChange={(e) => setTotalTables(Number(e.target.value))}
-                />
-              </label>
-              <ModalButtons>
-                <button onClick={closeModal}>Close</button>
-                <button onClick={handleAdminTableCreation}>Create Tables</button>
-              </ModalButtons>
-            </ModalContent>
-          </Modal>
-        )}
-
-        {/* Add/Edit Modal */}
-        {isModalOpen && (
-          <Modal>
-            <ModalContent>
-              <h2>{editingIndex !== null ? 'Edit Table' : 'Add Table'}</h2>
-              <label>
-                Table Name:
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                />
-              </label>
-              <label>
-                Capacity:
-                <input
-                  type="number"
-                  name="capacity"
-                  value={formData.capacity}
-                  onChange={handleInputChange}
-                />
-              </label>
-              <label>
-                Status:
-                <select
-                  name="status"
-                  value={formData.status}
-                  onChange={handleInputChange}
-                >
-                  <option value="active">Active</option>
-                  <option value="inactive">Inactive</option>
-                </select>
-              </label>
-              <ModalButtons>
-                <button onClick={closeModal}>Close</button>
-                <button onClick={saveChanges}>Save Changes</button>
-              </ModalButtons>
-            </ModalContent>
-          </Modal>
-        )}
-
-        {/* Table Grid View */}
-        <AdminSection>
-          <h3>Table Overview</h3>
-          <TableGrid>
-            {tables.map((table, index) => (
-              <TableSquare
-                key={index}
-                isAvailable={table.availability}
-                // onClick={() => toggleTableAvailability(index)}
-              >
-                {table.name}
-              </TableSquare>
-            ))}
-          </TableGrid>
-        </AdminSection>
       </AppWrapper>
+
+      {isModalOpen && (
+        <Modal>
+          <ModalContent>
+            <h2>{editingId ? "Edit Table" : "Add Table"}</h2>
+            <label>
+              Table Name:
+              <input type="text" name="name" value={formData.name} onChange={handleInputChange} />
+            </label>
+            <label>
+              Capacity:
+              <input type="number" name="capacity" value={formData.capacity} onChange={handleInputChange} />
+            </label>
+            <label>
+              Status:
+              <select name="status" value={formData.status} onChange={handleInputChange}>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </label>
+            <ModalButtons>
+              <button onClick={closeModal}>Close</button>
+              <button onClick={saveTable}>Save Changes</button>
+            </ModalButtons>
+          </ModalContent>
+        </Modal>
+      )}
+
+      <AdminSection>
+        <h3>Table Overview</h3>
+        <TableGrid>
+          {tables.map((table, index) => (
+            <TableSquare key={index} isAvailable={table.availability}>
+              {table.name}
+            </TableSquare>
+          ))}
+        </TableGrid>
+      </AdminSection>
     </Parent>
   );
 };
