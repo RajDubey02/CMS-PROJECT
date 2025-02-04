@@ -17,6 +17,7 @@ import {
   LayoutGrid,
   ArrowDownUp,
   UserPlus,
+  NotebookPen,
 } from "lucide-react";
 
 // Styled Components
@@ -29,6 +30,7 @@ const SidebarContainer = styled.div`
   left: ${(props) => (props.isOpen ? "0" : "-300px")};
   transition: left 0.3s ease;
   z-index: 1000;
+  overflow-y: auto;
   
   /* overflow-y: auto; */
 `;
@@ -42,6 +44,7 @@ const Overlay = styled.div`
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
   z-index: 1000;
+  overflow-y: auto;
 `;
 
 const Logo = styled.h1`
@@ -66,6 +69,7 @@ const NavLinkStyled = styled(NavLink)`
   border-radius: 8px;
   transition: background-color 0.3s;
   margin-bottom: 6px;
+  cursor: pointer;
 
   &:hover {
     /* background-color: #33333332; */
@@ -96,8 +100,8 @@ const LastDiv = styled.div`
   align-items: end;
   height: 12rem;
   position:absolute;
-  bottom: 85px;
-  left: 6px;
+  bottom: 10px;
+  left: 30px;
 /* height: fit-content; */
   & button {
     background-color: transparent;
@@ -108,7 +112,9 @@ const LastDiv = styled.div`
     color: white;
     font-size: 1.1rem;
     font-family: 'Times New Roman', Times, serif;
+   
   }
+  
 `;
 
 // Sidebar Component
@@ -270,6 +276,13 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             <NavLinkStyled to="/profile">
               <UserRoundPen size={20} />
               Profile
+            </NavLinkStyled>
+          </NavItem>
+
+          <NavItem>
+            <NavLinkStyled to="/Report">
+              <NotebookPen size={20} />
+              Report
             </NavLinkStyled>
           </NavItem>
         </nav>
