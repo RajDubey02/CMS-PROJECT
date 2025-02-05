@@ -7,8 +7,9 @@ const productRoutes = require("./routes/productRoutes");
 const tableRoutes = require("./routes/tableRoutes");
 const addOrderRoutes = require("./routes/addOrderRoutes");
 const bodyParser = require('body-parser');
-const userRoutes = require("./routes/userRoutes");const salesRoutes = require("./routes/salesRoutes");
-const foodRoutes = require('./routes/foodRoutes');
+const userRoutes = require("./routes/userRoutes");
+const salesRoutes = require("./routes/salesRoutes");
+const foodRoutes = require("./routes/foodRoutes.js");
 
 
 dotenv.config();
