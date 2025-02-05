@@ -7,7 +7,9 @@ const productRoutes = require("./routes/productRoutes");
 const tableRoutes = require("./routes/tableRoutes");
 const addOrderRoutes = require("./routes/addOrderRoutes");
 const bodyParser = require('body-parser');
-const userRoutes = require("./routes/userRoutes");
+const userRoutes = require("./routes/userRoutes");const salesRoutes = require("./routes/salesRoutes");
+const foodRoutes = require('./routes/foodRoutes');
+
 
 dotenv.config();
 connectDB();
@@ -31,6 +33,9 @@ app.use("/api/users", userRoutes);
 
 app.use(bodyParser.json({ limit: '50mb' }));  // Increase JSON payload limit
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+
+app.use("/api/report", salesRoutes);
+app.use('/api/food', foodRoutes);
 
 app.get("/", (req, res) => {
   res.send("API is running...");

@@ -1,28 +1,38 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import styled from "styled-components";
 import { Pencil, Trash2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 // Styled Components
 const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
+  font-family: "Raleway", serif;
 `;
 
 const Input = styled.input`
   height: 20px;
   width: 95%;
-  border: orange 1px solid;
+  border: ${(props) => (props.error ? "red 1px solid" : "orange 1px solid")};
   padding: 10px;
   margin: 5px 0;
   border-radius: 7px;
   outline: none;
+  transition: border-color 0.3s ease;
+
+  &:focus {
+    border-color: rgba(234, 104, 18, 0.81);
+    box-shadow: 0px 4px 10px rgba(234, 104, 18, 0.3);
+  }
 `;
 
 const TableHeader = styled.th`
   padding: 10px;
   background-color: rgba(234, 104, 18, 0.81);
   color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 `;
 
 const TableCell = styled.td`
@@ -39,23 +49,32 @@ const Button = styled.button`
   border-radius: 4px;
   width: 30px;
   height: 30px;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+
+  &:hover {
+    transform: scale(1.1);
+    background-color: rgba(234, 104, 18, 0.81);
+  }
 `;
 
-const Buttonb = styled.button`
+const Button1 = styled.button`
   margin: 5px;
-  width: 30px;
-  height: 30px;
-  background-color: green;
+  background-color: red;
   color: white;
   border: none;
   cursor: pointer;
   border-radius: 4px;
+  width: 30px;
+  height: 30px;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+
   &:hover {
-    background-color: rgb(252, 126, 23);
+    transform: scale(1.1);
+    background-color: #d9534f;
   }
 `;
 
-const Modal = styled.div`
+const Modal = styled(motion.div)`
   position: fixed;
   top: 0;
   left: 0;
@@ -72,13 +91,16 @@ const Modal = styled.div`
 const H2 = styled.h2`
   text-align: center;
   font-size: 30px;
+  margin-bottom: 20px;
+  color: rgba(17, 17, 17, 0.81);
 `;
 
-const ModalContent = styled.div`
+const ModalContent = styled(motion.div)`
   background-color: white;
   padding: 20px;
   width: 350px;
   border-radius: 25px;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
 `;
 
 const ModalButton = styled.button`
@@ -91,6 +113,22 @@ const ModalButton = styled.button`
   cursor: pointer;
   border-radius: 4px;
   width: 70px;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.1);
+    background-color: #45a049;
+  }
+`;
+
+const RadioGroup = styled.div`
+  margin: 10px;
+  display: flex;
+  justify-content: space-between;
+`;
+
+const Label = styled.label`
+  margin-left: 5px;
 `;
 
 const UserList = () => {
@@ -104,9 +142,6 @@ const UserList = () => {
     gender: "",
   });
 
-  
-
-  // Fetch users from backend
   useEffect(() => {
     axios
       .get("http://localhost:5000/api/users")
@@ -153,11 +188,73 @@ const UserList = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const closePopup = () => {
+    setShowPopup(false);
+    setErrorPopup("");
+  };
+
   return (
     <>
       <div>
         <H2>Manage Users</H2>
 
+        <AnimatePresence>
+          {editingUser !== null && (
+            <Modal
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <ModalContent
+                initial={{ y: "-100vh" }}
+                animate={{ y: 0 }}
+                exit={{ y: "-100vh" }}
+              >
+                <h3>Edit User</h3>
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleSave();
+                  }}
+                >
+                  <label>Email: </label>
+                  <Input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                  />
+                  <label>First Name: </label>
+                  <Input
+                    type="text"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleChange}
+                    required
+                  />
+                  <label>Last Name: </label>
+                  <Input
+                    type="text"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleChange}
+                    required
+                  />
+                  <label>Phone: </label>
+                  <Input
+                    type="text"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    required
+                  />
+                  <ModalButton type="submit">Save</ModalButton>
+                </form>
+              </ModalContent>
+            </Modal>
+          )}
+        </AnimatePresence>
         {editingUser && (
           <Modal>
             <ModalContent>
@@ -205,8 +302,13 @@ const UserList = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
-              <tr key={user._id}>
+            {users.map((user, index) => (
+              <motion.tr
+                key={index}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
                 <TableCell>{user.email}</TableCell>
                 <TableCell>
                   {user.firstName} {user.lastName}
@@ -214,17 +316,37 @@ const UserList = () => {
                 <TableCell>{user.phone}</TableCell>
                 <TableCell>{user.gender}</TableCell>
                 <TableCell>
-                  <Button onClick={() => handleEdit(user)}>
-                    <Pencil size={16} />
+                  <Button onClick={() => handleEdit(index)}>
+                    <Pencil size={20} />
                   </Button>
-                  <Buttonb onClick={() => handleDelete(user._id)}>
-                    <Trash2 size={16} />
-                  </Buttonb>
+                  <Button1 onClick={() => handleDelete(index)}>
+                    <Trash2 size={20} />
+                  </Button1>
                 </TableCell>
-              </tr>
+              </motion.tr>
             ))}
           </tbody>
         </Table>
+
+        <AnimatePresence>
+          {showPopup && (
+            <Modal
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <ModalContent
+                initial={{ scale: 0.8 }}
+                animate={{ scale: 1 }}
+                exit={{ scale: 0.8 }}
+              >
+                <h3>Error</h3>
+                <p>{errorPopup}</p>
+                <ModalButton onClick={closePopup}>OK</ModalButton>
+              </ModalContent>
+            </Modal>
+          )}
+        </AnimatePresence>
       </div>
     </>
   );

@@ -13,7 +13,7 @@ import CategoryManagement from "./components/CategoryManagement";
 import Table from "./components/Table";
 import User from "./components/User";
 import ManageUser from "./components/ManageUser";
-import MenuSection from "./components/Menu";
+import Report from "./components/Report";
 
 
 const App = () => {
@@ -51,6 +51,7 @@ const App = () => {
               <Route path="/CategoryManagement" element={<CategoryManagement />} />
               <Route path="/Table" element={<Table />} />
               <Route path="/ManageUser" element={<ManageUser />} />
+              <Route path="/Report" element={<Report />} />
               <Route
                 path="/orders/*"
                 element={

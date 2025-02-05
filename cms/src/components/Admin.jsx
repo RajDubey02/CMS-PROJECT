@@ -4,7 +4,7 @@ import { DollarSign, Users, Coffee, TrendingUp } from 'lucide-react';
 
 const DashboardContainer = styled.div`
   padding: 20px;
-  margin-left: 30px;
+  margin-left: 0px;
 `;
 
 const StatsGrid = styled.div`

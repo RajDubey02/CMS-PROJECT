@@ -10,7 +10,6 @@ router.post("/", async (req, res) => {
     if (!name) {
       return res.status(400).json({ message: "Category name is required." });
     }
-
     const newCategory = new Category({ name, status: status || "Active" });
     await newCategory.save();
 
@@ -39,7 +38,6 @@ router.put("/:id", async (req, res) => {
       { name, status },
       { new: true }
     );
-
     if (!updatedCategory) {
       return res.status(404).json({ message: "Category not found" });
     }
