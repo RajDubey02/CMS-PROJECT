@@ -14,6 +14,7 @@ import Table from "./components/Table";
 import User from "./components/User";
 import ManageUser from "./components/ManageUser";
 import Report from "./components/Report";
+import Login from "./components/Login"
 
 
 const App = () => {
@@ -41,7 +42,7 @@ const App = () => {
               <Route path="/" element={<HeroSEction />} />
             </Routes>
           </div>
-          <div style={{ marginLeft: "2rem" }}>
+          <div>
             <Routes>
               <Route path="/Admin" element={<Admin />} />
               <Route path="/User" element={<User />} />
@@ -51,6 +52,7 @@ const App = () => {
               <Route path="/Table" element={<Table />} />
               <Route path="/ManageUser" element={<ManageUser />} />
               <Route path="/Report" element={<Report />} />
+              <Route path="/Login" element={<Login />} />
               <Route
                 path="/orders/*"
                 element={

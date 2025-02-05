@@ -273,7 +273,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 
           {/* Profile */}
           <NavItem>
-            <NavLinkStyled to="/profile">
+            <NavLinkStyled to="/Login">
               <UserRoundPen size={20} />
               Profile
             </NavLinkStyled>

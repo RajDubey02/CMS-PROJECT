@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { Search, Bell, Mail, User, Menu } from "lucide-react";
+import { Search, User, Menu } from "lucide-react";
 
 const Universal = styled.div`
   margin: 0;
@@ -14,7 +14,7 @@ const NavbarContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  background-color: rgba(234, 104, 18, 0.81);
+  background-color: rgba(100, 62, 36, 0.81);
   position: sticky;
   color: #ecf0f1;
   width: 100%;
@@ -169,12 +169,8 @@ export const Navbar = ({ toggleSidebar, userName = "John Doe", serviceName = "Ca
           </Border>
         </NavLeft>
         <NavRight>
-          <IconWrapper>
-            <Bell size={24} />
-          </IconWrapper>
-          <IconWrapper>
-            <Mail size={24} />
-          </IconWrapper>
+  
+          
           <IconWrapper onClick={toggleProfileMenu} ref={profileRef}>
             <User size={24} />
             <ProfileMenu isVisible={showProfileMenu}>

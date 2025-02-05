@@ -24,9 +24,24 @@ const FormContainer = styled.div`
   align-items: center;
   justify-content: center;
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+
+  /* New animation to make the form fade in and scale */
+  animation: fadeInWithScale 0.6s ease-out;
+
   &:hover {
     transform: scale(1.02);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  @keyframes fadeInWithScale {
+    0% {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
 `;
 
@@ -44,8 +59,8 @@ const Input = styled.input`
   outline: none;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
   &:focus {
-    border-color: #f98b32;
-    box-shadow: 0 0 4px rgba(249, 139, 50, 0.6);
+    border-color: #a37550;
+    box-shadow: 0 0 4px rgba(128, 76, 34, 0.6);
   }
 `;
 
@@ -71,6 +86,7 @@ const RadioGroup = styled.div`
 const H = styled.h1`
   text-align: center;
   color: black;
+  margin: 50px;
 `;
 
 const Label = styled.label`
@@ -79,7 +95,7 @@ const Label = styled.label`
 
 const Button = styled.button`
   padding: 10px 20px;
-  background-color: rgba(234, 104, 18, 0.81);
+  background-color: rgba(129, 83, 52, 0.81);
   color: white;
   border: none;
   border-radius: 4px;
@@ -116,15 +132,23 @@ const PopupContent = styled.div`
   font-size: 10px;
   font-weight: 600;
   animation: slideIn 0.3s ease-in-out;
-  
+
   @keyframes fadeIn {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
   }
-  
+
   @keyframes slideIn {
-    0% { transform: translateY(-20px); }
-    100% { transform: translateY(0); }
+    0% {
+      transform: translateY(-20px);
+    }
+    100% {
+      transform: translateY(0);
+    }
   }
 `;
 
@@ -149,7 +173,7 @@ const UserForm = ({ onSave }) => {
 
     // Prevent entering more than 10 digits for phone number
     if (name === "phone" && value.length > 10) return;
-    
+
     setFormData({ ...formData, [name]: value });
   };
 

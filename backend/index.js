@@ -6,8 +6,8 @@ const categoryRoutes = require("./routes/categoryRoutes");
 const productRoutes = require("./routes/productRoutes");
 const tableRoutes = require("./routes/tableRoutes");
 const addOrderRoutes = require("./routes/addOrderRoutes");
-const salesRoutes = require("./routes/salesRoutes");
-const foodRoutes = require('./routes/foodRoutes');
+// const salesRoutes = require("./routes/salesRoutes");
+// const foodRoutes = require('./routes/foodRoutes');
 
 
 dotenv.config();
@@ -28,8 +28,8 @@ app.use("/api/tables", tableRoutes);
 
 app.use("/api/orders", addOrderRoutes);
 
-app.use("/api/report", salesRoutes);
-app.use('/api/food', foodRoutes);
+// app.use("/api/report", salesRoutes);
+// app.use('/api/food', foodRoutes);
 
 app.get("/", (req, res) => {
   res.send("API is running...");

@@ -10,9 +10,9 @@ import {
   ErrorMessage,
   CheckboxWrapper,
   ForgotPasswordLink,
-} from "../style/LoginStyles";
-import backgroundImg from "../assets/cafe2.jpeg";
-import logoImg from "../assets/logo1.png";
+} from "../styles/LoginStyles";
+import backgroundImg from "../assets/imgg.jpg";
+import logoImg from "../assets/6828.jpg";
 
 const Login = () => {
   const [formData, setFormData] = useState({

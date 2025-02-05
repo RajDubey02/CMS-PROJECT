@@ -1,6 +1,8 @@
 import React from 'react'
 import DashGraph from "./DashGraph"
 import Metrics from './Metrics';
+import { motion } from 'framer-motion';
+
 
 import CustomerTrend from './CustomerTrends';
 import styled from 'styled-components';
@@ -8,7 +10,7 @@ import PopularFoodGraph from './PopularFoodGraph';
 import RecentOrdersCard from './RecentOrdersCard';
 
 const ParentDiv= styled.div`
-  background-color: #f8f8f8;
+  background-color: #fffefd;
 `;
     
 const Div2= styled.div`
@@ -20,13 +22,34 @@ const Div2= styled.div`
   justify-content: center;
   
 `
+const CardWrapper = styled(motion.div)`
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+  }
+`;
+
+// Animations
+const fadeInUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+};
 
 const Report = () => {
   return (
    <>
    <ParentDiv>
-    <Metrics/>
     <Div2>
+    <Metrics />
    <DashGraph/>
    <CustomerTrend/>
    <PopularFoodGraph/>

@@ -103,8 +103,8 @@ const App = () => {
             <tr>
               <th>Name</th>
               <th>Capacity</th>
-              <th>Availability</th>
               <th>Status</th>
+              <th>Availability</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -113,8 +113,8 @@ const App = () => {
               <tr key={table._id}>
                 <td>{table.name}</td>
                 <td>{table.capacity}</td>
-                <td>{table.availability ? "Available" : "Occupied"}</td>
                 <td>{table.status}</td>
+                <td>{table.availability ? "Available" : "Occupied"}</td>
                 <td>
                   <ModalButtons>
                     <button onClick={() => toggleTableAvailability(table._id)}>
