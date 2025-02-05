@@ -3,11 +3,17 @@ const Table = require("../models/Table");
 exports.addTable = async (req, res) => {
   try {
     const { name, capacity, status } = req.body;
-    const newTable = new Table({ name, capacity, status, availability: true });
+
+    // Generate a unique table number
+    const lastTable = await Table.findOne().sort({ tableNumber: -1 });
+    const tableNumber = lastTable ? lastTable.tableNumber + 1 : 1;
+
+    const newTable = new Table({ name, tableNumber, capacity, status });
     await newTable.save();
+
     res.status(201).json(newTable);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: "Error adding table", error: error.message });
   }
 };
 
