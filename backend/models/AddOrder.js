@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema({
-  table: { type: String, required: true },
+  tableNumber: { type: String, required: true },  // Changed from 'table' to 'tableNumber'
+  tableName: { type: String, required: true },    // Added tableName
   items: [
     {
       product: String,

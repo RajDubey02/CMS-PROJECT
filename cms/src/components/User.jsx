@@ -7,7 +7,7 @@ const Body = styled.body`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: rgb(255, 254, 254);
+  background-color:  rgb(255, 254, 254);
   font-family: "Raleway", serif;
   transition: background-color 0.3s ease-in;
 `;
@@ -82,7 +82,6 @@ const RadioGroup = styled.div`
   gap: 70px;
   margin-top: 20px;
 `;
-
 const H = styled.h1`
   text-align: center;
   color: black;
@@ -92,7 +91,6 @@ const H = styled.h1`
 const Label = styled.label`
   font-weight: bold;
 `;
-
 const Button = styled.button`
   padding: 10px 20px;
   background-color: rgba(129, 83, 52, 0.81);
@@ -152,7 +150,7 @@ const PopupContent = styled.div`
   }
 `;
 
-const UserForm = ({ onSave }) => {
+const UserForm = ({ onUserAdded }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -168,6 +166,7 @@ const UserForm = ({ onSave }) => {
   const [errorPopup, setErrorPopup] = useState("");
   const [showPopup, setShowPopup] = useState(false);
 
+  // Handle Input Change
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -187,7 +186,18 @@ const UserForm = ({ onSave }) => {
     return phoneRegex.test(phone);
   };
 
-  const handleSubmit = (e) => {
+  const validatePassword = (password) => {
+    const strongPasswordRegex = /^(?=.*[!@#$%^&*])(?=.*[0-9])(?=.*[a-zA-Z]).{8,}$/;
+    return strongPasswordRegex.test(password);
+  };
+
+  const validatePhone = (phone) => {
+    const phoneRegex = /^\d{10}$/; // Validates exactly 10 digits
+    return phoneRegex.test(phone);
+  };
+
+  // Handle Form Submission
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (

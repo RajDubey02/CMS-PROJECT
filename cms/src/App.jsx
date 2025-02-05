@@ -48,6 +48,7 @@ const App = () => {
               <Route path="/User" element={<User />} />
               <Route path="/AddProduct" element={<AddProduct />} />
               <Route path="/ManageProduct" element={<ManageProduct />} />
+              <Route path="/MenuSection" element={<MenuSection />} />
               <Route path="/CategoryManagement" element={<CategoryManagement />} />
               <Route path="/Table" element={<Table />} />
               <Route path="/ManageUser" element={<ManageUser />} />

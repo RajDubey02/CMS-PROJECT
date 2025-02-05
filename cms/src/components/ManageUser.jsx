@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Pencil, Trash2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-// Styled components
+// Styled Components
 const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
@@ -141,74 +141,51 @@ const UserList = () => {
     phone: "",
     gender: "",
   });
-  const [errorPopup, setErrorPopup] = useState("");
-  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
-    const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
-    setUsers(storedUsers);
+    axios
+      .get("http://localhost:5000/api/users")
+      .then((response) => setUsers(response.data))
+      .catch((error) => console.error("Error fetching users:", error));
   }, []);
 
-  const handleDelete = (index) => {
-    const updatedUsers = users.filter((_, i) => i !== index);
-    localStorage.setItem("users", JSON.stringify(updatedUsers));
-    setUsers(updatedUsers);
+  // Delete user
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this user?")) {
+      await axios.delete(`http://localhost:5000/api/users/${id}`);
+      setUsers(users.filter((user) => user._id !== id));
+    }
   };
 
-  const handleEdit = (index) => {
-    const user = users[index];
-    setEditingUser(index);
+  // Edit user
+  const handleEdit = (user) => {
+    setEditingUser(user._id);
     setFormData(user);
   };
 
-  const validatePhone = (phone) => {
-    const phoneRegex = /^\d{10}$/; // Validates exactly 10 digits
-    return phoneRegex.test(phone);
+  // Save edited user
+  const handleSave = async () => {
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone || !formData.gender) {
+      alert("Please fill all fields before saving.");
+      return;
+    }
+  
+    try {
+      const { _id, ...updatedData } = formData;
+      const response = await axios.put(`http://localhost:5000/api/users/${_id}`, updatedData);
+  
+      setUsers(users.map((user) => (user._id === _id ? response.data : user)));
+      setEditingUser(null);
+    } catch (error) {
+      console.error("Error updating user:", error);
+      alert("Failed to update user. Please try again.");
+    }
   };
+  
 
-  const handleSave = () => {
-    const emailExists = users.some(
-      (user, i) => user.email === formData.email && i !== editingUser
-    );
-    if (emailExists) {
-      setErrorPopup("Email is already taken!");
-      setShowPopup(true);
-      return;
-    }
-
-    const phoneExists = users.some(
-      (user, i) => user.phone === formData.phone && i !== editingUser
-    );
-    if (phoneExists) {
-      setErrorPopup("Mobile number already exists!");
-      setShowPopup(true);
-      return;
-    }
-
-    if (!validatePhone(formData.phone)) {
-      setErrorPopup("Phone number must be exactly 10 digits!");
-      setShowPopup(true);
-      return;
-    }
-
-    const updatedUsers = [...users];
-    updatedUsers[editingUser] = formData;
-    localStorage.setItem("users", JSON.stringify(updatedUsers));
-    setUsers(updatedUsers);
-    setEditingUser(null);
-    setFormData({
-      email: "",
-      firstName: "",
-      lastName: "",
-      phone: "",
-      gender: "",
-    });
-  };
-
+  // Handle input change
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    if (name === "phone" && value.length > 10) return;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const closePopup = () => {
@@ -278,6 +255,41 @@ const UserList = () => {
             </Modal>
           )}
         </AnimatePresence>
+        {editingUser && (
+          <Modal>
+            <ModalContent>
+              <h3>Edit User</h3>
+              <form onSubmit={(e) => e.preventDefault()}>
+                <label>Email:</label>
+                <br />
+                <Input type="email" name="email" value={formData.email} onChange={handleChange} required />
+                <br />
+                <label>First Name:</label>
+                <br />
+                <Input type="text" name="firstName" value={formData.firstName} onChange={handleChange} required />
+                <br />
+                <label>Last Name:</label>
+                <br />
+                <Input type="text" name="lastName" value={formData.lastName} onChange={handleChange} required />
+                <br />
+                <label>Phone:</label>
+                <br />
+                <Input type="text" name="phone" value={formData.phone} onChange={handleChange} required />
+                <br />
+                <label>Gender:</label>
+                <br />
+                <Input type="text" name="gender" value={formData.gender} onChange={handleChange} required />
+                <br />
+                <ModalButton type="button" onClick={handleSave}>
+                  Save
+                </ModalButton>
+                <ModalButton type="button" onClick={() => setEditingUser(null)}>
+                  Cancel
+                </ModalButton>
+              </form>
+            </ModalContent>
+          </Modal>
+        )}
 
         <Table>
           <thead>

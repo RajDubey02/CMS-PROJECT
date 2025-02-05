@@ -2,12 +2,18 @@ const Order = require("../models/AddOrder");
 
 exports.addOrder = async (req, res) => {
   try {
-    const { table, items, summary, status } = req.body;
-    const newOrder = new Order({ table, items, summary, status });
+    const { tableNumber, tableName, items, summary, status } = req.body;
+
+    if (!tableNumber || !tableName) {
+      return res.status(400).json({ message: "Table number and name are required." });
+    }
+
+    const newOrder = new Order({ tableNumber, tableName, items, summary, status });
     await newOrder.save();
-    res.status(201).json(newOrder);
+
+    res.status(201).json({ message: "Order added successfully", order: newOrder });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: "Error adding order", error: error.message });
   }
 };
 

@@ -102,6 +102,7 @@ const App = () => {
           <thead>
             <tr>
               <th>Name</th>
+              <th>Table.No</th>
               <th>Capacity</th>
               <th>Status</th>
               <th>Availability</th>
@@ -109,6 +110,26 @@ const App = () => {
             </tr>
           </thead>
           <tbody>
+  {filteredTables.map((table) => (
+    <tr key={table._id}>
+      <td>{table.name}</td>
+      <td>{table.tableNumber}</td> {/* Display Table Number */}
+      <td>{table.capacity}</td>
+      <td>{table.availability ? "Available" : "Occupied"}</td>
+      <td>{table.status}</td>
+      <td>
+        <ModalButtons>
+          <button onClick={() => toggleTableAvailability(table._id)}>
+            {table.availability ? <Utensils /> : <UtensilsCrossed />}
+          </button>
+          <button onClick={() => openTableModal(table)}><Pencil /></button>
+          <button onClick={() => deleteTable(table._id)}><Trash2 /></button>
+        </ModalButtons>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
             {filteredTables.map((table) => (
               <tr key={table._id}>
                 <td>{table.name}</td>

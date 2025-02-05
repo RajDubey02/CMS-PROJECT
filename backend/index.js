@@ -28,6 +28,16 @@ app.use("/api/tables", tableRoutes);
 
 app.use("/api/orders", addOrderRoutes);
 
+app.use("/api/users", userRoutes);
+
+app.use(bodyParser.json({ limit: '50mb' }));  // Increase JSON payload limit
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+
+app.use("/api/users", userRoutes);
+
+app.use(bodyParser.json({ limit: '50mb' }));  // Increase JSON payload limit
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+
 // app.use("/api/report", salesRoutes);
 // app.use('/api/food', foodRoutes);
 
