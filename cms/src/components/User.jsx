@@ -1,10 +1,12 @@
+import React, { useState } from "react";
+import styled from "styled-components";
+import axios from "axios";
 
-import React, { useState } from 'react';
-import styled from 'styled-components';
+// Styled Components
 const Body = styled.div`
   display: flex;
   flex-direction: column;
-  background-color:rgb(255, 254, 254);
+  background-color: rgb(255, 254, 254);
 `;
 const FormContainer = styled.div`
   max-width: 500px;
@@ -14,31 +16,27 @@ const FormContainer = styled.div`
   border-radius: 8px;
   background-color: #f9f9f9;
 `;
-
 const Input = styled.input`
   width: 90%;
   padding: 10px;
   margin: 10px 0;
   border-radius: 4px;
   border: 1px solid #ddd;
-  `;
-
+`;
 const RadioGroup = styled.div`
   display: flex;
   gap: 20px;
 `;
-
 const H = styled.h1`
   text-align: center;
   color: black;
-  `;
+`;
 const Label = styled.label`
   font-weight: bold;
 `;
-
 const Button = styled.button`
   padding: 10px 20px;
-  background-color:rgba(234, 104, 18, 0.81);
+  background-color: rgba(234, 104, 18, 0.81);
   color: white;
   border: none;
   border-radius: 4px;
@@ -47,132 +45,106 @@ const Button = styled.button`
     background-color: #45a049;
   }
 `;
+const ErrorMessage = styled.p`
+  color: red;
+  font-weight: bold;
+  text-align: center;
+`;
+const SuccessMessage = styled.p`
+  color: green;
+  font-weight: bold;
+  text-align: center;
+`;
 
-
-const UserForm = ({ onSave }) => {
+const UserForm = ({ onUserAdded }) => {
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    confirmPassword: '',
-    firstName: '',
-    lastName: '',
-    phone: '',
-    gender: '',
+    email: "",
+    password: "",
+    confirmPassword: "",
+    firstName: "",
+    lastName: "",
+    phone: "",
+    gender: "",
   });
 
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
+  // Handle Input Change
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  // Handle Form Submission
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setSuccess("");
+
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match!');
+      setError("Passwords do not match!");
       return;
     }
 
-    const savedUsers = JSON.parse(localStorage.getItem('users')) || [];
-    savedUsers.push(formData);
-    localStorage.setItem('users', JSON.stringify(savedUsers));
-    onSave();
-    setFormData({
-      email: '',
-      password: '',
-      confirmPassword: '',
-      firstName: '',
-      lastName: '',
-      phone: '',
-      gender: '',
-    });
+    try {
+      const { confirmPassword, ...dataToSend } = formData;
+      const response = await axios.post("http://localhost:5000/api/users/register", dataToSend);
+      setSuccess("User registered successfully!");
+      setFormData({
+        email: "",
+        password: "",
+        confirmPassword: "",
+        firstName: "",
+        lastName: "",
+        phone: "",
+        gender: "",
+      });
+      onUserAdded(); // Refresh user list in parent component
+    } catch (err) {
+      setError(err.response?.data?.message || "Error registering user.");
+    }
   };
 
   return (
-    <>
-      <Body>
-        <H>User Management App</H>
-        <FormContainer>
-          <h2>Add User</h2>
-          {error && <p style={{ color: 'red' }}>{error}</p>}
-          <form onSubmit={handleSubmit}>
-            <Label>Email</Label>
-            <Input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange} required
-            />
-            <Label>Password</Label>
-            <Input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange} required
-            />
-            <Label>Confirm Password</Label>
-            <Input
-              type="password"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange} required
-            />
-            <Label>First Name</Label>
-            <Input
-              type="text"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleChange} required
-            />
-            <Label>Last Name</Label>
-            <Input
-              type="text"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleChange} required
-            />
-            <Label>Phone</Label>
-            <Input
-              type="text"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange} required
-            />
-            <Label>Gender</Label>
-            <br />    <br />
-            <RadioGroup>
-              <div>
-                <input
-                  type="radio"
-                  name="gender"
-                  value="male"
-                  onChange={handleChange}
-                  checked={formData.gender === 'male'} required
-                />
-                <label>Male</label>
-              </div>
-
-              <div>
-                <input
-                  type="radio"
-                  name="gender"
-                  value="female"
-                  onChange={handleChange}
-                  checked={formData.gender === 'female'} required
-                />
-                <label>Female</label>
-              </div>
-
-            </RadioGroup>  <br /> <br />
-            <Button type="submit">Save User</Button>
-          </form>
-        </FormContainer>
-      </Body>
-    </>
+    <Body>
+      <H>User Management App</H>
+      <FormContainer>
+        <h2>Add User</h2>
+        {error && <ErrorMessage>{error}</ErrorMessage>}
+        {success && <SuccessMessage>{success}</SuccessMessage>}
+        <form onSubmit={handleSubmit}>
+          <Label>Email</Label>
+          <Input type="email" name="email" value={formData.email} onChange={handleChange} required />
+          <Label>Password</Label>
+          <Input type="password" name="password" value={formData.password} onChange={handleChange} required />
+          <Label>Confirm Password</Label>
+          <Input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required />
+          <Label>First Name</Label>
+          <Input type="text" name="firstName" value={formData.firstName} onChange={handleChange} required />
+          <Label>Last Name</Label>
+          <Input type="text" name="lastName" value={formData.lastName} onChange={handleChange} required />
+          <Label>Phone</Label>
+          <Input type="text" name="phone" value={formData.phone} onChange={handleChange} required />
+          <Label>Gender</Label>
+          <br />
+          <br />
+          <RadioGroup>
+            <div>
+              <input type="radio" name="gender" value="male" onChange={handleChange} checked={formData.gender === "male"} required />
+              <label>Male</label>
+            </div>
+            <div>
+              <input type="radio" name="gender" value="female" onChange={handleChange} checked={formData.gender === "female"} required />
+              <label>Female</label>
+            </div>
+          </RadioGroup>
+          <br />
+          <br />
+          <Button type="submit">Save User</Button>
+        </form>
+      </FormContainer>
+    </Body>
   );
 };
 
 export default UserForm;
-
-

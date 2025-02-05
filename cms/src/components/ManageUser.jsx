@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { Pencil, Trash2 } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import styled from "styled-components";
+import { Pencil, Trash2 } from "lucide-react";
 
-// Styled components
+// Styled Components
 const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
@@ -16,9 +17,7 @@ const Input = styled.input`
   margin: 5px 0;
   border-radius: 7px;
   outline: none;
- 
 `;
-
 
 const TableHeader = styled.th`
   padding: 10px;
@@ -27,13 +26,11 @@ const TableHeader = styled.th`
 `;
 
 const TableCell = styled.td`
- 
   border: 1px solid #ddd;
-  text-align: center
+  text-align: center;
 `;
 
 const Button = styled.button`
-  
   margin: 5px;
   background-color: green;
   color: white;
@@ -42,7 +39,20 @@ const Button = styled.button`
   border-radius: 4px;
   width: 30px;
   height: 30px;
+`;
 
+const Buttonb = styled.button`
+  margin: 5px;
+  width: 30px;
+  height: 30px;
+  background-color: green;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  &:hover {
+    background-color: rgb(252, 126, 23);
+  }
 `;
 
 const Modal = styled.div`
@@ -57,13 +67,12 @@ const Modal = styled.div`
   align-items: center;
   z-index: 100;
   width: 100%;
-  line-hight: 5;
- 
 `;
-const H2=styled.h2`
-text-align: center;
-font-size: 30px;
-`
+
+const H2 = styled.h2`
+  text-align: center;
+  font-size: 30px;
+`;
 
 const ModalContent = styled.div`
   background-color: white;
@@ -82,137 +91,107 @@ const ModalButton = styled.button`
   cursor: pointer;
   border-radius: 4px;
   width: 70px;
-   
-`;
-
-const Buttonb= styled.button`
-
- margin: 5px;
-  width: 30px;
-  height: 30px;
-  background-color: green;
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 4px;
-  &:hover {
-    background-color:rgb(252, 126, 23);
-  }
-
-
 `;
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
-  const [editingUser, setEditingUser] = useState(null); // State to track which user is being edited
+  const [editingUser, setEditingUser] = useState(null);
   const [formData, setFormData] = useState({
-    email: '',
-    firstName: '',
-    lastName: '',
-    phone: '',
-    gender: ''
+    email: "",
+    firstName: "",
+    lastName: "",
+    phone: "",
+    gender: "",
   });
 
+  
+
+  // Fetch users from backend
   useEffect(() => {
-    const storedUsers = JSON.parse(localStorage.getItem('users')) || [];
-    setUsers(storedUsers);
+    axios
+      .get("http://localhost:5000/api/users")
+      .then((response) => setUsers(response.data))
+      .catch((error) => console.error("Error fetching users:", error));
   }, []);
 
-  const handleDelete = (index) => {
-    const updatedUsers = users.filter((_, i) => i !== index);
-    localStorage.setItem('users', JSON.stringify(updatedUsers));
-    setUsers(updatedUsers);
+  // Delete user
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this user?")) {
+      await axios.delete(`http://localhost:5000/api/users/${id}`);
+      setUsers(users.filter((user) => user._id !== id));
+    }
   };
 
-  const handleEdit = (index) => {
-    const user = users[index];
-    setEditingUser(index); // Set the user to be edited
-    setFormData(user); // Populate form with user's data
+  // Edit user
+  const handleEdit = (user) => {
+    setEditingUser(user._id);
+    setFormData(user);
   };
 
-  const handleSave = () => {
-    const updatedUsers = [...users];
-    updatedUsers[editingUser] = formData; // Update the edited user
-    localStorage.setItem('users', JSON.stringify(updatedUsers));
-    setUsers(updatedUsers);
-    setEditingUser(null); // Clear editing state
-    setFormData({
-      email: '',
-      firstName: '',
-      lastName: '',
-      phone: '',
-      gender: ''
-    }); // Reset form data
+  // Save edited user
+  const handleSave = async () => {
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone || !formData.gender) {
+      alert("Please fill all fields before saving.");
+      return;
+    }
+  
+    try {
+      const { _id, ...updatedData } = formData;
+      const response = await axios.put(`http://localhost:5000/api/users/${_id}`, updatedData);
+  
+      setUsers(users.map((user) => (user._id === _id ? response.data : user)));
+      setEditingUser(null);
+    } catch (error) {
+      console.error("Error updating user:", error);
+      alert("Failed to update user. Please try again.");
+    }
   };
+  
 
+  // Handle input change
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   return (
     <>
       <div>
-        
-
         <H2>Manage Users</H2>
 
-        {editingUser !== null && (
+        {editingUser && (
           <Modal>
             <ModalContent>
               <h3>Edit User</h3>
-              <form onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
-                <label>Email: </label> <br />
-                <Input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
+              <form onSubmit={(e) => e.preventDefault()}>
+                <label>Email:</label>
                 <br />
-                <label>First Name: </label> <br />
-                <Input
-                  type="text"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  required
-                />
+                <Input type="email" name="email" value={formData.email} onChange={handleChange} required />
                 <br />
-                <label>Last Name: </label> <br />
-                <Input
-                  type="text"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  required
-                />
+                <label>First Name:</label>
                 <br />
-                <label>Phone: </label> <br />
-                <Input
-                  type="text"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  required
-                  />
+                <Input type="text" name="firstName" value={formData.firstName} onChange={handleChange} required />
                 <br />
-                <label>Gender: </label> <br />
-                <Input
-                  type="text"
-                  name="gender"
-                  value={formData.gender}
-                  onChange={handleChange}
-                  required
-                  />
+                <label>Last Name:</label>
                 <br />
-                <ModalButton type="submit">Save</ModalButton>
-                <ModalButton type="button" onClick={() => setEditingUser(null)}>Cancel</ModalButton>
+                <Input type="text" name="lastName" value={formData.lastName} onChange={handleChange} required />
+                <br />
+                <label>Phone:</label>
+                <br />
+                <Input type="text" name="phone" value={formData.phone} onChange={handleChange} required />
+                <br />
+                <label>Gender:</label>
+                <br />
+                <Input type="text" name="gender" value={formData.gender} onChange={handleChange} required />
+                <br />
+                <ModalButton type="button" onClick={handleSave}>
+                  Save
+                </ModalButton>
+                <ModalButton type="button" onClick={() => setEditingUser(null)}>
+                  Cancel
+                </ModalButton>
               </form>
             </ModalContent>
           </Modal>
-                 
         )}
 
         <Table>
@@ -226,15 +205,21 @@ const UserList = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user, index) => (
-              <tr key={index}>
+            {users.map((user) => (
+              <tr key={user._id}>
                 <TableCell>{user.email}</TableCell>
-                <TableCell>{user.firstName} {user.lastName}</TableCell>
+                <TableCell>
+                  {user.firstName} {user.lastName}
+                </TableCell>
                 <TableCell>{user.phone}</TableCell>
                 <TableCell>{user.gender}</TableCell>
                 <TableCell>
-                  <Button onClick={() => handleEdit(index)}><Pencil size={16}/></Button>
-                  <Buttonb onClick={() => handleDelete(index)}><Trash2 size={16}/></Buttonb>
+                  <Button onClick={() => handleEdit(user)}>
+                    <Pencil size={16} />
+                  </Button>
+                  <Buttonb onClick={() => handleDelete(user._id)}>
+                    <Trash2 size={16} />
+                  </Buttonb>
                 </TableCell>
               </tr>
             ))}

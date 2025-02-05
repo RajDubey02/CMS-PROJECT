@@ -250,6 +250,10 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
               <NavLinkStyled to="/ManageProduct"  >
                 <PackageSearch size={20} />
                 Manage Product</NavLinkStyled>
+
+                <NavLinkStyled to="/MenuSection"  >
+                <PackageSearch size={20} />
+                Menu List</NavLinkStyled>
             </SubOrder>
           </NavItem>
 
