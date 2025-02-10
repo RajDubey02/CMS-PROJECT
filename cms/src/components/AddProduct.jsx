@@ -44,14 +44,27 @@ const AddProduct = ({ history }) => {
     fetchCategories();
   }, []);
 
-  const handleImageUpload = (e) => {
+  const handleImageUpload = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProductData((prev) => ({ ...prev, image: reader.result }));
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+  
+    const formData = new FormData();
+    formData.append("file", file);
+  
+    try {
+      const response = await axios.post("http://localhost:5000/api/upload", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+  
+      setProductData((prev) => ({
+        ...prev,
+        image: `http://localhost:5000${response.data.filePath}`, // Store the image URL from the backend
+      }));
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      console.log(error);
+      alert("Failed to upload image.");
+      
     }
   };
 
@@ -138,7 +151,7 @@ const AddProduct = ({ history }) => {
           <ImageUploadSection>
             {productData.image ? (
               <div>
-                <img src={productData.image} alt="Product preview" />
+                <img src={productData.image}  />
               </div>
             ) : (
               <div className="placeholder">No image uploaded</div>

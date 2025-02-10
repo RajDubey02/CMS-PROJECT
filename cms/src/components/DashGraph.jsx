@@ -59,7 +59,7 @@ const Dropdown = styled.select`
   width: 100px;
   border-radius: 5px;
   font-size: 10px;
-  background-color: #ddb892;  /* Light Caramel */
+  background-color: #d0b294;  /* Light Caramel */
   color: #16120f;  /* Coffee Bean Dark */
   border: none;
   cursor: pointer;

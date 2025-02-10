@@ -19,11 +19,15 @@ const ManageOrdersPage = () => {
 
   // Fetch orders from backend
   useEffect(() => {
+    fetchOrders();
+  }, []);
+
+  const fetchOrders = () => {
     axios
       .get("http://localhost:5000/api/orders")
       .then((response) => setOrders(response.data))
       .catch((error) => console.error("Error fetching orders:", error));
-  }, []);
+  };
 
   // Update Order Status
   const updateOrderStatus = async (index, status) => {
@@ -34,10 +38,7 @@ const ManageOrdersPage = () => {
         { status }
       );
 
-      const updatedOrders = orders.map((order, i) =>
-        i === index ? response.data : order
-      );
-      setOrders(updatedOrders);
+      fetchOrders(); // Re-fetch updated orders
     } catch (error) {
       console.error("Error updating order status:", error);
     }
@@ -53,15 +54,8 @@ const ManageOrdersPage = () => {
   const handleSaveEdit = async (index) => {
     const orderToUpdate = orders[index];
     try {
-      const response = await axios.put(
-        `http://localhost:5000/api/orders/${orderToUpdate._id}`,
-        editOrder
-      );
-
-      const updatedOrders = orders.map((order, i) =>
-        i === index ? response.data : order
-      );
-      setOrders(updatedOrders);
+      await axios.put(`http://localhost:5000/api/orders/${orderToUpdate._id}`, editOrder);
+      fetchOrders(); // Refresh orders list after update
       setEditableIndex(null);
       setEditOrder(null);
     } catch (error) {
@@ -75,7 +69,7 @@ const ManageOrdersPage = () => {
     if (window.confirm("Are you sure you want to delete this order?")) {
       try {
         await axios.delete(`http://localhost:5000/api/orders/${orderToDelete._id}`);
-        setOrders(orders.filter((_, i) => i !== index));
+        fetchOrders();
       } catch (error) {
         console.error("Error deleting order:", error);
       }
@@ -115,7 +109,8 @@ const ManageOrdersPage = () => {
 
       order.items.forEach((item) => {
         const wrappedDesc = doc.splitTextToSize(item.description || "", 50);
-        doc.text(item.product || "", 20, yPos);
+        doc.text(item.productName || "", 20, yPos);
+
         doc.text(item.quantity.toString(), 80, yPos);
         doc.text(parseFloat(item.rate).toFixed(2), 100, yPos);
         doc.text(parseFloat(item.amount).toFixed(2), 130, yPos);
@@ -161,8 +156,7 @@ const ManageOrdersPage = () => {
   return (
     <Container>
       <Title>Manage Orders</Title>
-      <Table>
-        <thead>
+      <Table><thead>
           <TableRow>
             <TableData as="th">Table Number</TableData>
             <TableData as="th">Table Name</TableData>
@@ -191,7 +185,11 @@ const ManageOrdersPage = () => {
                   order.status
                 )}
               </TableData>
-              <TableData>{order.items.map(item => item.product).join(", ")}</TableData>
+              <TableData>
+                  {order.items.map((item) => item.productName).join(", ")}
+              </TableData>
+
+
               <TableData>{order.items.reduce((sum, item) => sum + (parseFloat(item.quantity) || 0), 0)}</TableData>
               <TableData>{order.items.reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0).toFixed(2)}</TableData>
               <TableData>

@@ -48,7 +48,7 @@ const RecentOrdersCard = () => {
 
   const fetchRecentOrders = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/recent-orders");
+      const response = await axios.get("http://localhost:5000/app/orders");
       setRecentOrders(response.data);
     } catch (error) {
       console.error("Error fetching recent orders:", error);

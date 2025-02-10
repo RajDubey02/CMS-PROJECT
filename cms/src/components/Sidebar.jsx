@@ -180,6 +180,57 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             </NavLinkStyled>
           </NavItem>
 
+          {/* Menu Section */}
+
+          <NavItem>
+            <div
+              onClick={() => toggleDropdown("Menu")}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                padding: "12px 16px",
+                color: "#fff",
+                textDecoration: "none",
+                borderRadius: "8px",
+                cursor: "pointer",
+                backgroundColor: activeDropdown === "Menu" ? "#4a4a4a1c" : "transparent",
+                transition: "background-color 0.3s",
+              }}
+            >
+              <ClipboardList size={20} style={{ marginRight: "12px" }} />
+              Menu
+              {activeDropdown === "Menu" ? (
+                <ChevronUp size={20} style={{ marginLeft: "auto" }} />
+              ) : (
+                <ChevronDown size={20} style={{ marginLeft: "auto" }} />
+              )}
+            </div>
+            <SubOrder isOpen={activeDropdown === "Menu"}>
+
+              <NavLinkStyled to="AddProduct">
+                <CirclePlus size={20} />
+                Add Product
+
+              </NavLinkStyled>
+              <NavLinkStyled to="/ManageProduct"  >
+                <PackageSearch size={20} />
+                Manage Product</NavLinkStyled>
+
+                <NavLinkStyled to="/MenuSection"  >
+                <PackageSearch size={20} />
+                Menu List</NavLinkStyled>
+            </SubOrder>
+          </NavItem>
+          {/* Table */}
+          <NavItem>
+            <NavLinkStyled to="/Table">
+              <Table size={20} />
+              Table
+            </NavLinkStyled>
+
+            </NavItem>
+            
+
           {/* Orders */}
           <NavItem>
             <div
@@ -214,6 +265,16 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             </SubOrder>
           </NavItem>
 
+          {/* Staff */}
+
+
+          <NavItem>
+            <NavLinkStyled to="/ManageUser">
+              <Users size={20} />
+              Staff
+            </NavLinkStyled>
+          </NavItem>
+
           {/* Menu */}
           {/* <NavItem>
             <NavLinkStyled to="/menu">
@@ -223,61 +284,13 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           </NavItem> */}
 
 
-          <NavItem>
-            <div
-              onClick={() => toggleDropdown("Menu")}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                padding: "12px 16px",
-                color: "#fff",
-                textDecoration: "none",
-                borderRadius: "8px",
-                cursor: "pointer",
-                backgroundColor: activeDropdown === "Menu" ? "#4a4a4a1c" : "transparent",
-                transition: "background-color 0.5s",
-              }}
-            >
-              <ClipboardList size={20} style={{ marginRight: "12px" }} />
-              Menu
-              {activeDropdown === "Menu" ? (
-                <ChevronUp size={20} style={{ marginLeft: "auto" }} />
-              ) : (
-                <ChevronDown size={20} style={{ marginLeft: "auto" }} />
-              )}
-            </div>
-            <SubOrder isOpen={activeDropdown === "Menu"}>
+          
 
-              <NavLinkStyled to="AddProduct">
-                <CirclePlus size={20} />
-                Add Product
-
-              </NavLinkStyled>
-              <NavLinkStyled to="/ManageProduct"  >
-                <PackageSearch size={20} />
-                Manage Product</NavLinkStyled>
-
-                <NavLinkStyled to="/MenuSection"  >
-                <PackageSearch size={20} />
-                Menu List</NavLinkStyled>
-            </SubOrder>
-          </NavItem>
-
-          {/* Table and Staff */}
-          <NavItem>
-            <NavLinkStyled to="/Table">
-              <Table size={20} />
-              Table
-            </NavLinkStyled>
-            <NavLinkStyled to="/ManageUser">
-              <Users size={20} />
-              Staff
-            </NavLinkStyled>
-          </NavItem>
+          
 
           {/* Profile */}
           <NavItem>
-            <NavLinkStyled to="/profile">
+            <NavLinkStyled to="/Login">
               <UserRoundPen size={20} />
               Profile
             </NavLinkStyled>

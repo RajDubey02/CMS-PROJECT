@@ -57,10 +57,10 @@ const AddOrderPage = () => {
 
   const handleOrderChange = (index, field, value) => {
     const updatedOrders = [...currentOrder];
-
+  
     if (field === "product") {
-      const selectedProduct = products.find(product => product._id === value);
-      updatedOrders[index].product = value;
+      const selectedProduct = products.find(product => product.name === value);
+      updatedOrders[index].productName = value; // Store product name instead of ObjectId
       updatedOrders[index].rate = selectedProduct ? selectedProduct.price : 0;
       updatedOrders[index].amount = updatedOrders[index].quantity * updatedOrders[index].rate;
     } else if (field === "quantity" || field === "rate") {
@@ -69,10 +69,11 @@ const AddOrderPage = () => {
     } else {
       updatedOrders[index][field] = value;
     }
-
+  
     setCurrentOrder(updatedOrders);
     calculateSummary(updatedOrders, summary.discountPercentage);
   };
+  
 
   const handleDiscountChange = (value) => {
     const discountValue = parseFloat(value) || "";
@@ -144,30 +145,37 @@ const AddOrderPage = () => {
   
     const [selectedTableNumber, selectedTableName] = table.split(" - ");
   
-    if (currentOrder.some(order => !order.product || order.quantity <= 0 || order.rate <= 0)) {
+    if (currentOrder.some(order => !order.productName || order.quantity <= 0 || order.rate <= 0)) {
       setErrorMessage("Please fill all product details correctly.");
       return;
     }
   
+  
     const newOrder = {
       tableNumber: selectedTableNumber,
       tableName: selectedTableName,
-      items: currentOrder,
+      items: currentOrder.map(order => ({
+        productName: order.productName, // Use productName instead of ObjectId
+        quantity: order.quantity,
+        rate: order.rate,
+        amount: order.amount,
+        description: order.description,
+      })),
       summary,
-      status: "Pending"
+      status: "Unpaid",
     };
 
     axios.post("http://localhost:5000/api/orders", newOrder)
-      .then(response => {
-        setOrders([...orders, response.data]);
-        resetForm();
-        setSuccessMessage("Order successfully added!");
-      })
-      .catch(error => {
-        setErrorMessage("Error adding order. Please try again.");
-        console.error(error);
-      });
-  };
+    .then(response => {
+      setOrders([...orders, response.data]);
+      resetForm();
+      setSuccessMessage("Order successfully added!");
+    })
+    .catch(error => {
+      setErrorMessage("Error adding order. Please try again.");
+      console.error(error);
+    });
+};
 
   const resetForm = () => {
     setTable("");
@@ -218,12 +226,18 @@ const AddOrderPage = () => {
               {currentOrder.map((order, index) => (
                 <TableRow key={index}>
                   <TableData>
-                    <Select value={order.product} onChange={(e) => handleOrderChange(index, "product", e.target.value)}>
-                      <option value="">Select Product</option>
-                      {products.map(product => (
-                        <option key={product._id} value={product._id}>{product.name}</option>
-                      ))}
-                    </Select>
+                  <Select
+  value={order.productName} // Use productName instead of product._id
+  onChange={(e) => handleOrderChange(index, "product", e.target.value)}
+>
+  <option value="">Select Product</option>
+  {products.map(product => (
+    <option key={product.name} value={product.name}>
+      {product.name}
+    </option>
+  ))}
+</Select>
+
                   </TableData>
                   <TableData><Input type="number" min="1" value={order.quantity} onChange={(e) => handleOrderChange(index, "quantity", e.target.value)} /></TableData>
                   <TableData><Input type="number" min="0" value={order.rate} disabled /></TableData>

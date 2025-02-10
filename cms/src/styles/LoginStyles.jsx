@@ -30,6 +30,7 @@ export const BackgroundImage = styled.img`
 `;
 
 export const LoginBox = styled.div`
+background-color: white;
   position: relative;
   z-index: 2;
   width: 400px;
@@ -55,6 +56,7 @@ export const Logo = styled.img`
   width: 100px;
   margin: 0 auto 20px auto;
   display: block;
+  border-radius: 50%;
 
   @media (max-width: 768px) {
     width: 80px;
@@ -91,9 +93,9 @@ export const Input = styled.input`
   font-size: 16px;
 
   &:focus {
-    border-color: #ff5722;
+    border-color: #613224;
     outline: none;
-    box-shadow: 0 0 5px #ff5722;
+    box-shadow: 0 0 5px #634036;
   }
 
   @media (max-width: 768px) {
@@ -111,7 +113,7 @@ export const Button = styled.button`
   width: 90%;
   padding: 12px;
   margin-top: 20px;
-  background-color: #ff5722;
+  background-color:  #613224;
   color: white;
   font-size: 16px;
   font-weight: bold;
@@ -121,7 +123,7 @@ export const Button = styled.button`
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #e64a19;
+    background-color:  #291611;
   }
 
   @media (max-width: 768px) {

@@ -133,6 +133,10 @@ export const UploadButton = styled.label`
   input {
     display: none;
   }
+  &:focus {
+  outline: 2px solid rgba(31, 27, 25, 0.87);
+}
+
 `;
 
 export const TextFormatToolbar = styled.div`
@@ -155,6 +159,10 @@ export const FormatButton = styled.button`
   &:hover svg {
     color: rgba(234, 104, 18, 0.87);
   }
+  &:focus {
+  outline: 2px solid rgba(234, 104, 18, 0.87);
+}
+
 `;
 
 export const MultiSelect = styled.div`
@@ -215,6 +223,10 @@ export const Button = styled.button`
   &:hover {
     background-color: #ff9100;
   }
+  &:focus {
+  outline: 2px solid rgba(234, 104, 18, 0.87);
+}
+
 `;
 
 export const ActionButton = styled(Button)`

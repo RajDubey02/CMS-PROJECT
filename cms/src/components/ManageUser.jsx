@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Pencil, Trash2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import axios from "axios"; // Add axios import
 
 // Styled components
 const Table = styled.table`
@@ -144,15 +145,22 @@ const UserList = () => {
   const [errorPopup, setErrorPopup] = useState("");
   const [showPopup, setShowPopup] = useState(false);
 
+  // Fetch data from the backend
   useEffect(() => {
-    const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
-    setUsers(storedUsers);
+    axios
+      .get("http://localhost:5000/api/users") // Replace with your backend URL
+      .then((response) => setUsers(response.data))
+      .catch((error) => console.error("Error fetching users:", error));
   }, []);
 
   const handleDelete = (index) => {
-    const updatedUsers = users.filter((_, i) => i !== index);
-    localStorage.setItem("users", JSON.stringify(updatedUsers));
-    setUsers(updatedUsers);
+    const userId = users[index]._id; // Assuming the backend gives a unique user ID
+    axios
+      .delete(`http://localhost:5000/api/users/${userId}`)
+      .then(() => {
+        setUsers(users.filter((_, i) => i !== index));
+      })
+      .catch((error) => console.error("Error deleting user:", error));
   };
 
   const handleEdit = (index) => {
@@ -191,18 +199,21 @@ const UserList = () => {
       return;
     }
 
-    const updatedUsers = [...users];
-    updatedUsers[editingUser] = formData;
-    localStorage.setItem("users", JSON.stringify(updatedUsers));
-    setUsers(updatedUsers);
-    setEditingUser(null);
-    setFormData({
-      email: "",
-      firstName: "",
-      lastName: "",
-      phone: "",
-      gender: "",
-    });
+    const userId = users[editingUser]._id;
+    axios
+      .put(`http://localhost:5000/api/users/${userId}`, formData)
+      .then(() => {
+        setUsers(users.map((user, i) => (i === editingUser ? formData : user)));
+        setEditingUser(null);
+        setFormData({
+          email: "",
+          firstName: "",
+          lastName: "",
+          phone: "",
+          gender: "",
+        });
+      })
+      .catch((error) => console.error("Error updating user:", error));
   };
 
   const handleChange = (e) => {

@@ -5,7 +5,8 @@ const orderSchema = new mongoose.Schema({
   tableName: { type: String, required: true },    // Added tableName
   items: [
     {
-      product: String,
+      // product: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
+      productName: { type: String, required: true },
       quantity: Number,
       rate: Number,
       amount: Number,
@@ -22,8 +23,11 @@ const orderSchema = new mongoose.Schema({
     discountAmount: Number,
     netAmount: Number,
   },
-  status: { type: String, default: "Pending" },
-});
+  status: { type: String, default: "Unpaid" },
+},
+
+{ timestamps: true }
+);
 
 const Order = mongoose.model("Order", orderSchema);
 module.exports = Order;

@@ -96,7 +96,8 @@ export const Button = styled.button`
   font-size: 1rem;
   margin:  0 5px;
   border: none;
-  border-radius: 4px;
+ 
+  border-radius: 10px;
   color: #fff;
   background: ${(props) => (props.red ? "#ff5c5c" : "#4caf50")};
   cursor: pointer;
@@ -107,18 +108,20 @@ export const Button = styled.button`
   }
 
   &:disabled {
-    background: #ddd;
+    background: #ffffff;
     cursor: not-allowed;
   }
 
   @media (max-width: 768px) {
     padding: 6px 12px;
     font-size: 0.9rem;
+    /* margin: 5%; */
   }
 
   @media (max-width: 480px) {
     padding: 4px 10px;
     font-size: 0.8rem;
+    /* margin: 5%; */
   }
 `;
 

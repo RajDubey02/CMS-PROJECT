@@ -14,7 +14,11 @@ import Table from "./components/Table";
 import User from "./components/User";
 import ManageUser from "./components/ManageUser";
 import Report from "./components/Report";
-// import MenuSection
+import Login from "./components/Login";
+import MenuSection from "./components/Menu";
+import Register from "./components/Register";
+import ForgotPassword from "./components/ForgotPassword";
+import ResetPassword from "./components/ResetPassword";
 
 
 const App = () => {
@@ -42,17 +46,22 @@ const App = () => {
               <Route path="/" element={<HeroSEction />} />
             </Routes>
           </div>
-          <div style={{ marginLeft: "2rem" }}>
+          <div>
             <Routes>
               <Route path="/Admin" element={<Admin />} />
               <Route path="/User" element={<User />} />
               <Route path="/AddProduct" element={<AddProduct />} />
               <Route path="/ManageProduct" element={<ManageProduct />} />
-              {/* <Route path="/MenuSection" element={<MenuSection />} /> */}
+              <Route path="/MenuSection" element={<MenuSection />} />
               <Route path="/CategoryManagement" element={<CategoryManagement />} />
               <Route path="/Table" element={<Table />} />
               <Route path="/ManageUser" element={<ManageUser />} />
               <Route path="/Report" element={<Report />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/forgot-pass" element={<ForgotPassword />} />
+              <Route path="/reset-pass" element={<ResetPassword />} />
+              
               <Route
                 path="/orders/*"
                 element={
