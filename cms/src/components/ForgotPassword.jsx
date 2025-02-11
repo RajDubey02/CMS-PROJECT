@@ -24,6 +24,8 @@ const ForgotPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
+
     if (!email) {
       setError('Email is required');
       return;
@@ -39,8 +41,9 @@ const ForgotPassword = () => {
       setEmailSent(true);
       toast.success('Password reset instructions sent to your email');
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Failed to send reset email');
-      setError(error.response?.data?.message || 'An error occurred');
+      const errorMsg = error.response?.data?.message || 'Failed to send reset email';
+      toast.error(errorMsg);
+      setError(errorMsg);
     } finally {
       setLoading(false);
     }
@@ -52,7 +55,7 @@ const ForgotPassword = () => {
         <AuthCard>
           <Title>Check Your Email</Title>
           <p style={{ textAlign: 'center', marginBottom: '1rem' }}>
-            We've sent password reset instructions to your email.
+            We've sent password reset instructions to your email. Please check your inbox.
           </p>
           <LinkText>
             <Link to="/login">Back to Login</Link>
@@ -65,7 +68,7 @@ const ForgotPassword = () => {
   return (
     <AuthContainer>
       <AuthCard>
-        <Title>Reset Password</Title>
+        <Title>Forgot Password</Title>
         <Form onSubmit={handleSubmit}>
           <InputGroup>
             <IconWrapper>
@@ -73,10 +76,10 @@ const ForgotPassword = () => {
             </IconWrapper>
             <Input
               type="email"
-              placeholder="Email"
+              placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              error={error}
+              disabled={loading}
             />
             {error && <ErrorMessage>{error}</ErrorMessage>}
           </InputGroup>
@@ -86,8 +89,7 @@ const ForgotPassword = () => {
           </Button>
 
           <LinkText>
-            Remember your password?
-            <Link to="/login">Sign In</Link>
+            Remember your password? <Link to="/login">Sign In</Link>
           </LinkText>
         </Form>
       </AuthCard>

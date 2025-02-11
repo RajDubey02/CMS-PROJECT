@@ -17,8 +17,8 @@ import Report from "./components/Report";
 import Login from "./components/Login";
 import MenuSection from "./components/Menu";
 import Register from "./components/Register";
-import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
+import ForgotPassword from "./components/ForgotPassword";
 
 
 const App = () => {
@@ -59,8 +59,9 @@ const App = () => {
               <Route path="/Report" element={<Report />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
-              <Route path="/forgot-pass" element={<ForgotPassword />} />
+              {/* <Route path="/forgot-pass" element={<ForgotPassword />} /> */}
               <Route path="/reset-pass" element={<ResetPassword />} />
+              <Route path="/forgot-pass" element={<ForgotPassword />} />
               
               <Route
                 path="/orders/*"

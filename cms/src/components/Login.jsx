@@ -1,20 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
-import { toast } from 'react-toastify';
-import {
-  AuthContainer,
-  AuthCard,
-  Title,
-  Form,
-  InputGroup,
-  Input,
-  IconWrapper,
-  ErrorMessage,
-  Button,
-  LinkText
-} from '../styles/AuthStyles';
+import { Mail, Lock } from 'lucide-react';
+import { AuthContainer, AuthCard, Title, Form, InputGroup, Input, IconWrapper, ErrorMessage, Button, LinkText } from '../styles/AuthStyles'; // Adjust path
 
 const Login = () => {
   const navigate = useNavigate();
@@ -22,11 +10,8 @@ const Login = () => {
     email: '',
     password: ''
   });
-  const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-
-  const adminEmail = 'admin@gmail.com'; // Replace with your admin's email
 
   const validateForm = () => {
     const newErrors = {};
@@ -49,21 +34,21 @@ const Login = () => {
     setLoading(true);
     try {
       const response = await axios.post('http://localhost:5000/api/auth/login', formData);
-      localStorage.setItem('token', response.data.token);
+      if (response.data.success) {
 
-      // Check if the logged-in email matches the admin's email
-      if (formData.email === adminEmail) {
-        toast.success('Admin login successful!');
-        navigate('/Admin');
-      } else {
-        toast.success('User login successful!');
-        navigate('/MenuSection'); // Replace with the path you want for regular users
+        const { email } = formData;
+        if (email === "admin@gmail.com") {
+          navigate('/Admin');
+        } else {
+          navigate('/MenuSection');
+        } 
+      }else {
+        setErrors({ submit: response.data.message || 'Login Failed'});
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Login failed');
-      setErrors({
-        submit: error.response?.data?.message || 'An error occurred during login'
-      });
+      // console.error("Login Error:", error.response?.data || error.message); // Debugging
+
+      setErrors({ submit: error.response?.data?.message || 'An error occurred during login' });
     } finally {
       setLoading(false);
     }
@@ -72,7 +57,7 @@ const Login = () => {
   return (
     <AuthContainer>
       <AuthCard>
-        <Title>Welcome Back</Title>
+        <Title>Login</Title>
         <Form onSubmit={handleSubmit}>
           <InputGroup>
             <IconWrapper>
@@ -93,32 +78,27 @@ const Login = () => {
               <Lock size={20} />
             </IconWrapper>
             <Input
-              type={showPassword ? 'text' : 'password'}
+              type="password"
               placeholder="Password"
               value={formData.password}
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
               error={errors.password}
             />
-            <IconWrapper
-              style={{ left: 'auto', right: '0.75rem', cursor: 'pointer' }}
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-            </IconWrapper>
             {errors.password && <ErrorMessage>{errors.password}</ErrorMessage>}
           </InputGroup>
 
           <Button type="submit" disabled={loading}>
-            {loading ? 'Signing in...' : 'Sign In'}
+            {loading ? 'Logging in...' : 'Login'}
           </Button>
 
-          <LinkText>
+          {errors.submit && <ErrorMessage>{errors.submit}</ErrorMessage>}
+
+          {/* <LinkText>
             <Link to="/forgot-pass">Forgot Password?</Link>
-          </LinkText>
+          </LinkText> */}
 
           <LinkText>
-            Don't have an account?
-            <Link to="/register">Sign Up</Link>
+            Don't have an account? <Link to="/register">Sign Up</Link>
           </LinkText>
         </Form>
       </AuthCard>

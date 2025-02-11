@@ -1,15 +1,16 @@
 import React, { useState } from "react";
+import axios from "axios";
 import styled from "styled-components";
 import { Eye, EyeOff } from "lucide-react";
 
-const Body = styled.body`
+const Body = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   background-color: rgb(255, 254, 254);
   font-family: "Raleway", serif;
-  transition: background-color 0.3s ease-in;
+  height: 100vh;
 `;
 
 const FormContainer = styled.div`
@@ -23,9 +24,6 @@ const FormContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
-
-  /* New animation to make the form fade in and scale */
   animation: fadeInWithScale 0.6s ease-out;
 
   &:hover {
@@ -70,8 +68,6 @@ const EyeIcon = styled.span`
   right: 20px;
   transform: translateY(-50%);
   cursor: pointer;
-  font-size: 16px;
-  transition: transform 0.2s ease-in-out;
   &:hover {
     transform: translateY(-50%) scale(1.1);
   }
@@ -79,14 +75,14 @@ const EyeIcon = styled.span`
 
 const RadioGroup = styled.div`
   display: flex;
-  gap: 70px;
-  margin-top: 20px;
+  gap: 20px;
+  margin-top: 10px;
 `;
 
 const H = styled.h1`
   text-align: center;
   color: black;
-  margin: 50px;
+  margin: 20px;
 `;
 
 const Label = styled.label`
@@ -101,6 +97,7 @@ const Button = styled.button`
   border-radius: 4px;
   cursor: pointer;
   margin-top: 20px;
+  width: 100%;
   transition: background-color 0.3s ease, transform 0.3s ease;
   &:hover {
     background-color: #45a049;
@@ -119,7 +116,6 @@ const Popup = styled.div`
   align-items: center;
   background: rgba(0, 0, 0, 0.5);
   z-index: 1000;
-  animation: fadeIn 0.3s ease-in-out;
 `;
 
 const PopupContent = styled.div`
@@ -129,30 +125,9 @@ const PopupContent = styled.div`
   text-align: center;
   max-width: 400px;
   width: 100%;
-  font-size: 10px;
-  font-weight: 600;
-  animation: slideIn 0.3s ease-in-out;
-
-  @keyframes fadeIn {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
-  }
-
-  @keyframes slideIn {
-    0% {
-      transform: translateY(-20px);
-    }
-    100% {
-      transform: translateY(0);
-    }
-  }
 `;
 
-const UserForm = ({ onSave }) => {
+const UserForm = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -165,209 +140,121 @@ const UserForm = ({ onSave }) => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [errorPopup, setErrorPopup] = useState("");
+  const [popupMessage, setPopupMessage] = useState("");
   const [showPopup, setShowPopup] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    // Prevent entering more than 10 digits for phone number
     if (name === "phone" && value.length > 10) return;
-
     setFormData({ ...formData, [name]: value });
   };
 
   const validatePassword = (password) => {
-    const strongPasswordRegex = /^(?=.*[!@#$%^&*])(?=.*[0-9])(?=.*[a-zA-Z]).{8,}$/;
-    return strongPasswordRegex.test(password);
+    return /^(?=.*[!@#$%^&*])(?=.*[0-9])(?=.*[a-zA-Z]).{8,}$/.test(password);
   };
 
   const validatePhone = (phone) => {
-    const phoneRegex = /^\d{10}$/; // Validates exactly 10 digits
-    return phoneRegex.test(phone);
+    return /^\d{10}$/.test(phone);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (
-      !formData.email ||
-      !formData.password ||
-      !formData.confirmPassword ||
-      !formData.firstName ||
-      !formData.lastName ||
-      !formData.phone ||
-      !formData.gender
-    ) {
-      setErrorPopup("All fields must be filled out!");
+    if (Object.values(formData).some((field) => field === "")) {
+      setPopupMessage("All fields must be filled out!");
       setShowPopup(true);
       return;
     }
 
     if (!validatePassword(formData.password)) {
-      setErrorPopup(
-        "Password must be at least 8 characters long, include a number, a letter, and a special character!"
+      setPopupMessage(
+        "Password must be at least 8 characters, include a number, a letter, and a special character!"
       );
       setShowPopup(true);
       return;
     }
 
     if (!validatePhone(formData.phone)) {
-      setErrorPopup("Phone number must be exactly 10 digits!");
+      setPopupMessage("Phone number must be exactly 10 digits!");
       setShowPopup(true);
       return;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      setErrorPopup("Passwords do not match!");
+      setPopupMessage("Passwords do not match!");
       setShowPopup(true);
       return;
     }
 
-    const savedUsers = JSON.parse(localStorage.getItem("users")) || [];
-    const emailExists = savedUsers.some((user) => user.email === formData.email);
-    const phoneExists = savedUsers.some((user) => user.phone === formData.phone);
-
-    if (emailExists) {
-      setErrorPopup("Email is already taken!");
+    try {
+      const response = await axios.post("http://localhost:5000/api/users/register", formData);
+      setPopupMessage(response.data.message || "User registered successfully!");
       setShowPopup(true);
-      return;
-    }
-
-    if (phoneExists) {
-      setErrorPopup("Mobile number already exists!");
+      setFormData({
+        email: "",
+        password: "",
+        confirmPassword: "",
+        firstName: "",
+        lastName: "",
+        phone: "",
+        gender: "",
+      });
+    } catch (error) {
+      setPopupMessage(error.response?.data?.message || "Error registering user");
       setShowPopup(true);
-      return;
     }
-
-    savedUsers.push(formData);
-    localStorage.setItem("users", JSON.stringify(savedUsers));
-
-    setErrorPopup("Data Submitted Successfully!");
-    setShowPopup(true);
-
-    if (onSave) onSave();
-
-    setFormData({
-      email: "",
-      password: "",
-      confirmPassword: "",
-      firstName: "",
-      lastName: "",
-      phone: "",
-      gender: "",
-    });
   };
 
   const closePopup = () => {
     setShowPopup(false);
-    setErrorPopup("");
+    setPopupMessage("");
   };
 
   return (
     <Body>
-      <H>User Management App</H>
+      <H>User Registration</H>
       <FormContainer>
-        <h2>Add User</h2>
         <form onSubmit={handleSubmit}>
+          <Label>First Name</Label>
+          <Input type="text" name="firstName" value={formData.firstName} onChange={handleChange} required />
+          
+          <Label>Last Name</Label>
+          <Input type="text" name="lastName" value={formData.lastName} onChange={handleChange} required />
+
           <Label>Email</Label>
-          <Input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
+          <Input type="email" name="email" value={formData.email} onChange={handleChange} required />
+          
+          <Label>Phone</Label>
+          <Input type="text" name="phone" value={formData.phone} onChange={handleChange} required />
+
           <Label>Password</Label>
           <InputContainer>
-            <Input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
+            <Input type={showPassword ? "text" : "password"} name="password" value={formData.password} onChange={handleChange} required />
             <EyeIcon onClick={() => setShowPassword(!showPassword)}>
               {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
             </EyeIcon>
           </InputContainer>
+
           <Label>Confirm Password</Label>
           <InputContainer>
-            <Input
-              type={showConfirmPassword ? "text" : "password"}
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
-            />
+            <Input type={showConfirmPassword ? "text" : "password"} name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required />
           </InputContainer>
-          <Label>First Name</Label>
-          <Input
-            type="text"
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleChange}
-            required
-          />
-          <Label>Last Name</Label>
-          <Input
-            type="text"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleChange}
-            required
-          />
-          <Label>Phone</Label>
-          <Input
-            type="text"
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
-            required
-          />
+
           <Label>Gender</Label>
           <RadioGroup>
-            <div>
-              <input
-                type="radio"
-                name="gender"
-                value="male"
-                onChange={handleChange}
-                checked={formData.gender === "male"}
-                required
-              />
-              <label>Male</label>
-            </div>
-            <div>
-              <input
-                type="radio"
-                name="gender"
-                value="female"
-                onChange={handleChange}
-                checked={formData.gender === "female"}
-                required
-              />
-              <label>Female</label>
-            </div>
-            <div>
-              <input
-                type="radio"
-                name="gender"
-                value="custom"
-                onChange={handleChange}
-                checked={formData.gender === "custom"}
-                required
-              />
-              <label>Custom</label>
-            </div>
+            <label><input type="radio" name="gender" value="male" onChange={handleChange} /> Male</label>
+            <label><input type="radio" name="gender" value="female" onChange={handleChange} /> Female</label>
+            <label><input type="radio" name="gender" value="custom" onChange={handleChange} /> Custom</label>
           </RadioGroup>
-          <Button type="submit">Save User</Button>
+
+          <Button type="submit">Register</Button>
         </form>
       </FormContainer>
+
       {showPopup && (
         <Popup>
           <PopupContent>
-            <h2>{errorPopup}</h2>
+            <h2>{popupMessage}</h2>
             <Button onClick={closePopup}>Close</Button>
           </PopupContent>
         </Popup>

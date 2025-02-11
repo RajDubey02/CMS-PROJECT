@@ -20,22 +20,22 @@ connectDB();
 
 const app = express();
 
-// ✅ Ensure "uploads" folder exists
+//  Ensure "uploads" folder exists
 const uploadDir = path.join(__dirname, "uploads");
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
 }
 
-// ✅ Middleware
+//  Middleware
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json({ limit: "100mb" }));
 app.use(bodyParser.urlencoded({ limit: "100mb", extended: true }));
 
-// ✅ Serve uploaded files statically
+//  Serve uploaded files statically
 app.use("/uploads", express.static(uploadDir));
 
-// ✅ Multer Storage Configuration (Restrict to Images Only)
+//  Multer Storage Configuration (Restrict to Images Only)
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, uploadDir);
@@ -45,7 +45,7 @@ const storage = multer.diskStorage({
   },
 });
 
-// ✅ File Filter: Allow Only Images (jpg, png, jpeg)
+//  File Filter: Allow Only Images (jpg, png, jpeg)
 const fileFilter = (req, file, cb) => {
   const allowedTypes = /jpeg|jpg|png|gif/;
   const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
@@ -57,14 +57,14 @@ const fileFilter = (req, file, cb) => {
   cb(new Error("Only image files are allowed!"));
 };
 
-// ✅ File Upload Middleware (10MB limit, only images)
+//  File Upload Middleware (10MB limit, only images)
 const upload = multer({
   storage,
   limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
   fileFilter,
 });
 
-// ✅ File Upload Route (Single Image)
+// File Upload Route (Single Image)
 app.post("/api/upload", upload.single("file"), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: "No file uploaded." });
@@ -81,12 +81,12 @@ app.use("/api/revenue", addOrderRoutes);
 app.use("/api/users", userRoutes);
 app.use('/api/auth', authRoutes);
 
-// ✅ Root Route
+//  Root Route
 app.get("/", (req, res) => {
   res.send("API is running...");
 });
 
-// ✅ Error Handling Middleware (Multer & Other Errors)
+//  Error Handling Middleware (Multer & Other Errors)
 app.use((err, req, res, next) => {
   console.error("Error:", err.message);
 
@@ -100,6 +100,6 @@ app.use((err, req, res, next) => {
   next();
 });
 
-// ✅ Start Server
+//  Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
