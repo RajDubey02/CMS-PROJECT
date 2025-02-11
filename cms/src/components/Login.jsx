@@ -57,7 +57,7 @@ const Login = () => {
         navigate('/Admin');
       } else {
         toast.success('User login successful!');
-        navigate('/MenuSection'); // Replace with the path you want for regular users
+        navigate('/'); // Replace with the path you want for regular users
       }
     } catch (error) {
       toast.error(error.response?.data?.message || 'Login failed');

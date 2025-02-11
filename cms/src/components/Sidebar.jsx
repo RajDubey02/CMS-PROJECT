@@ -18,6 +18,7 @@ import {
   ArrowDownUp,
   UserPlus,
   NotebookPen,
+  History
 } from "lucide-react";
 
 // Styled Components
@@ -290,7 +291,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 
           {/* Profile */}
           <NavItem>
-            <NavLinkStyled to="/Login">
+            <NavLinkStyled to="/Profile">
               <UserRoundPen size={20} />
               Profile
             </NavLinkStyled>
@@ -300,6 +301,12 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             <NavLinkStyled to="/Report">
               <NotebookPen size={20} />
               Report
+            </NavLinkStyled>
+          </NavItem>
+          <NavItem>
+            <NavLinkStyled to="/History">
+              <History size={20} />
+              History
             </NavLinkStyled>
           </NavItem>
         </nav>
