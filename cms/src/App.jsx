@@ -19,6 +19,9 @@ import MenuSection from "./components/Menu";
 import Register from "./components/Register";
 import ResetPassword from "./components/ResetPassword";
 import ForgotPassword from "./components/ForgotPassword";
+import ResetPassword from "./components/ResetPassword";
+import Profile from "./components/Profile";
+import History from "./components/History"
 
 
 const App = () => {
@@ -27,6 +30,8 @@ const App = () => {
   const toggleSidebar = (isOpen) => setIsSidebarOpen(isOpen);
 
   return (
+
+    
     <Router>
       <div style={{ display: "flex" }}>
         {/* Sidebar */}
@@ -41,6 +46,7 @@ const App = () => {
           }}
         >
           <div>
+            
             <Navbar toggleSidebar={toggleSidebar} />
             <Routes>
               <Route path="/" element={<HeroSEction />} />
@@ -62,7 +68,9 @@ const App = () => {
               {/* <Route path="/forgot-pass" element={<ForgotPassword />} /> */}
               <Route path="/reset-pass" element={<ResetPassword />} />
               <Route path="/forgot-pass" element={<ForgotPassword />} />
-              
+              <Route path="/reset-pass" element={<ResetPassword />} />
+              <Route path="/profile" element={<Profile/>} />
+              <Route path="/history" element={<History/>} />
               <Route
                 path="/orders/*"
                 element={
