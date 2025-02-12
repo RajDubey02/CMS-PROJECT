@@ -1,12 +1,40 @@
-import styled from 'styled-components';
+
+import styled, { keyframes } from 'styled-components';
+
+// Fade-in animation for the main container
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
+// Scale-in effect for modals
+const scaleIn = keyframes`
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+`;
 
 export const Parent = styled.div`
-  height: 100vh;
-  width: 95vw;
+ 
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   font-family: Arial, sans-serif;
   margin-top: 2rem;
+  padding: 0 100px;
+  animation: ${fadeIn} 0.5s ease-in-out;
 
   @media (max-width: 768px) {
     height: auto;
@@ -17,7 +45,8 @@ export const Header = styled.div`
   text-align: center;
   margin-bottom: 20px;
 
-  h2 {margin-bottom: 2rem;
+  h2 {
+    margin-bottom: 2rem;
     font-size: 2rem;
     color: #343a40;
   }
@@ -42,26 +71,27 @@ export const SearchBar = styled.div`
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 1rem;
-  }
-
- button {
-    padding: 10px 20px;
-    
-      border: 1px solid rgba(234, 104, 18, 0.81);
-    background-color: rgba(234, 104, 18, 0.81);
-    color: white;
-    border-radius: 4px;
-
-    &:hover {
-      background-color: rgb(255, 255, 255);
-      border: 1px solid rgba(234, 104, 18, 0.81);
-      color: black;
-    }
-
-    &:focus {
     outline: none;
   }
 
+  button {
+    padding: 10px 20px;
+    border: 1px solid #a36a3f;
+    background-color: #a36a3f;
+    color: white;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: white;
+      border: 1px solid rgba(177, 102, 52, 0.81);
+      color: black;
+      transform: scale(1.05);
+    }
+
+    &:focus {
+      outline: none;
+    }
   }
 
   @media (max-width: 768px) {
@@ -70,7 +100,7 @@ export const SearchBar = styled.div`
     input {
       width: 95%;
     }
-    button{
+    button {
       width: 27%;
     }
   }
@@ -84,12 +114,12 @@ export const AppWrapper = styled.div`
 `;
 
 export const Table = styled.table`
-  width: 90%;
+  width: 150%;
   max-width: 1200px;
   border-collapse: collapse;
 
   th, td {
-    padding: 12px 16px;
+    padding: 5px 7px;
     text-align: left;
     border: 1px solid #ddd;
   }
@@ -100,6 +130,11 @@ export const Table = styled.table`
 
   tr:nth-child(even) {
     background-color: #f9f9f9;
+  }
+
+  tr:hover {
+    background-color: rgba(163, 106, 63, 0.2);
+    transition: background-color 0.3s ease;
   }
 
   @media (max-width: 768px) {
@@ -131,6 +166,7 @@ export const ModalContent = styled.div`
   text-align: center;
   display: flex;
   flex-direction: column;
+  animation: ${scaleIn} 0.3s ease-out;
 
   label {
     display: block;
@@ -140,6 +176,7 @@ export const ModalContent = styled.div`
       margin-top: 5px;
       width: 90%;
       padding: 8px;
+      outline: none;
     }
   }
 
@@ -152,29 +189,30 @@ export const ModalContent = styled.div`
 export const ModalButtons = styled.div`
   display: flex;
   justify-content: center;
-  align-items : flex-end;
+  align-items: center;
   gap: 10px;
-  margin-top: 20px;
+  margin: 20px 20px;
 
   button {
-    padding: 10px 20px;
-    
-      border: 1px solid rgba(234, 104, 18, 0.81);
-    background-color: rgba(234, 104, 18, 0.81);
+    padding: 5px 10px;
+    border: 1px solid #a36a3f;
+    background-color: rgba(182, 105, 54, 0.81);
     color: white;
     border-radius: 4px;
+    transition: all 0.3s ease;
 
     &:hover {
-      background-color: rgb(255, 255, 255);
-      border: 1px solid rgba(234, 104, 18, 0.81);
+      background-color: white;
+      border: 1px solid rgba(189, 102, 45, 0.81);
       color: black;
+      transform: scale(1.05);
     }
 
     &:focus {
-    outline: none;
+      outline: none;
+    }
   }
 
-}
   @media (max-width: 768px) {
     flex-direction: column;
     button {
@@ -185,9 +223,10 @@ export const ModalButtons = styled.div`
 `;
 
 export const AdminSection = styled.div`
-  width: 90%;
+  height: 500px;
+  width: 500px;
   max-width: 1200px;
-  margin: 20px 0;
+  margin-top: 80px;
   text-align: center;
 
   h3 {
@@ -207,6 +246,7 @@ export const TableGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   gap: 10px;
+  margin-top: 50px;
 
   @media (max-width: 768px) {
     grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
@@ -224,9 +264,11 @@ export const TableSquare = styled.div`
   font-weight: bold;
   border-radius: 8px;
   cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 
   &:hover {
-    background-color: ${(props) => (props.isAvailable ? 'rgba(76, 175, 80, 1)' : 'rgba(234, 104, 18, 1)')};
+    background-color: ${(props) => (props.isAvailable ? 'rgba(76, 175, 80, 1)' : '#965c36')};
+    transform: scale(1.05);
   }
 
   @media (max-width: 768px) {
@@ -234,3 +276,4 @@ export const TableSquare = styled.div`
     height: 80px;
   }
 `;
+

@@ -17,6 +17,7 @@ import {
   ImagePreview,
   Select,
   ButtonGroup,
+  Button1,
 } from "../styles/ManageProductStyles";
 import { Plus, Edit, Trash2, X, IndianRupee } from "lucide-react";
 
@@ -132,11 +133,12 @@ const ManageProduct = () => {
   return (
     <Container>
       <Navbar>
-        <button className="primary" onClick={() => setIsModalOpen(true)}>
+        <PageTitle>Manage Products</PageTitle>
+        <Button1 className="primary" onClick={() => setIsModalOpen(true)}>
           <Plus size={16} /> Add Product
-        </button>
+        </Button1>
       </Navbar>
-      <PageTitle>Manage Products</PageTitle>
+    
       <Table>
         <TableHeader>
           <TableRow>
@@ -159,8 +161,8 @@ const ManageProduct = () => {
               <TableCell>{product.category?.name || "Uncategorized"}</TableCell>
               <TableCell>{product.active}</TableCell>
               <TableCell>
-                <ActionButton onClick={() => handleEdit(product)}><Edit size={16} /></ActionButton>
-                <ActionButton onClick={() => handleDelete(product._id)}><Trash2 size={16} /></ActionButton>
+                <ActionButton onClick={() => handleEdit(product)}><Edit size={20} /></ActionButton>
+                <ActionButton onClick={() => handleDelete(product._id)}><Trash2 size={20} /></ActionButton>
               </TableCell>
             </TableRow>
           ))}

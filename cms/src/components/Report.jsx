@@ -2,8 +2,6 @@ import React from 'react'
 import DashGraph from "./DashGraph"
 import Metrics from './Metrics';
 import { motion } from 'framer-motion';
-
-
 import RevenueTrend from './RevenueTrend';
 import styled from 'styled-components';
 import PopularFoodGraph from './PopularFoodGraph';

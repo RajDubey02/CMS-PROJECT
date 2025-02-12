@@ -33,13 +33,15 @@ export const Select = styled.select`
   padding: 8px;
   border-radius: 5px;
   border: 1px solid #6f4c3e;
-  background: #e8d8b0;
-  color: #3b2a2a;
+  background: #ad7452;
+  color: #ffffff;
   font-size: 16px;
   cursor: pointer;
+  outline: none;
 
   &:hover {
-    background: #c2b280;
+    background: #d1d0ce;
+    color: black;
   }
 `;
 

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
@@ -74,12 +75,12 @@ const NavLinkStyled = styled(NavLink)`
 
   &:hover {
     /* background-color: #33333332; */
-    background-color: rgba(234, 104, 18, 0.288);
+    background-color: rgba(163, 100, 57, 0.288);
   }
 
   &.active {
     /* background-color: #4a4a4a97; */
-    background-color: rgba(234, 104, 18, 0.61);
+    background-color:rgba(212, 110, 42, 0.288);
     
   }
 
@@ -97,12 +98,13 @@ const SubMenu = styled.div`
 `;
 
 const LastDiv = styled.div`
-  display: flex;
+margin-left: 12px;
+  /* display: flex;
   align-items: end;
   height: 12rem;
   position:absolute;
-  bottom: 10px;
-  left: 30px;
+  bottom: -28px;
+   */
 /* height: fit-content; */
   & button {
     background-color: transparent;
@@ -324,3 +326,4 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 };
 
 export default Sidebar;
+

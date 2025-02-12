@@ -19,7 +19,6 @@ import MenuSection from "./components/Menu";
 import Register from "./components/Register";
 import ResetPassword from "./components/ResetPassword";
 import ForgotPassword from "./components/ForgotPassword";
-import ResetPassword from "./components/ResetPassword";
 import Profile from "./components/Profile";
 import History from "./components/History"
 

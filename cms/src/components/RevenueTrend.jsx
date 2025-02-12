@@ -10,7 +10,8 @@ ChartJS.register(LineElement, PointElement, Tooltip, Legend, CategoryScale, Line
 const Card = styled.div`
   background: linear-gradient(135deg, #f5f5f0, #e8d8b0);
   border-radius: 10px;
-  padding: 20px;
+  padding: 200px;
+  height: 500px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   width: 100%;
   max-width: 650px;

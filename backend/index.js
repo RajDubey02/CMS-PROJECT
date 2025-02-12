@@ -29,8 +29,10 @@ if (!fs.existsSync(uploadDir)) {
 //  Middleware
 app.use(cors());
 app.use(express.json());
-app.use(bodyParser.json({ limit: "100mb" }));
-app.use(bodyParser.urlencoded({ limit: "100mb", extended: true }));
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
+
+
 
 //  Serve uploaded files statically
 app.use("/uploads", express.static(uploadDir));
@@ -42,6 +44,7 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     cb(null, `image-${Date.now()}${path.extname(file.originalname)}`);
+
   },
 });
 
@@ -60,7 +63,7 @@ const fileFilter = (req, file, cb) => {
 //  File Upload Middleware (10MB limit, only images)
 const upload = multer({
   storage,
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
+  limits: { fileSize: 50 * 1024 * 1024 }, // 10MB limit
   fileFilter,
 });
 
@@ -103,3 +106,4 @@ app.use((err, req, res, next) => {
 //  Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
+

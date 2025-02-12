@@ -48,7 +48,7 @@ const ParentDiv= styled.div`
   display: flex;
   flex-direction: column;
   width: 460px;
-  height: 300px;
+  height: 350px;
   align-items: center;
   justify-content: center;
   border-radius:10px ;
