@@ -21,6 +21,7 @@ import ResetPassword from "./components/ResetPassword";
 import ForgotPassword from "./components/ForgotPassword";
 import Profile from "./components/Profile";
 import History from "./components/History"
+import Logout from "./components/Logout";
 
 
 const App = () => {
@@ -29,6 +30,13 @@ const App = () => {
   const toggleSidebar = (isOpen) => setIsSidebarOpen(isOpen);
 
   return (
+    <div className="App">
+
+<Router> 
+    <Routes>
+    <Route path="/" element={<Login />} />
+  </Routes>
+  </Router>
 
     
     <Router>
@@ -47,9 +55,7 @@ const App = () => {
           <div>
             
             <Navbar toggleSidebar={toggleSidebar} />
-            <Routes>
-              <Route path="/" element={<HeroSEction />} />
-            </Routes>
+           
           </div>
           <div>
             <Routes>
@@ -63,6 +69,7 @@ const App = () => {
               <Route path="/ManageUser" element={<ManageUser />} />
               <Route path="/Report" element={<Report />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/logout" element={<Logout />} />
               <Route path="/register" element={<Register />} />
               {/* <Route path="/forgot-pass" element={<ForgotPassword />} /> */}
               <Route path="/reset-pass" element={<ResetPassword />} />
@@ -86,6 +93,7 @@ const App = () => {
         </div>
       </div>
     </Router>
+    </div>
   );
 };
 

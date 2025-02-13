@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,NavLink } from "react-router-dom";
 import styled from "styled-components";
-import { Search, User, Menu } from "lucide-react";
+import { Search, User, Menu, LogOut } from "lucide-react";
 
 const Universal = styled.div`
   margin: 0;
@@ -46,6 +46,29 @@ const NavLeft = styled.div`
     margin-right: 10px;
   }
 `;
+const NavLinkStyled = styled(NavLink)`
+  display: flex;
+  align-items: center;
+  color: #fff;
+  background-color: #b37b57;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background-color 0.1s;
+  margin-bottom: 6px;
+  cursor: pointer;
+  width: 80px;
+  height: 35px;
+
+  &:hover {
+    /* background-color: #33333332; */
+    background-color: rgba(10, 9, 7, 0.288);
+  }
+`;
+const NavItem = styled.div`
+  display: flex;
+  flex-direction: column;
+
+`;
 
 const Border = styled.div`
   border: 1px solid #ecf0f1;
@@ -76,12 +99,12 @@ const ProfileMenu = styled.div`
   position: absolute;
   top: 40px;
   right: 0;
-  background: #34495e;
-  color: #ecf0f1;
-  padding: 10px;
+  background: #fcfeff;
+  color: #8d5b3f;
+  padding: 20px;
   border-radius: 5px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  width: 200px;
+  width: 150px;
   display: ${(props) => (props.isVisible ? "block" : "none")};
   z-index: 100;
 
@@ -176,6 +199,13 @@ export const Navbar = ({ toggleSidebar, userName = "John Doe", serviceName = "Ca
             <ProfileMenu isVisible={showProfileMenu}>
               <ProfileName>{userName}</ProfileName>
               <ServiceName>{serviceName}</ServiceName>
+              <NavItem>
+                          <NavLinkStyled to="/logout">
+                          <LogOut color="white" />
+                           Log out
+                          </NavLinkStyled>
+                        </NavItem>
+
             </ProfileMenu>
           </IconWrapper>
         </NavRight>

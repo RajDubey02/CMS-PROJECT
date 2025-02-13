@@ -311,15 +311,16 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
               History
             </NavLinkStyled>
           </NavItem>
+
+          <NavItem>
+            <NavLinkStyled to="/logout">
+            <LogOut color="white" />
+             Log out
+            </NavLinkStyled>
+          </NavItem>
         </nav>
 
-        {/* Logout */}
-        <LastDiv>
-          <button>
-            <LogOut color="white" />
-            Log out
-          </button>
-        </LastDiv>
+     
       </SidebarContainer>
     </>
   );

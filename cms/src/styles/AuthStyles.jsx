@@ -5,7 +5,7 @@ export const AuthContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background-color: rgba(252, 245, 241, 0.288);
   padding: 2rem;
 `;
 
@@ -45,8 +45,8 @@ export const Input = styled.input`
 
   &:focus {
     outline: none;
-    border-color: #4096ff;
-    box-shadow: 0 0 0 2px rgba(64, 150, 255, 0.2);
+    border-color:rgba(194, 112, 58, 0.288);
+    box-shadow: 0 0 0 2px rgba(95, 61, 52, 0.2);
   }
 `;
 
@@ -65,7 +65,7 @@ export const ErrorMessage = styled.p`
 `;
 
 export const Button = styled.button`
-  background: #1890ff;
+  background:#8d5034;
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -75,7 +75,7 @@ export const Button = styled.button`
   transition: background 0.3s;
 
   &:hover {
-    background: #40a9ff;
+    background: #8d5034;
   }
 
   &:disabled {
@@ -90,7 +90,7 @@ export const LinkText = styled.p`
   color: #666;
 
   a {
-    color: #1890ff;
+    color: #e6a385;
     text-decoration: none;
     margin-left: 0.5rem;
 
