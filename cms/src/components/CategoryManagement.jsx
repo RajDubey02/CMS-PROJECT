@@ -159,8 +159,8 @@ const CategoryManagement = () => {
                 </span>
               </td>
               <td>
-                <Button onClick={() => handleEdit(category)}><Pencil /></Button>
-                <Button onClick={() => handleDelete(category._id)}><Trash2 /></Button>
+                <Button onClick={() => handleEdit(category)}><Pencil size={20}/></Button>
+                <Button onClick={() => handleDelete(category._id)}><Trash2 size={20} /></Button>
               </td>
             </tr>
           ))}

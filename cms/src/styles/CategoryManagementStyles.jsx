@@ -13,15 +13,15 @@ export const Nav = styled.div`
 `;
 
 export const Button = styled.button`
-  background-color:   #de8602;
+  background-color:rgba(148, 81, 37, 0.76);
   color: white;
   border: none;
-  padding: 0.5rem 1rem;
+  padding: 8px ;
   margin-right: 12px;
   cursor: pointer;
   border-radius: 4px;
   &:hover {
-    background-color: #e16405;
+    background-color: rgba(90, 55, 32, 0.76);
   }
 `;
 
@@ -30,7 +30,7 @@ export const Table = styled.table`
   border-collapse: collapse;
   margin-bottom: 1rem;
   th, td {
-    padding: 1rem;
+    padding: 10px;
     border: 1px solid #ddd;
     text-align: left;
   }
@@ -97,7 +97,7 @@ export const PaginationWrapper = styled.div`
 
 export const PaginationButton = styled(Button)`
   margin: 0 0.5rem;
-  background-color: ${(props) => (props.active ? "#007bff" : "#ddd")};
+  background-color: ${(props) => (props.active ? "#69401f" : "#ddd")};
   &:disabled {
     background-color: #ccc;
   }

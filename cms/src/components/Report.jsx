@@ -48,9 +48,9 @@ const Report = () => {
    <ParentDiv>
     <Div2>
     <Metrics />
-   <DashGraph/>
    {/* <RevenueTrend/> */}
    <PopularFoodGraph/>
+   <DashGraph/>
    <RecentOrdersCard/>
     </Div2>
    </ParentDiv>
