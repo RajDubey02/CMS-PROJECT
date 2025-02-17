@@ -6,6 +6,7 @@ import axios from "axios"; // Add axios import
 
 // Styled components
 const Table = styled.table`
+  margin-top: 20px;
   width: 100%;
   border-collapse: collapse;
   font-family: "Raleway", serif;
@@ -16,7 +17,7 @@ const Input = styled.input`
   width: 95%;
   border: ${(props) => (props.error ? "red 1px solid" : "orange 1px solid")};
   padding: 10px;
-  margin: 5px 0;
+  margin: 15px 0;
   border-radius: 7px;
   outline: none;
   transition: border-color 0.3s ease;
@@ -29,7 +30,7 @@ const Input = styled.input`
 
 const TableHeader = styled.th`
   padding: 10px;
-  background-color: rgba(234, 104, 18, 0.81);
+  background-color: rgba(163, 93, 46, 0.81);
   color: white;
   position: sticky;
   top: 0;
@@ -43,7 +44,7 @@ const TableCell = styled.td`
 
 const Button = styled.button`
   margin: 5px;
-  background-color: green;
+  background-color:#b66249;
   color: white;
   border: none;
   cursor: pointer;
@@ -60,7 +61,7 @@ const Button = styled.button`
 
 const Button1 = styled.button`
   margin: 5px;
-  background-color: red;
+  background-color: #b66249;
   color: white;
   border: none;
   cursor: pointer;
@@ -93,6 +94,7 @@ const H2 = styled.h2`
   text-align: center;
   font-size: 30px;
   margin-bottom: 20px;
+  margin-top: 20px;
   color: rgba(17, 17, 17, 0.81);
 `;
 

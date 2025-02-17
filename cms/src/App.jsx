@@ -19,10 +19,9 @@ import MenuSection from "./components/Menu";
 import Register from "./components/Register";
 import Home from "./components/Home";
 import ForgotPassword from "./components/ForgotPassword";
-import ResetPassword from "./components/ResetPassword";
 import Profile from "./components/Profile";
 import History from "./components/History"
-// import LandingPage from "./"
+import Logout from "./components/Logout";
 
 
 const App = () => {
@@ -31,6 +30,13 @@ const App = () => {
   const toggleSidebar = (isOpen) => setIsSidebarOpen(isOpen);
 
   return (
+    <div className="App">
+
+<Router> 
+    <Routes>
+    <Route path="/" element={<Login />} />
+  </Routes>
+  </Router>
 
     
     <Router>
@@ -64,7 +70,8 @@ const App = () => {
               <Route path="/Table" element={<Table />} />
               <Route path="/ManageUser" element={<ManageUser />} />
               <Route path="/Report" element={<Report />} />
-              {/* <Route path="/" element={<Login />} /> */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/logout" element={<Logout />} />
               <Route path="/register" element={<Register />} />
               {/* <Route path="/forgot-pass" element={<ForgotPassword />} /> */}
               <Route path="/reset-pass" element={<ResetPassword />} />
@@ -92,6 +99,7 @@ const App = () => {
         </div>
       </div>
     </Router>
+    </div>
   );
 };
 

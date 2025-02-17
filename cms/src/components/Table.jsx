@@ -119,10 +119,10 @@ const App = () => {
                 <td>
                   <ModalButtons>
                     <button onClick={() => toggleTableAvailability(table._id)}>
-                      {table.availability ? <Utensils /> : <UtensilsCrossed />}
+                      {table.availability ? <Utensils size={18} /> : <UtensilsCrossed size={18} />}
                     </button>
-                    <button onClick={() => openTableModal(table)}><Pencil /></button>
-                    <button onClick={() => deleteTable(table._id)}><Trash2 /></button>
+                    <button onClick={() => openTableModal(table)}><Pencil size={18}/></button>
+                    <button onClick={() => deleteTable(table._id)}><Trash2 size={18}/></button>
                   </ModalButtons>
                 </td>
               </tr>

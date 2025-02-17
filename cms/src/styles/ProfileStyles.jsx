@@ -1,3 +1,4 @@
+
 import styled from 'styled-components';
 
 export const ProfileContainer = styled.div`
@@ -41,7 +42,12 @@ export const ProfileCard = styled.div`
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 350px;
-  text-align: center;
+  margin-bottom: 10px;
+   
+  display: flex;
+  flex-direction:column ;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const Title = styled.h2`
@@ -70,6 +76,7 @@ export const Input = styled.input`
   font-size: 16px;
   background: ${(props) => (props.disabled ? '#f0f0f0' : 'white')};
   color: ${(props) => (props.disabled ? '#666' : 'black')};
+  
 
   &:focus {
     border-color: #6f4c3e;
@@ -92,21 +99,23 @@ export const ErrorMessage = styled.span`
 `;
 
 export const Button = styled.button`
-  background: #6f4c3e;
+  background: #b97e67;
   color: white;
   border: none;
-  padding: 12px;
+  padding: 5px;
   font-size: 16px;
   border-radius: 5px;
+  text-align: center;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  width: 70%;
   transition: all 0.3s ease-in-out;
+  margin-bottom: 10px ;
 
   &:hover {
-    background: #3b2a2a;
+    background: #85593c;
   }
 
   &:disabled {

@@ -9,19 +9,23 @@ const MenuContainer = styled.div`
   gap: 20px;
   justify-content: center;
   padding: 20px;
+  align-items: center;
+  background-color: #fff8f2;
+  padding: 0 77px 0 77px;
 `;
 
 const CategorySection = styled.div`
   width: 100%;
   margin-bottom: 30px;
+  
 `;
 
 const CategoryTitle = styled.h2`
   font-size: 22px;
-  color: #d35400;
+  color: #533623;
   text-align: left;
   margin-bottom: 15px;
-  border-bottom: 2px solid #d35400;
+  border-bottom: 2px solid #e26d1e;
   padding-bottom: 5px;
   width: fit-content;
 `;
@@ -70,7 +74,7 @@ const Description = styled.p`
 const Price = styled.span`
   font-size: 16px;
   font-weight: bold;
-  color: #e67e22;
+  color: #b47945;
 `;
 
 const MenuSection = () => {

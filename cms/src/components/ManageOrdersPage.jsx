@@ -251,15 +251,9 @@ const ManageOrdersPage = () => {
                   <Button onClick={() => handleSaveEdit(index)}>Save</Button>
                 ) : (
                   <>
-                    <Button onClick={() => handlePrint(order)}>
-                      <Printer />
-                    </Button>
-                    <Button onClick={() => handleEdit(index)}>
-                      <FilePenLine />
-                    </Button>
-                    <Button red onClick={() => handleDelete(index)}>
-                      <Trash2 />
-                    </Button>
+                    <Button onClick={() => handlePrint(order)}><Printer size={18} /></Button>
+                    <Button onClick={() => handleEdit(index)}><FilePenLine size={18}/></Button>
+                    <Button red onClick={() => handleDelete(index)}><Trash2 size={18}/></Button>
                   </>
                 )}
               </TableData>

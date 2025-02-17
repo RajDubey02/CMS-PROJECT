@@ -92,19 +92,20 @@ export const TableData = styled.td`
 
 // Button styles
 export const Button = styled.button`
-  padding: 8px 16px;
+  padding: 5px 7px;
   font-size: 1rem;
   margin:  0 5px;
   border: none;
  
-  border-radius: 10px;
+  border-radius: 5px;
   color: #fff;
-  background: ${(props) => (props.red ? "#ff5c5c" : "#4caf50")};
+  background: ${(props) => (props.red ? "#b66249" : "#b66249")};
   cursor: pointer;
   transition: background 0.3s ease;
 
   &:hover {
-    background: ${(props) => (props.red ? "#ff4040" : "#45a045")};
+  background-color: #884343;
+ 
   }
 
   &:disabled {

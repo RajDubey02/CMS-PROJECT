@@ -1,5 +1,4 @@
 
-
 import styled from "styled-components";
 
 // Container styling
@@ -12,19 +11,15 @@ export const Container = styled.div`
 // Navbar styling
 export const Navbar = styled.nav`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-
-  button {
-    padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 14px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    margin: 10px;
+    gap: 850px;
+    justify-content: center;
 
     &.primary {
       background-color:rgba(234, 104, 18, 0.76);
@@ -43,7 +38,7 @@ export const Navbar = styled.nav`
         background-color:rgba(234, 104, 18, 0.993);
       }
     }
-  }
+
 `;
 
 // Page Title styling
@@ -63,7 +58,7 @@ export const Table = styled.table`
 
 export const TableHeader = styled.thead`
 
-  background-color: rgba(234, 104, 18, 0.918);
+  background-color: rgba(172, 103, 58, 0.918);
   color: white;
 
   th {
@@ -91,6 +86,7 @@ export const TableCell = styled.th`
 }
   padding: 12px;
   border-bottom: 1px solid #ddd;
+  width: 50px;
 
   img {
     border-radius: 5px;
@@ -109,7 +105,9 @@ export const ActionButton = styled.button`
   color:rgba(234, 104, 18, 0.81);
 
   &:hover {
-    color: rgb(234, 104, 18);
+    color: rgb(255, 250, 246);
+    background-color: #c5822a;
+    border-radius: 5px;
   }
 
   & + & {
@@ -253,11 +251,22 @@ export const ButtonGroup = styled.div`
       color: white;
 
       &:hover {
-        background-color:rgb(234, 104, 18);
+        background-color:rgb(163, 93, 46);
+        color: white;
+        
       }
     }
   }
 `;
+
+
+export const Button1 = styled.div`
+background-color: #5e2e1ba9;
+color: white;
+padding: 5px;
+border-radius: 5px;
+`;
+
 
 export const PaginationContainer = styled.div`
   display: flex;
@@ -285,4 +294,4 @@ export const PaginationButton = styled.button`
     background: #bbb;
     cursor: not-allowed;
   }
-`;                    
+`;                   

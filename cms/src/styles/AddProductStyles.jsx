@@ -1,3 +1,5 @@
+
+
 import styled from "styled-components";
 
 export const Container = styled.div`
@@ -6,7 +8,7 @@ export const Container = styled.div`
   padding: 20px;
   background-color: #f9f9f9;
   min-height: 100vh;
-  min-width: 100vw;
+  min-width: 90vw;
   box-sizing: border-box;
 `;
 
@@ -73,7 +75,7 @@ export const Input = styled.input`
   margin-bottom: 15px;
 
   &:focus {
-    border-color: rgba(234, 104, 18, 0.87);
+    border-color: rgba(153, 108, 78, 0.87);
     outline: none;
   }
 `;
@@ -87,7 +89,7 @@ export const DescriptionInput = styled.textarea`
   border-radius: 4px;
 
   &:focus {
-    border-color: rgba(234, 104, 18, 0.87);
+    border-color:rgba(155, 104, 71, 0.87);
     outline: none;
   }
 `;
@@ -119,7 +121,7 @@ export const ImageUploadSection = styled.div`
 export const UploadButton = styled.label`
   display: inline-block;
   padding: 8px 15px;
-  background-color: rgba(234, 104, 18, 0.87);
+  background-color: rgba(155, 104, 71, 0.87);
   color: #fff;
   font-size: 14px;
   border-radius: 4px;
@@ -127,7 +129,7 @@ export const UploadButton = styled.label`
   text-align: center;
 
   &:hover {
-    background-color: rgba(234, 104, 18, 0.958);
+    boder: solid  rgba(83, 58, 42, 0.958);
   }
 
   input {
@@ -157,10 +159,10 @@ export const FormatButton = styled.button`
   }
 
   &:hover svg {
-    color: rgba(234, 104, 18, 0.87);
+    color: rgba(107, 72, 49, 0.87);
   }
   &:focus {
-  outline: 2px solid rgba(234, 104, 18, 0.87);
+  outline: 2px solid rgba(97, 69, 51, 0.87);
 }
 
 `;
@@ -176,7 +178,7 @@ export const MultiSelect = styled.div`
     margin-bottom: 10px;
 
     &:focus {
-      border-color: rgba(234, 104, 18, 0.87);
+      border-color: rgba(155, 104, 71, 0.87);
       outline: none;
     }
   }
@@ -216,15 +218,15 @@ export const Button = styled.button`
   font-size: 14px;
   border: none;
   border-radius: 4px;
-  background-color: #ea6812;
+  background-color: rgba(155, 104, 71, 0.87);
   color: #fff;
   cursor: pointer;
 
   &:hover {
-    background-color: #ff9100;
+    background-color:rgba(112, 79, 58, 0.87)
   }
   &:focus {
-  outline: 2px solid rgba(234, 104, 18, 0.87);
+  outline: 2px solid rgba(155, 104, 71, 0.87);
 }
 
 `;
@@ -235,10 +237,10 @@ export const ActionButton = styled(Button)`
   gap: 8px;
 
   &.secondary {
-    background-color: #c53805;
+    background-color: rgba(155, 104, 71, 0.87);
 
     &:hover {
-      background-color: #ff9100;
+      background-color: rgba(155, 104, 71, 0.87);
     }
   }
 `;
