@@ -127,7 +127,7 @@ const ServiceName = styled.div`
   color: #bdc3c7;
 `;
 
-export const Navbar = ({ toggleSidebar, userName = "John Doe", serviceName = "Cafe Manager" }) => {
+export const Navbar = ({ toggleSidebar, serviceName = "Cafe Manager" }) => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const profileRef = useRef(null);
@@ -173,6 +173,10 @@ export const Navbar = ({ toggleSidebar, userName = "John Doe", serviceName = "Ca
     };
   }, []);
 
+  // Fetch user name from localStorage based on role
+  const userRole = localStorage.getItem("userRole");
+  const userName = userRole === "admin" ? "Admin User" : userRole === "cashier" ? "Cashier User" : "John Doe"; // Replace with logic for actual names if needed
+
   return (
     <Universal>
       <NavbarContainer>
@@ -181,7 +185,7 @@ export const Navbar = ({ toggleSidebar, userName = "John Doe", serviceName = "Ca
             <Menu size={24} />
           </button>
           <Border>
-            <Search size={24} />
+            <Search size={1} />
             <input
               type="search"
               placeholder="Search for pages..."
@@ -192,8 +196,6 @@ export const Navbar = ({ toggleSidebar, userName = "John Doe", serviceName = "Ca
           </Border>
         </NavLeft>
         <NavRight>
-  
-          
           <IconWrapper onClick={toggleProfileMenu} ref={profileRef}>
             <User size={24} />
             <ProfileMenu isVisible={showProfileMenu}>

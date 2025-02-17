@@ -11,75 +11,67 @@ import {
 } from "../styles/RecentOrdersCardStyles";
 
 const RecentOrdersCard = () => {
-  const [recentOrders, setRecentOrders] = useState([
-    {
-      table: "1",
-      status: "Paid",
-      totalAmount: 1200.0,
-      items: [
-        { name: "Paneer Butter Masala", price: 400.0 },
-        { name: "Tandoori Roti", price: 50.0 },
-      ],
-    },
-    {
-      table: "3",
-      status: "Unpaid",
-      totalAmount: 800.0,
-      items: [
-        { name: "Veg Biryani", price: 600.0 },
-        { name: "Raita", price: 200.0 },
-      ],
-    },
-    {
-      table: "5",
-      status: "Paid",
-      totalAmount: 1500.0,
-      items: [
-        { name: "Chicken Biryani", price: 900.0 },
-        { name: "Gulab Jamun", price: 200.0 },
-        { name: "Butter Naan", price: 100.0 },
-      ],
-    },
-  ]); // Default Data
+  const [recentOrders, setRecentOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetchRecentOrders();
   }, []);
 
   const fetchRecentOrders = async () => {
+    setLoading(true);
+    setError("");
+
     try {
-      const response = await axios.get("http://localhost:5000/app/orders");
-      setRecentOrders(response.data);
+      const response = await axios.get("http://localhost:5000/api/orders");
+      let orders = response.data;
+
+      if (!orders || orders.length === 0) {
+        setError("No recent orders found.");
+        return;
+      }
+
+      // Sort orders by most recent first
+      orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+      // Take only the latest 5 orders
+      setRecentOrders(orders.slice(0, 5));
     } catch (error) {
       console.error("Error fetching recent orders:", error);
+      setError("Failed to fetch recent orders.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <CardContainer>
       <CardTitle>Recent Orders</CardTitle>
-      <OrderList>
-        {recentOrders.length > 0 ? (
-          recentOrders.map((order, index) => (
-            <OrderItem key={index}>
+      {loading ? (
+        <p>Loading recent orders...</p>
+      ) : error ? (
+        <p>{error}</p>
+      ) : (
+        <OrderList>
+          {recentOrders.map((order, index) => (
+            <OrderItem key={order._id || index}>
               <div>
-                <strong>Table {order.table}</strong> - 
+                <strong>Table {order.tableNumber}</strong> - 
                 <StatusBadge status={order.status}>{order.status}</StatusBadge>
               </div>
               <MenuList>
                 {order.items.map((item, idx) => (
                   <MenuItem key={idx}>
-                    {item.name} - ₹{item.price.toFixed(2)}
+                    {item.productName} - ₹{(item.amount || 0).toFixed(2)}
                   </MenuItem>
                 ))}
               </MenuList>
-              <div><strong>Total:</strong> ₹{order.totalAmount.toFixed(2)}</div>
+              <div><strong>Total:</strong> ₹{(order.summary?.netAmount || 0).toFixed(2)}</div>
             </OrderItem>
-          ))
-        ) : (
-          <p>No recent orders available.</p>
-        )}
-      </OrderList>
+          ))}
+        </OrderList>
+      )}
     </CardContainer>
   );
 };

@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import {
   Container,
   PageTitle,
@@ -18,7 +19,10 @@ import {
 } from "../styles/AddProductStyles";
 import { Bold, Italic, Underline, Quote, ArrowLeft } from "lucide-react";
 
-const AddProduct = ({ history }) => {
+const AddProduct = () => {
+  const navigate = useNavigate();
+  const fileInputRef = useRef(null);
+
   const initialProductData = {
     image: "",
     name: "",
@@ -47,24 +51,22 @@ const AddProduct = ({ history }) => {
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-  
+
     const formData = new FormData();
     formData.append("file", file);
-  
+
     try {
       const response = await axios.post("http://localhost:5000/api/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-  
+
       setProductData((prev) => ({
         ...prev,
         image: `http://localhost:5000${response.data.filePath}`, // Store the image URL from the backend
       }));
     } catch (error) {
       console.error("Error uploading image:", error);
-      console.log(error);
-      alert("Failed to upload image.");
-      
+      alert(error.response?.data?.error || "Failed to upload image.");
     }
   };
 
@@ -110,37 +112,22 @@ const AddProduct = ({ history }) => {
     }
   };
 
-  // const handleSaveProduct = async () => {
-  //   try {
-  //     const response = await axios.post("http://localhost:5000/api/products/add", productData);
-  //     console.log("Backend response:", response.data);
-  //     alert("Product saved successfully!");
-  //     setProductData(initialProductData); // Reset form
-  //   } catch (error) {
-  //     console.error("Error saving product:", error);
-  //     alert("Failed to save product. Please try again.");
-  //   }
-  // };
   const handleSaveProduct = async () => {
     try {
       const response = await axios.post("http://localhost:5000/api/products", {
         ...productData,
-        category: productData.category.join(", "), // Convert array to string
+        category: productData.category, // Keep as an array
       });
-  
+
       console.log("Backend response:", response.data);
       alert("Product saved successfully!");
       setProductData(initialProductData); // Reset form
     } catch (error) {
       console.error("Error saving product:", error);
-      if (error.response) {
-        alert(`Failed to save product: ${error.response.data.message}`);
-      } else {
-        alert("Failed to save product. Please check the console for errors.");
-      }
+      alert(error.response?.data?.message || "Failed to save product.");
     }
   };
-  
+
   return (
     <Container>
       <FormContainer>
@@ -151,17 +138,17 @@ const AddProduct = ({ history }) => {
           <ImageUploadSection>
             {productData.image ? (
               <div>
-                <img src={productData.image}  />
+                <img src={productData.image} alt="Uploaded" />
               </div>
             ) : (
               <div className="placeholder">No image uploaded</div>
             )}
           </ImageUploadSection>
           <div style={{ display: "flex", alignItems: "center", gap: "10px", marginTop: "1rem" }}>
-            <UploadButton>
-              <input type="file" accept="image/*" onChange={handleImageUpload} hidden />
+            <UploadButton onClick={() => fileInputRef.current.click()}>
               Upload Image
             </UploadButton>
+            <input type="file" ref={fileInputRef} accept="image/*" onChange={handleImageUpload} hidden />
             {productData.image && (
               <Button onClick={handleRemoveImage} className="remove-button">
                 Remove Image
@@ -245,16 +232,8 @@ const AddProduct = ({ history }) => {
           </MultiSelect>
         </div>
 
-        <div>
-          <Label>Active</Label>
-          <select name="active" value={productData.active} onChange={handleInputChange}>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-          </select>
-        </div>
-
         <ButtonGroup>
-          <ActionButton className="secondary" onClick={() => history.push("/manage-products")}>
+          <ActionButton className="secondary" onClick={() => navigate("/manage-products")}>
             <ArrowLeft size={16} />
             Back to Products
           </ActionButton>

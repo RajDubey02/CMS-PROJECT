@@ -17,7 +17,7 @@ import Report from "./components/Report";
 import Login from "./components/Login";
 import MenuSection from "./components/Menu";
 import Register from "./components/Register";
-import ResetPassword from "./components/ResetPassword";
+import Home from "./components/Home";
 import ForgotPassword from "./components/ForgotPassword";
 import Profile from "./components/Profile";
 import History from "./components/History"
@@ -55,7 +55,9 @@ const App = () => {
           <div>
             
             <Navbar toggleSidebar={toggleSidebar} />
-           
+            <Routes>
+              {/* <Route path="/" element={<HeroSEction />} /> */}
+            </Routes>
           </div>
           <div>
             <Routes>
@@ -77,6 +79,10 @@ const App = () => {
               <Route path="/reset-pass" element={<ResetPassword />} />
               <Route path="/profile" element={<Profile/>} />
               <Route path="/history" element={<History/>} />
+               {/* <Route path="/home" element={<Home/>} /> */}
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login role="admin" />} />
+              {/* <Route path="/login" element={<Login role="cashier" />} /> */}
               <Route
                 path="/orders/*"
                 element={

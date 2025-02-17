@@ -1,25 +1,11 @@
 
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
-  Home,
-  Coffee,
-  Users,
-  ClipboardList,
-  ChevronDown,
-  ChevronUp,
-  Table,
-  UserRoundPen,
-  LogOut,
-  CirclePlus,
-  PackageSearch,
-  Lock,
-  LayoutGrid,
-  ArrowDownUp,
-  UserPlus,
-  NotebookPen,
-  History
+  Home, Users, ClipboardList, ChevronDown, ChevronUp,
+  Table, UserRoundPen, LogOut, CirclePlus, PackageSearch,
+  Lock, LayoutGrid, ArrowDownUp, UserPlus, NotebookPen, History
 } from "lucide-react";
 
 // Styled Components
@@ -33,8 +19,6 @@ const SidebarContainer = styled.div`
   transition: left 0.3s ease;
   z-index: 1000;
   overflow-y: auto;
-  
-  /* overflow-y: auto; */
 `;
 
 const Overlay = styled.div`
@@ -46,7 +30,6 @@ const Overlay = styled.div`
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
   z-index: 1000;
-  overflow-y: auto;
 `;
 
 const Logo = styled.h1`
@@ -74,38 +57,28 @@ const NavLinkStyled = styled(NavLink)`
   cursor: pointer;
 
   &:hover {
-    /* background-color: #33333332; */
-    background-color: rgba(163, 100, 57, 0.288);
+    background-color: rgba(212, 110, 42, 0.288);
   }
 
   &.active {
-    /* background-color: #4a4a4a97; */
-    background-color:rgba(212, 110, 42, 0.288);
-    
+    background-color: rgba(158, 97, 56, 0.61);
   }
 
   svg {
     margin-right: 12px;
   }
 `;
-const SubOrder = styled.div`
-  display: ${(props) => (props.isOpen ? "block" : "none")};
-  padding-left: 20px;
-`;
+
 const SubMenu = styled.div`
   display: ${(props) => (props.isOpen ? "block" : "none")};
   padding-left: 20px;
 `;
 
 const LastDiv = styled.div`
-margin-left: 12px;
-  /* display: flex;
-  align-items: end;
-  height: 12rem;
-  position:absolute;
-  bottom: -28px;
-   */
-/* height: fit-content; */
+  margin-left: 12px;
+  /* position: ; */
+  bottom: 20px;
+
   & button {
     background-color: transparent;
     display: flex;
@@ -114,213 +87,225 @@ margin-left: 12px;
     border-color: transparent;
     color: white;
     font-size: 1.1rem;
-    font-family: 'Times New Roman', Times, serif;
-   
+    cursor: pointer;
   }
-  
 `;
 
-// Sidebar Component
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   const [activeDropdown, setActiveDropdown] = useState("");
+  const [role, setRole] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const storedRole = localStorage.getItem("userRole");
+    setRole(storedRole);
+  }, []);
+
+  useEffect(() => {
+    if (!isOpen) setActiveDropdown("");
+  }, [isOpen]);
+
+  const SubOrder = styled.div`
+  display: ${(props) => (props.isOpen ? "block" : "none")};
+  padding-left: 20px;
+`;
+const SubMenu = styled.div`
+  display: ${(props) => (props.isOpen ? "block" : "none")};
+  padding-left: 20px;
+`;
 
   const toggleDropdown = (dropdownName) => {
     setActiveDropdown((prev) => (prev === dropdownName ? "" : dropdownName));
   };
 
-  // Collapse all dropdowns when the sidebar closes
-  useEffect(() => {
-    if (!isOpen) setActiveDropdown("");
-  }, [isOpen]);
+  const handleLogout = () => {
+    localStorage.removeItem("userRole");
+    setRole(null);
+    navigate("/login");
+  };
 
   return (
     <>
-      {/* Overlay for clicks outside the sidebar */}
       <Overlay isOpen={isOpen} onClick={() => toggleSidebar(false)} />
 
-      {/* Sidebar */}
       <SidebarContainer isOpen={isOpen}>
         <Logo>Café Manager</Logo>
         <nav>
-          {/* Dashboard */}
-          <NavItem>
-            <div
-              onClick={() => toggleDropdown("dashboard")}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                padding: "12px 16px",
-                color: "#fff",
-                textDecoration: "none",
-                borderRadius: "8px",
-                cursor: "pointer",
-                backgroundColor: activeDropdown === "dashboard" ? "#4a4a4a13" : "transparent",
-                transition: "background-color 0.3s",
-              }}
-            >
-              <Home size={20} style={{ marginRight: "12px" }} />
-              Dashboard
-              {activeDropdown === "dashboard" ? (
-                <ChevronUp size={20} style={{ marginLeft: "auto" }} />
-              ) : (
-                <ChevronDown size={20} style={{ marginLeft: "auto" }} />
-              )}
-            </div>
-            <SubMenu isOpen={activeDropdown === "dashboard"}>
-              <NavLinkStyled to="/Admin">
-                <Lock size={20} />
-                Admin</NavLinkStyled>
-           
-            <NavLinkStyled to="/User">
-                <UserPlus size={20} />
-               Add User</NavLinkStyled>
-             </SubMenu>
-          </NavItem>
-          <NavItem>
-            <NavLinkStyled to="/CategoryManagement">
-              <LayoutGrid size={20} />
-              Category
-            </NavLinkStyled>
-          </NavItem>
-
-          {/* Menu Section */}
-
-          <NavItem>
-            <div
-              onClick={() => toggleDropdown("Menu")}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                padding: "12px 16px",
-                color: "#fff",
-                textDecoration: "none",
-                borderRadius: "8px",
-                cursor: "pointer",
-                backgroundColor: activeDropdown === "Menu" ? "#4a4a4a1c" : "transparent",
-                transition: "background-color 0.3s",
-              }}
-            >
-              <ClipboardList size={20} style={{ marginRight: "12px" }} />
-              Menu
-              {activeDropdown === "Menu" ? (
-                <ChevronUp size={20} style={{ marginLeft: "auto" }} />
-              ) : (
-                <ChevronDown size={20} style={{ marginLeft: "auto" }} />
-              )}
-            </div>
-            <SubOrder isOpen={activeDropdown === "Menu"}>
-
-              <NavLinkStyled to="AddProduct">
-                <CirclePlus size={20} />
-                Add Product
-
-              </NavLinkStyled>
-              <NavLinkStyled to="/ManageProduct"  >
-                <PackageSearch size={20} />
-                Manage Product</NavLinkStyled>
-
-                <NavLinkStyled to="/MenuSection"  >
-                <PackageSearch size={20} />
-                Menu List</NavLinkStyled>
-            </SubOrder>
-          </NavItem>
-          {/* Table */}
-          <NavItem>
-            <NavLinkStyled to="/Table">
-              <Table size={20} />
-              Table
-            </NavLinkStyled>
-
-            </NavItem>
+          {role === "admin" && (
+            <>
             
+              <NavItem>
+                <NavLinkStyled to="/Admin">
+                  <Home size={20} />
+                  Dashboard
+                </NavLinkStyled>
+              </NavItem>
 
-          {/* Orders */}
-          <NavItem>
-            <div
-              onClick={() => toggleDropdown("orders")}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                padding: "12px 16px",
-                color: "#fff",
-                textDecoration: "none",
-                borderRadius: "8px",
-                cursor: "pointer",
-                backgroundColor: activeDropdown === "orders" ? "#4a4a4a1c" : "transparent",
-                transition: "background-color 0.5s",
-              }}
-            >
-              <ArrowDownUp size={20} style={{ marginRight: "12px" }} />
-              Orders
-              {activeDropdown === "orders" ? (
-                <ChevronUp size={20} style={{ marginLeft: "auto" }} />
-              ) : (
-                <ChevronDown size={20} style={{ marginLeft: "auto" }} />
-              )}
-            </div>
-            <SubOrder isOpen={activeDropdown === "orders"}>
-              <NavLinkStyled to="/orders/add">
-              <CirclePlus size={20} />
-              Add Order</NavLinkStyled>
-              <NavLinkStyled to="/orders/manage"  >
-              <PackageSearch size={20} />
-              Manage Orders</NavLinkStyled>
-            </SubOrder>
-          </NavItem>
+              <NavItem>
+                <NavLinkStyled to="/User">
+                  <UserPlus size={20} />
+                  Add User
+                </NavLinkStyled>
+              </NavItem>
 
-          {/* Staff */}
+              <NavItem>
+                <NavLinkStyled to="/CategoryManagement">
+                  <LayoutGrid size={20} />
+                  Category
+                </NavLinkStyled>
+              </NavItem>
+
+              {/* Menu Section */}
+              <NavItem>
+                <div onClick={() => toggleDropdown("Menu")} style={{ display: "flex", alignItems: "center", padding: "12px 16px", color: "#fff", cursor: "pointer", backgroundColor: activeDropdown === "Menu" ? "#4a4a4a1c" : "transparent" }}>
+                  <ClipboardList size={20} style={{ marginRight: "12px" }} />
+                  Menu
+                  {activeDropdown === "Menu" ? <ChevronUp size={20} style={{ marginLeft: "auto" }} /> : <ChevronDown size={20} style={{ marginLeft: "auto" }} />}
+                </div>
+                <SubMenu isOpen={activeDropdown === "Menu"}>
+                  <NavLinkStyled to="/AddProduct">
+                    <CirclePlus size={20} />
+                    Add Product
+                  </NavLinkStyled>
+                  <NavLinkStyled to="/ManageProduct">
+                    <PackageSearch size={20} />
+                    Manage Product
+                  </NavLinkStyled>
+                  <NavLinkStyled to="/MenuSection">
+                    <PackageSearch size={20} />
+                    Menu List
+                  </NavLinkStyled>
+                </SubMenu>
+              </NavItem>
+
+              <NavItem>
+                <NavLinkStyled to="/Table">
+                  <Table size={20} />
+                  Table
+                </NavLinkStyled>
+              </NavItem>
+
+              <NavItem>
+                <NavLinkStyled to="/ManageUser">
+                  <Users size={20} />
+                  Staff
+                </NavLinkStyled>
+              </NavItem>
+
+              <NavItem>
+                <NavLinkStyled to="/Profile">
+                  <UserRoundPen size={20} />
+                  Profile
+                </NavLinkStyled>
+              </NavItem>
+
+              <NavItem>
+                <NavLinkStyled to="/Report">
+                  <NotebookPen size={20} />
+                  Report
+                </NavLinkStyled>
+              </NavItem>
+
+              <NavItem>
+                <NavLinkStyled to="/History">
+                  <History size={20} />
+                  History
+                </NavLinkStyled>
+              </NavItem>
+
+              {/* Logout */}
+          <LastDiv>
+            <button onClick={handleLogout}>
+              <LogOut color="white" />
+              Log Out
+            </button>
+          </LastDiv>
+            </>
+          )}
+
+          {role === "cashier" && (
+            <>
+              <NavItem>
+                <NavLinkStyled to="/Admin">
+                  <Home size={20} />
+                  Dashboard
+                </NavLinkStyled>
+              </NavItem>
 
 
-          <NavItem>
-            <NavLinkStyled to="/ManageUser">
-              <Users size={20} />
-              Staff
-            </NavLinkStyled>
-          </NavItem>
+              <NavItem>
+                <NavLinkStyled to="/Table">
+                  <Table size={20} />
+                  Table
+                </NavLinkStyled>
+              </NavItem>
 
-          {/* Menu */}
-          {/* <NavItem>
-            <NavLinkStyled to="/menu">
-              <Coffee size={20} />
-              Menu Category
-            </NavLinkStyled>
-          </NavItem> */}
+              <NavItem>
+                <div
+                  onClick={() => toggleDropdown("orders")}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "12px 16px",
+                    color: "#fff",
+                    textDecoration: "none",
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                    backgroundColor: activeDropdown === "orders" ? "#4a4a4a1c" : "transparent",
+                    transition: "background-color 0.5s",
+                  }}
+                >
+                  <ArrowDownUp size={20} style={{ marginRight: "12px" }} />
+                  Orders
+                  {activeDropdown === "orders" ? (
+                    <ChevronUp size={20} style={{ marginLeft: "auto" }} />
+                  ) : (
+                    <ChevronDown size={20} style={{ marginLeft: "auto" }} />
+                  )}
+                </div>
+                <SubOrder isOpen={activeDropdown === "orders"}>
+                  <NavLinkStyled to="/orders/add">
+                    <CirclePlus size={20} />
+                    Add Order</NavLinkStyled>
+                  <NavLinkStyled to="/orders/manage"  >
+                    <PackageSearch size={20} />
+                    Manage Orders</NavLinkStyled>
+                </SubOrder>
+              </NavItem>
 
+              <NavItem>
+                <NavLinkStyled to="/Profile">
+                  <UserRoundPen size={20} />
+                  Profile
+                </NavLinkStyled>
+              </NavItem>
+
+              <NavItem>
+                <NavLinkStyled to="/Report">
+                  <NotebookPen size={20} />
+                  Report
+                </NavLinkStyled>
+              </NavItem>
+
+              <NavItem>
+                <NavLinkStyled to="/History">
+                  <History size={20} />
+                  History
+                </NavLinkStyled>
+              </NavItem>
+
+              {/* Logout */}
+          <LastDiv>
+            <button onClick={handleLogout}>
+              <LogOut color="white" />
+              Log Out
+            </button>
+          </LastDiv>
+            </>
+          )}
 
           
-
-          
-
-          {/* Profile */}
-          <NavItem>
-            <NavLinkStyled to="/Profile">
-              <UserRoundPen size={20} />
-              Profile
-            </NavLinkStyled>
-          </NavItem>
-
-          <NavItem>
-            <NavLinkStyled to="/Report">
-              <NotebookPen size={20} />
-              Report
-            </NavLinkStyled>
-          </NavItem>
-          <NavItem>
-            <NavLinkStyled to="/History">
-              <History size={20} />
-              History
-            </NavLinkStyled>
-          </NavItem>
-
-          <NavItem>
-            <NavLinkStyled to="/logout">
-            <LogOut color="white" />
-             Log out
-            </NavLinkStyled>
-          </NavItem>
         </nav>
-
-     
       </SidebarContainer>
     </>
   );

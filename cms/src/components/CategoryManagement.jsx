@@ -122,8 +122,8 @@ const CategoryManagement = () => {
   return (
     <CategoryContainer>
       <Nav>
-        <div>
-          <h3>Manage Categories</h3>
+        <div style={{display:"flex", flexDirection:"column" , alignItems:"left", justifyContent:"space-between"}}>
+          <h3 style={{marginBottom:"5%"}}>Manage Categories</h3>
           <Button onClick={() => { setIsEditing(false); setIsModalVisible(true); }}>Add Category</Button>
         </div>
       </Nav>
@@ -186,9 +186,9 @@ const CategoryManagement = () => {
         </PaginationWrapper>
       </div>
 
-      <Center>
+      {/* <Center>
         <Button onClick={handleAddCategory}>Go To Add Products</Button>
-      </Center>
+      </Center> */}
 
       {isModalVisible && (
         <ModalContainer>

@@ -143,6 +143,8 @@ app.use(express.json());
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
+
+
 //  Serve uploaded files statically
 app.use("/uploads", express.static(uploadDir));
 
@@ -153,6 +155,7 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     cb(null, `image-${Date.now()}${path.extname(file.originalname)}`);
+
   },
 });
 
