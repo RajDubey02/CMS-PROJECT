@@ -8,7 +8,7 @@ const Body = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: rgb(255, 254, 254);
+  background: linear-gradient(135deg, #f5efe6 0%, #d7b899 100%);
   font-family: "Raleway", serif;
   height: 100vh;
 `;
@@ -16,25 +16,20 @@ const Body = styled.div`
 const FormContainer = styled.div`
   max-width: 450px;
   margin: 0 auto;
-  padding: 15px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  animation: fadeInWithScale 0.6s ease-out;
+  padding: 20px;
+  border-radius: 10px;
+  background: white;
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
+  animation: fadeInWithScale 0.5s ease-out;
 
   &:hover {
     transform: scale(1.02);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   }
 
   @keyframes fadeInWithScale {
     0% {
       opacity: 0;
-      transform: scale(0.8);
+      transform: scale(0.9);
     }
     100% {
       opacity: 1;
@@ -49,16 +44,17 @@ const InputContainer = styled.div`
 `;
 
 const Input = styled.input`
-  width: 95%;
-  padding: 10px;
-  margin: 10px 0;
-  border-radius: 4px;
-  border: 1px solid #ddd;
-  outline: none;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+  border-radius: 6px;
+  border: 1px solid #b8a080;
+  font-size: 1rem;
+  transition: 0.3s ease-in-out;
+
   &:focus {
-    border-color: #a37550;
-    box-shadow: 0 0 4px rgba(128, 76, 34, 0.6);
+    border-color: #8b5e3c;
+    box-shadow: 0 0 5px rgba(139, 94, 60, 0.5);
   }
 `;
 
@@ -75,33 +71,44 @@ const EyeIcon = styled.span`
 
 const RadioGroup = styled.div`
   display: flex;
-  gap: 20px;
+  gap: 15px;
   margin-top: 10px;
+
+  label {
+    font-size: 0.9rem;
+    color: #4e342e;
+  }
 `;
 
 const H = styled.h1`
   text-align: center;
-  color: black;
-  margin: 20px;
+  color: #4e342e;
+  font-size: 1.8rem;
+  margin-bottom: 15px;
 `;
 
 const Label = styled.label`
   font-weight: bold;
+  color: #6d4c41;
+  font-size: 1rem;
 `;
 
 const Button = styled.button`
-  padding: 10px 20px;
-  background-color: rgba(129, 83, 52, 0.81);
+  padding: 12px;
+  background: linear-gradient(135deg, #8b5e3c 0%, #6d4c41 100%);
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
-  margin-top: 20px;
+  margin-top: 15px;
   width: 100%;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  font-size: 1rem;
+  transition: background 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
   &:hover {
-    background-color: #45a049;
-    transform: scale(1.05);
+    background: linear-gradient(135deg, #6d4c41 0%, #4e342e 100%);
+    transform: scale(1.03);
   }
 `;
 
@@ -121,10 +128,11 @@ const Popup = styled.div`
 const PopupContent = styled.div`
   background-color: white;
   padding: 20px;
-  border-radius: 8px;
+  border-radius: 10px;
   text-align: center;
   max-width: 400px;
   width: 100%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 `;
 
 const UserForm = () => {

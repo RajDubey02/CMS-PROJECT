@@ -17,11 +17,12 @@ import Report from "./components/Report";
 import Login from "./components/Login";
 import MenuSection from "./components/Menu";
 import Register from "./components/Register";
-import ResetPassword from "./components/ResetPassword";
+import Home from "./components/Home";
 import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
 import Profile from "./components/Profile";
 import History from "./components/History"
+// import LandingPage from "./"
 
 
 const App = () => {
@@ -49,7 +50,7 @@ const App = () => {
             
             <Navbar toggleSidebar={toggleSidebar} />
             <Routes>
-              <Route path="/" element={<HeroSEction />} />
+              {/* <Route path="/" element={<HeroSEction />} /> */}
             </Routes>
           </div>
           <div>
@@ -63,7 +64,7 @@ const App = () => {
               <Route path="/Table" element={<Table />} />
               <Route path="/ManageUser" element={<ManageUser />} />
               <Route path="/Report" element={<Report />} />
-              <Route path="/login" element={<Login />} />
+              {/* <Route path="/" element={<Login />} /> */}
               <Route path="/register" element={<Register />} />
               {/* <Route path="/forgot-pass" element={<ForgotPassword />} /> */}
               <Route path="/reset-pass" element={<ResetPassword />} />
@@ -71,6 +72,10 @@ const App = () => {
               <Route path="/reset-pass" element={<ResetPassword />} />
               <Route path="/profile" element={<Profile/>} />
               <Route path="/history" element={<History/>} />
+               {/* <Route path="/home" element={<Home/>} /> */}
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login role="admin" />} />
+              {/* <Route path="/login" element={<Login role="cashier" />} /> */}
               <Route
                 path="/orders/*"
                 element={

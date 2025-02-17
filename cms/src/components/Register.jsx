@@ -163,4 +163,3 @@ const Register = () => {
 
 export default Register;
 
-// Create  a login page and register page that , register page must contain a form with fields for email, password, confirm password, and a submit button. The data from  form must be saved in backend using a POST request, and it must validate during login . give complete backend code with all file and database schema. but dont add password hashing and jwt tokens , dont give forgot password functionality. Give complete code in react.js and node.js.

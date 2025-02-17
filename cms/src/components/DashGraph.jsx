@@ -1,76 +1,51 @@
-import React, { useState, useEffect } from 'react';
-import { Bar } from 'react-chartjs-2';
-import { Chart as ChartJS, BarElement, Tooltip, Legend, CategoryScale, LinearScale } from 'chart.js';
-import styled, { keyframes } from 'styled-components';
-import { motion } from 'framer-motion';
-import axios from 'axios';
-
+import React, { useState, useEffect } from "react";
+import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  BarElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+} from "chart.js";
+import styled, { keyframes } from "styled-components";
+import axios from "axios";
 
 ChartJS.register(BarElement, Tooltip, Legend, CategoryScale, LinearScale);
 
+// Fade-in animation
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
 `;
 
-// const Card = styled(motion.div)`
-//   background: linear-gradient(135deg, #ede0d4, #ddb892);
-//   border-radius: 15px;
- 
-//   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-//   width: 5050px;
-//   height: 360px;
-//   max-width: 600px;
-//   text-align: center;
-//   display: flex;
-//   flex-direction: row;
-//   align-items: center;
-//   justify-content: center;
-//   animation: ${fadeIn} 0.5s ease-in-out;
-// `;
-
-// const DashboardContainer = styled.div`
-//   font-family: 'Roboto', sans-serif;
-//   background-color: #b66363;  /* Creamy Beige */
-//   padding: 50px 0;
-//   text-align: center;
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   justify-content: center;
-//   height: 100vh;
-// `;
-
-
-const ParentDiv= styled.div`
-    background: linear-gradient(135deg, #f5f5f0, #e8d8b0);
+const ParentDiv = styled.div`
+  background: linear-gradient(135deg, #f5f5f0, #e8d8b0);
   padding: 15px;
   display: flex;
   flex-direction: column;
   width: 460px;
-  height: 300px;
+  height: 350px;
   align-items: center;
   justify-content: center;
-  border-radius:10px ;
+  border-radius: 10px;
 `;
+
 const Dropdown = styled.select`
   padding: 12px;
-  border-radius:10px ;
-  width: 100px;
-  border-radius: 5px;
-  font-size: 10px;
-  background-color: #d0b294;  /* Light Caramel */
-  color: #16120f;  /* Coffee Bean Dark */
+  border-radius: 10px;
+  width: 120px;
+  font-size: 12px;
+  background-color: #d0b294;
+  color: #16120f;
   border: none;
   cursor: pointer;
-  margin-bottom: 20px;
-  margin-top: 10px;
+  margin-bottom: 10px;
   transition: 0.3s ease;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
   &:hover {
-    background-color: #d3c8be;  /* Soft Toasted Brown */
-    border-radius:10px ;
+    background-color: #d3c8be;
   }
 
   &:focus {
@@ -94,15 +69,12 @@ const ChartContainer = styled.div`
 const chartOptions = {
   responsive: true,
   plugins: {
-    legend: {
-      display: true,
-      position: 'top',
-    },
+    legend: { display: true, position: "top" },
     title: {
       display: true,
-      text: 'Café Management - Revenue, Customers & Sales',
-      font: { size: 20 },
-      color: '#7f5539',  /* Coffee Bean Dark */
+      text: "Café Daily Performance (Revenue & Orders)",
+      font: { size: 18 },
+      color: "#7f5539",
     },
   },
   scales: {
@@ -112,31 +84,94 @@ const chartOptions = {
 };
 
 const BarChart = () => {
-  const [selectedTimePeriod, setSelectedTimePeriod] = useState('today');
-  const [chartData, setChartData] = useState({ revenues: 680, customers: 190, sales: 500 });
+  const [selectedTimePeriod, setSelectedTimePeriod] = useState("today");
+  const [chartLabels, setChartLabels] = useState([]);
+  const [chartRevenue, setChartRevenue] = useState([]);
+  const [chartOrders, setChartOrders] = useState([]);
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/api/sales`)
-      .then(response => {
-        const sales = response.data;
-        const filteredData = sales.find(sale => sale.timePeriod === selectedTimePeriod) || { revenues: 10, customers: 20, sales: 30 };
-        setChartData(filteredData);
-      })
-      .catch(error => console.error("Error fetching sales data:", error));
+    fetchDailyData();
   }, [selectedTimePeriod]);
 
-  const handleDropdownChange = (e) => {
-    setSelectedTimePeriod(e.target.value);
+  const fetchDailyData = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/api/orders");
+      const orders = response.data;
+
+      const aggregatedData = aggregateData(orders, selectedTimePeriod);
+
+      setChartLabels(aggregatedData.map((data) => data.date));
+      setChartRevenue(aggregatedData.map((data) => data.revenue));
+      setChartOrders(aggregatedData.map((data) => data.orderCount));
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    }
   };
 
-  const data = {
-    labels: ['Revenue', 'Customers', 'Sales'],
+  // Aggregates revenue and order count based on selected period (Today, Week, Month)
+  const aggregateData = (orders, period) => {
+    const today = new Date();
+    let filteredOrders = [];
+
+    if (period === "today") {
+      filteredOrders = orders.filter(
+        (order) => new Date(order.createdAt).toDateString() === today.toDateString()
+      );
+    } else if (period === "week") {
+      const weekStart = new Date();
+      weekStart.setDate(today.getDate() - 6);
+
+      filteredOrders = orders.filter(
+        (order) => new Date(order.createdAt) >= weekStart
+      );
+    } else if (period === "month") {
+      const monthStart = new Date();
+      monthStart.setDate(1);
+
+      filteredOrders = orders.filter(
+        (order) => new Date(order.createdAt) >= monthStart
+      );
+    }
+
+    // Group by Date
+    const dataMap = {};
+    filteredOrders.forEach((order) => {
+      const orderDate = new Date(order.createdAt).toLocaleDateString("en-IN", {
+        timeZone: "Asia/Kolkata",
+      });
+
+      if (!dataMap[orderDate]) {
+        dataMap[orderDate] = { revenue: 0, orderCount: 0 };
+      }
+
+      dataMap[orderDate].revenue += order.summary?.netAmount || 0;
+      dataMap[orderDate].orderCount += 1;
+    });
+
+    // Convert to array format for charting
+    return Object.keys(dataMap).map((date) => ({
+      date,
+      revenue: dataMap[date].revenue,
+      orderCount: dataMap[date].orderCount,
+    }));
+  };
+
+  const chartData = {
+    labels: chartLabels,
     datasets: [
       {
-        label: 'Cafe Management',
-        data: [chartData.revenues, chartData.customers, chartData.sales],
-        backgroundColor: ['#9c6644', '#e6ccb2', '#b08968'],  /* Muted Olive Green, Light Warm Tan, Soft Toasted Brown */
-        borderColor: '#fff',
+        label: "Revenue (₹)",
+        data: chartRevenue,
+        backgroundColor: "#9c6644",
+        borderColor: "#fff",
+        borderWidth: 3,
+        barThickness: 40,
+      },
+      {
+        label: "Orders Count",
+        data: chartOrders,
+        backgroundColor: "#e6ccb2",
+        borderColor: "#fff",
         borderWidth: 3,
         barThickness: 40,
       },
@@ -144,28 +179,20 @@ const BarChart = () => {
   };
 
   return (
-    <>
-  
     <ParentDiv>
+      <h3>Performance</h3>
 
-         Performance
-        
-          <Dropdown onChange={handleDropdownChange} value={selectedTimePeriod}>
-            <option value="today">Today</option>
-            <option value="week">This Week</option>
-            <option value="month">This Month</option>
-          </Dropdown>
-          <ChartContainer>
-            <Bar data={data} options={chartOptions} />
-          </ChartContainer>
+      <Dropdown onChange={(e) => setSelectedTimePeriod(e.target.value)} value={selectedTimePeriod}>
+        <option value="today">Today</option>
+        <option value="week">This Week</option>
+        <option value="month">This Month</option>
+      </Dropdown>
 
-        {/* <Card whileHover={{ scale: 1.02 }}> */}
-   
-        {/* </Card> */}
+      <ChartContainer>
+        <Bar data={chartData} options={chartOptions} />
+      </ChartContainer>
     </ParentDiv>
-    </>
   );
 };
 
 export default BarChart;
-  

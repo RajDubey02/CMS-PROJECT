@@ -1,29 +1,38 @@
-import React from 'react'
-import DashGraph from "./DashGraph"
-import Metrics from './Metrics';
-import { motion } from 'framer-motion';
+import React from "react";
+import DashGraph from "./DashGraph";
+import Metrics from "./Metrics";
+import { motion } from "framer-motion";
+import RevenueTrend from "./RevenueTrend";
+import styled from "styled-components";
+import PopularFoodGraph from "./PopularFoodGraph";
+import RecentOrdersCard from "./RecentOrdersCard";
 
-
-import RevenueTrend from './RevenueTrend';
-import styled from 'styled-components';
-import PopularFoodGraph from './PopularFoodGraph';
-import RecentOrdersCard from './RecentOrdersCard';
-
-const ParentDiv= styled.div`
-  background-color: #fffefd;
+// Parent Container (Handles Theme)
+const ParentDiv = styled.div`
+  background-color: ${({ theme }) => theme.background};
+  color: ${({ theme }) => theme.text};
+  min-height: 100vh;
+  padding: 20px;
+  transition: all 0.3s ease-in-out;
 `;
-    
-const Div2= styled.div`
+
+// Flex Container for Components
+const FlexContainer = styled.div`
   display: flex;
-  flex-direction: row;
   flex-wrap: wrap;
-  gap: 10px;
-  align-items: center;
+  gap: 20px;
   justify-content: center;
-  
-`
+  align-items: flex-start;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+  }
+`;
+
+// Card Wrapper with Hover Effects
 const CardWrapper = styled(motion.div)`
-  background: white;
+  background: ${({ theme }) => theme.cardBackground};
   padding: 15px;
   border-radius: 12px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
@@ -46,19 +55,23 @@ const fadeInUp = {
 
 const Report = () => {
   return (
-   <>
-   <ParentDiv>
-    <Div2>
-    <Metrics />
-   <DashGraph/>
-   {/* <RevenueTrend/> */}
-   <PopularFoodGraph/>
-   <RecentOrdersCard/>
-    </Div2>
-   </ParentDiv>
-   
-   </>
-  )
-}
+    <ParentDiv>
+      <FlexContainer>
+        <motion.div variants={fadeInUp} initial="hidden" animate="visible">
+          <Metrics />
+        </motion.div>
+        <motion.div variants={fadeInUp} initial="hidden" animate="visible">
+          <DashGraph />
+        </motion.div>
+        <motion.div variants={fadeInUp} initial="hidden" animate="visible">
+          <PopularFoodGraph />
+        </motion.div>
+        <motion.div variants={fadeInUp} initial="hidden" animate="visible">
+          <RecentOrdersCard />
+        </motion.div>
+      </FlexContainer>
+    </ParentDiv>
+  );
+};
 
-export default Report
+export default Report;

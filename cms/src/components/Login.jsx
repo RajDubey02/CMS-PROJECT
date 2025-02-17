@@ -30,30 +30,39 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-
+  
     setLoading(true);
     try {
       const response = await axios.post('http://localhost:5000/api/auth/login', formData);
+      
+      console.log("API Response:", response.data); // Debugging
+  
       if (response.data.success) {
-
-        const { email } = formData;
-        if (email === "admin@gmail.com") {
+        const { role } = response.data.user;
+  
+        // Store role in localStorage & confirm it's saved
+        localStorage.setItem("userRole", role);
+        console.log("Stored Role:", localStorage.getItem("userRole"));
+  
+        // Redirect based on role
+        if (role === "admin") {
           navigate('/Admin');
+        } else if (role === "cashier") {
+          navigate('/orders/add');
         } else {
-          navigate('/MenuSection');
-        } 
-      }else {
-        setErrors({ submit: response.data.message || 'Login Failed'});
+          navigate('/MenuSection'); 
+        }
+      } else {
+        setErrors({ submit: response.data.message || 'Login Failed' });
       }
     } catch (error) {
-      // console.error("Login Error:", error.response?.data || error.message); // Debugging
-
+      console.error("Login Error:", error.response?.data || error.message);
       setErrors({ submit: error.response?.data?.message || 'An error occurred during login' });
     } finally {
       setLoading(false);
     }
   };
-
+  
   return (
     <AuthContainer>
       <AuthCard>

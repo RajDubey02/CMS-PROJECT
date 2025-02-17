@@ -1,23 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { motion } from 'framer-motion';
-import { DollarSign, ShoppingCart, FileText, TrendingUp } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { motion } from "framer-motion";
+import { DollarSign, ShoppingCart, FileText, TrendingUp } from "lucide-react";
+import axios from "axios";
 
-// Animation Variants (Smooth Fade & Slide-Up)
+// Animation Variants
 const cardVariants = {
   hidden: { opacity: 0, y: 30 },
   visible: (index) => ({
     opacity: 1,
     y: 0,
-    transition: {
-      delay: index * 0.15,
-      duration: 0.6,
-      ease: "easeOut",
-    },
+    transition: { delay: index * 0.15, duration: 0.6, ease: "easeOut" },
   }),
 };
 
-// Metrics Container
+// Styled Components
 const MetricsContainer = styled(motion.div)`
   padding: 20px;
   display: flex;
@@ -26,7 +23,6 @@ const MetricsContainer = styled(motion.div)`
   justify-content: center;
 `;
 
-// Styled Card
 const Card = styled(motion.div)`
   background: #d4c8be;
   padding: 20px;
@@ -49,7 +45,6 @@ const Card = styled(motion.div)`
   }
 `;
 
-// Icon Wrapper
 const IconWrapper = styled.div`
   background: rgba(255, 255, 255, 0.2);
   padding: 10px;
@@ -65,29 +60,57 @@ const IconWrapper = styled.div`
 `;
 
 const Metrics = () => {
-  // Default values before fetching data
+  // State for Metrics
   const [metrics, setMetrics] = useState({
-    netIncome: 120901,
-    orders: 142,
-    avgContract: 8864,
-    growthRate: 8.72,
+    netIncome: 0,
+    orders: 0,
+    avgOrderValue: 0,
+    growthRate: 0,
   });
 
-  // Fetch Data from Backend
   useEffect(() => {
     const fetchMetrics = async () => {
       try {
-        const response = await fetch('https://your-api-endpoint.com/metrics'); // Replace with your actual backend API
-        const data = await response.json();
+        const response = await axios.get("http://localhost:5000/api/orders");
+        const orders = response.data;
+
+        // Calculate Total Revenue
+        const totalRevenue = orders.reduce((sum, order) => sum + (order.summary?.netAmount || 0), 0);
+
+        // Calculate Total Orders
+        const totalOrders = orders.length;
+
+        // Calculate Avg Order Value
+        const avgOrderValue = totalOrders > 0 ? totalRevenue / totalOrders : 0;
+
+        // Calculate Growth Rate (based on last 7 days)
+        const today = new Date();
+        const lastWeekStart = new Date(today);
+        lastWeekStart.setDate(today.getDate() - 7);
+
+        const lastWeekRevenue = orders
+          .filter((order) => new Date(order.createdAt) >= lastWeekStart)
+          .reduce((sum, order) => sum + (order.summary?.netAmount || 0), 0);
+
+        const previousWeekRevenue = orders
+          .filter((order) => new Date(order.createdAt) < lastWeekStart)
+          .reduce((sum, order) => sum + (order.summary?.netAmount || 0), 0);
+
+        const growthRate =
+          previousWeekRevenue > 0
+            ? ((lastWeekRevenue - previousWeekRevenue) / previousWeekRevenue) * 100
+            : lastWeekRevenue > 0
+            ? 100
+            : 0;
 
         setMetrics({
-          netIncome: data.netIncome || 120901,
-          orders: data.orders || 142,
-          avgContract: data.avgContract || 8864,
-          growthRate: data.growthRate || 8.72,
+          netIncome: totalRevenue.toFixed(2),
+          orders: totalOrders,
+          avgOrderValue: avgOrderValue.toFixed(2),
+          growthRate: growthRate.toFixed(2),
         });
       } catch (error) {
-        console.error('Error fetching metrics:', error);
+        console.error("Error fetching metrics:", error);
       }
     };
 
@@ -97,9 +120,9 @@ const Metrics = () => {
   return (
     <MetricsContainer initial="hidden" animate="visible">
       {[
-        { icon: <DollarSign size={28} color="white" />, text: `Net Income: $${metrics.netIncome}` },
-        { icon: <ShoppingCart size={28} color="white" />, text: `Orders: ${metrics.orders}` },
-        { icon: <FileText size={28} color="white" />, text: `Avg Contract: $${metrics.avgContract}` },
+        { icon: <DollarSign size={28} color="white" />, text: `Net Income: ₹${metrics.netIncome}` },
+        { icon: <ShoppingCart size={28} color="white" />, text: `Total Orders: ${metrics.orders}` },
+        { icon: <FileText size={28} color="white" />, text: `Avg Order Value: ₹${metrics.avgOrderValue}` },
         { icon: <TrendingUp size={28} color="white" />, text: `Growth Rate: ${metrics.growthRate}%` },
       ].map((item, index) => (
         <Card key={index} custom={index} variants={cardVariants} initial="hidden" animate="visible">

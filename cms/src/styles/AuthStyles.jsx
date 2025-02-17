@@ -5,23 +5,25 @@ export const AuthContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: linear-gradient(135deg, #F5EFE6 0%, #C3A995 100%); /* Warm Cafe Gradient */
   padding: 2rem;
+  height: 100vh - 4vh ;
 `;
 
 export const AuthCard = styled.div`
   background: white;
   padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 400px;
 `;
 
 export const Title = styled.h1`
   text-align: center;
-  color: #333;
+  color: #4E342E; /* Dark Brown */
   font-size: 2rem;
+  font-weight: bold;
   margin-bottom: 2rem;
 `;
 
@@ -38,15 +40,16 @@ export const InputGroup = styled.div`
 export const Input = styled.input`
   width: 100%;
   padding: 0.75rem 2.5rem;
-  border: 1px solid ${props => props.error ? '#ff4d4f' : '#d9d9d9'};
-  border-radius: 4px;
+  border: 1px solid ${props => props.error ? '#D32F2F' : '#6D4C41'}; /* Red if error, Brown otherwise */
+  border-radius: 8px;
   font-size: 1rem;
   transition: all 0.3s;
+  color: #2E2E2E;
 
   &:focus {
     outline: none;
-    border-color: #4096ff;
-    box-shadow: 0 0 0 2px rgba(64, 150, 255, 0.2);
+    border-color: #4E342E; /* Dark Brown */
+    box-shadow: 0 0 5px #4E342E;
   }
 `;
 
@@ -55,31 +58,31 @@ export const IconWrapper = styled.span`
   left: 0.75rem;
   top: 50%;
   transform: translateY(-50%);
-  color: #999;
+  color: #6D4C41;
 `;
 
 export const ErrorMessage = styled.p`
-  color: #ff4d4f;
+  color: #D32F2F; /* Error Red */
   font-size: 0.875rem;
   margin-top: 0.25rem;
 `;
 
 export const Button = styled.button`
-  background: #1890ff;
+  background: #4E342E; /* Dark Brown */
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 1rem;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: background 0.3s ease-in-out;
 
   &:hover {
-    background: #40a9ff;
+    background: #291611; /* Darker Brown */
   }
 
   &:disabled {
-    background: #d9d9d9;
+    background: #A1887F;
     cursor: not-allowed;
   }
 `;
@@ -87,12 +90,13 @@ export const Button = styled.button`
 export const LinkText = styled.p`
   text-align: center;
   margin-top: 1rem;
-  color: #666;
+  color: #6D4C41;
 
   a {
-    color: #1890ff;
+    color: #FF7043; /* Warm Orange */
     text-decoration: none;
     margin-left: 0.5rem;
+    font-weight: bold;
 
     &:hover {
       text-decoration: underline;
