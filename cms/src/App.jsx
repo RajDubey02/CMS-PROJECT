@@ -73,10 +73,12 @@ const App = () => {
               <Route path="/login" element={<Login />} />
               <Route path="/logout" element={<Logout />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/home" element={<Home />} />
+
               {/* <Route path="/forgot-pass" element={<ForgotPassword />} /> */}
-              <Route path="/reset-pass" element={<ResetPassword />} />
-              <Route path="/forgot-pass" element={<ForgotPassword />} />
-              <Route path="/reset-pass" element={<ResetPassword />} />
+              {/* <Route path="/reset-pass" element={<ResetPassword />} /> */}
+              {/* <Route path="/forgot-pass" element={<ForgotPassword />} /> */}
+              {/* <Route path="/reset-pass" element={<ResetPassword />} /> */}
               <Route path="/profile" element={<Profile/>} />
               <Route path="/history" element={<History/>} />
                {/* <Route path="/home" element={<Home/>} /> */}
