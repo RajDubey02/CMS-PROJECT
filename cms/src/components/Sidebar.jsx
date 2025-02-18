@@ -121,7 +121,7 @@ const SubMenu = styled.div`
   const handleLogout = () => {
     localStorage.removeItem("userRole");
     setRole(null);
-    navigate("/login");
+    navigate("/");
   };
 
   return (
