@@ -1,200 +1,102 @@
-// import React from 'react';
-// import styled from 'styled-components';
-// import { Coffee, ShoppingBag, Smile, Star } from 'lucide-react';
+import React from "react";
+import styled, { keyframes } from "styled-components";
+import { useNavigate } from "react-router-dom";
 
-// // Styled Components
-// const MainContent = styled.div`
-//   padding: 20px;
-// `;
+// Background Fade-in Animation
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+`;
 
-// const HeroSection = styled.section`
-//   background: #f5ebe0;
-//   padding: 50px;
-//   text-align: center;
-//   border-radius: 8px;
-//   margin-bottom: 40px;
+// Button Hover Effect
+const pulse = keyframes`
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+`;
 
-//   h1 {
-//     font-size: 3rem;
-//     color: #6b4226;
-//     margin-bottom: 20px;
-//   }
+// Styled Components
+const Container = styled.div`
+  width: 100%;
+  height: 100vh;
+  background: url("https://source.unsplash.com/1600x900/?coffee-shop,barista,cafe") center/cover no-repeat;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  text-shadow: 2px 2px 10px rgba(75, 57, 36, 0.7);
+  animation: ${fadeIn} 1.2s ease-in-out;
+`;
 
-//   p {
-//     font-size: 1.2rem;
-//     color: #4e342e;
-//     margin-bottom: 30px;
-//   }
+const Overlay = styled.div`
+  width: 100%;
+  height: 100%;
+  background: rgba(238, 223, 223, 0.6); /* Dark overlay for readability */
+  position: absolute;
+  top: 0;
+  left: 0;
+`;
 
-//   button {
-//     background: #6b4226;
-//     color: #fff;
-//     border: none;
-//     padding: 12px 20px;
-//     border-radius: 6px;
-//     font-size: 1rem;
-//     cursor: pointer;
-//     transition: background 0.3s;
+const Content = styled.div`
+  position: relative;
+  z-index: 2;
+`;
 
-//     &:hover {
-//       background: #4e342e;
-//     }
-//   }
-// `;
+const Title = styled.h1`
+  font-size: 4rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, #c2b280, #6f4c3e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: ${fadeIn} 1.5s ease-in-out;
+`;
 
-// const Section = styled.section`
-//   margin-bottom: 40px;
+const SubTitle = styled.p`
+  font-size: 1.5rem;
+  margin-bottom: 30px;
+  animation: ${fadeIn} 1.8s ease-in-out;
+`;
 
-//   h2 {
-//     font-size: 2rem;
-//     margin-bottom: 20px;
-//     text-align: center;
-//     color: #6b4226;
-//   }
+const Button = styled.button`
+  padding: 15px 30px;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 50px;
+  background: #6f4c3e;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+  animation: ${pulse} 1.5s infinite ease-in-out;
 
-//   p {
-//     text-align: center;
-//     color: #4e342e;
-//     margin-bottom: 40px;
-//   }
-// `;
+  &:hover {
+    background: #3b2a2a;
+    transform: scale(1.05);
+  }
+`;
 
-// const ServicesGrid = styled.div`
-//   display: flex;
-//   justify-content: space-between;
-//   gap: 20px;
-// `;
+const Welcome = () => {
+  const navigate = useNavigate();
 
-// const ServiceCard = styled.div`
-//   background: white;
-//   padding: 20px;
-//   border-radius: 10px;
-//   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-//   flex: 1;
-//   text-align: center;
-
-//   svg {
-//     color: #6b4226;
-//     font-size: 40px;
-//     margin-bottom: 15px;
-//   }
-
-//   h3 {
-//     font-size: 1.5rem;
-//     color: #4e342e;
-//     margin-bottom: 10px;
-//   }
-
-//   p {
-//     color: #6b422e;
-//   }
-// `;
-
-// const WhyChooseUsGrid = styled.div`
-//   display: flex;
-//   justify-content: center;
-//   gap: 20px;
-// `;
-
-// const ChooseCard = styled.div`
-//   background: white;
-//   padding: 20px;
-//   border-radius: 10px;
-//   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-//   flex: 1;
-//   text-align: center;
-
-//   svg {
-//     color: #ff9800;
-//     font-size: 40px;
-//     margin-bottom: 15px;
-//   }
-
-//   h3 {
-//     font-size: 1.5rem;
-//     color: #4e342e;
-//     margin-bottom: 10px;
-//   }
-
-//   p {
-//     color: #6b4226;
-//   }
-// `;
-
-// // Component
-// const Content = () => {
-//   return (
-//     <MainContent>
-//       {/* Hero Section */}
-//       <HeroSection>
-//         <h1>Welcome to Café Bliss</h1>
-//         <p>
-//           Where the aroma of freshly brewed coffee meets the warm ambiance of comfort. Take a
-//           sip, relax, and indulge in delightful flavors.
-//         </p>
-//         <button>Explore Our Menu</button>
-//       </HeroSection>
-
-//       {/* Featured Services */}
-//       <Section>
-//         <h2>Our Services</h2>
-//         <p>We provide the best coffee and snacks to brighten your day.</p>
-//         <ServicesGrid>
-//           <ServiceCard>
-//             <Coffee size={40} />
-//             <h3>Freshly Brewed Coffee</h3>
-//             <p>Savor the taste of freshly brewed coffee made just for you.</p>
-//           </ServiceCard>
-//           <ServiceCard>
-//             <ShoppingBag size={40} />
-//             <h3>Takeaway Service</h3>
-//             <p>Grab your favorite coffee and snacks on the go.</p>
-//           </ServiceCard>
-//           <ServiceCard>
-//             <Smile size={40} />
-//             <h3>Cozy Ambiance</h3>
-//             <p>Enjoy a warm and inviting space for you and your loved ones.</p>
-//           </ServiceCard>
-//         </ServicesGrid>
-//       </Section>
-
-//       {/* Why Choose Us */}
-//       <Section>
-//         <h2>Why Choose Us?</h2>
-//         <WhyChooseUsGrid>
-//           <ChooseCard>
-//             <Star size={40} />
-//             <h3>Top-Quality Coffee</h3>
-//             <p>We use only the finest beans for a premium coffee experience.</p>
-//           </ChooseCard>
-//           <ChooseCard>
-//             <Smile size={40} />
-//             <h3>Friendly Staff</h3>
-//             <p>Our team is dedicated to providing excellent customer service.</p>
-//           </ChooseCard>
-//           <ChooseCard>
-//             <Coffee size={40} />
-//             <h3>Delicious Menu</h3>
-//             <p>From coffee to desserts, our menu is crafted to delight.</p>
-//           </ChooseCard>
-//         </WhyChooseUsGrid>
-//       </Section>
-//     </MainContent>
-//   );
-// };
-
-// export default Content;
-
-
-
-import React from 'react'
-import Report from './Report'
-const HeroSEction = () => {
   return (
-    <div>
-      <Report/>
-    </div>
-  )
-}
+    <Container>
+      <Overlay />
+      <Content>
+        <Title>Cafe Management System</Title>
+        <SubTitle>Effortlessly manage orders, staff, and inventory</SubTitle>
+        <Button onClick={() => navigate("/login")}>Login</Button>
+      </Content>
+    </Container>
+  );
+};
 
-export default HeroSEction
+export default Welcome;

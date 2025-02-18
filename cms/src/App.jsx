@@ -74,6 +74,7 @@ const App = () => {
               <Route path="/logout" element={<Logout />} />
               <Route path="/register" element={<Register />} />
               <Route path="/home" element={<Home />} />
+              
 
               {/* <Route path="/forgot-pass" element={<ForgotPassword />} /> */}
               {/* <Route path="/reset-pass" element={<ResetPassword />} /> */}
@@ -82,7 +83,7 @@ const App = () => {
               <Route path="/profile" element={<Profile/>} />
               <Route path="/history" element={<History/>} />
                {/* <Route path="/home" element={<Home/>} /> */}
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={<HeroSEction />} />
               <Route path="/login" element={<Login role="admin" />} />
               {/* <Route path="/login" element={<Login role="cashier" />} /> */}
               <Route

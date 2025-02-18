@@ -16,11 +16,12 @@ const cardVariants = {
 
 // Styled Components
 const MetricsContainer = styled(motion.div)`
-  padding: 20px;
+  padding: 10px;
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
   justify-content: center;
+  
 `;
 
 const Card = styled(motion.div)`
@@ -30,8 +31,8 @@ const Card = styled(motion.div)`
   color: #131212;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   text-align: center;
-  width: 265px;
-  font-size: 18px;
+  width: 295px;
+  font-size: 20px;
   font-weight: bold;
   display: flex;
   flex-direction: row;

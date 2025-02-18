@@ -1,9 +1,7 @@
-
-
 import React from 'react'
-import Report from './Report'
+import Report from "./Report"
 
-const HeroSEction = () => {
+const Admin = () => {
   return (
     <div>
       <Report/>
@@ -11,4 +9,4 @@ const HeroSEction = () => {
   )
 }
 
-export default HeroSEction
+export default Admin

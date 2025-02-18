@@ -47,13 +47,14 @@ const RecentOrdersCard = () => {
 
   return (
     <CardContainer>
-      <CardTitle>Recent Orders</CardTitle>
+      
       {loading ? (
         <p>Loading recent orders...</p>
       ) : error ? (
         <p>{error}</p>
       ) : (
         <OrderList>
+          <CardTitle>Recent Orders</CardTitle>
           {recentOrders.map((order, index) => (
             <OrderItem key={order._id || index}>
               <div>

@@ -7,6 +7,7 @@ import styled from "styled-components";
 import PopularFoodGraph from "./PopularFoodGraph";
 import RecentOrdersCard from "./RecentOrdersCard";
 
+
 // Parent Container (Handles Theme)
 const ParentDiv = styled.div`
   background-color: ${({ theme }) => theme.background};
@@ -19,6 +20,20 @@ const ParentDiv = styled.div`
 // Flex Container for Components
 const FlexContainer = styled.div`
   display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  align-items: flex-start;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+  }
+`;
+
+const FlexContainer2 = styled.div`
+  display: flex;
+  flex-direction: column;
   flex-wrap: wrap;
   gap: 20px;
   justify-content: center;
@@ -60,16 +75,23 @@ const Report = () => {
         <motion.div variants={fadeInUp} initial="hidden" animate="visible">
           <Metrics />
         </motion.div>
+      <FlexContainer2>
         <motion.div variants={fadeInUp} initial="hidden" animate="visible">
-          <DashGraph />
+        <DashGraph />
         </motion.div>
         <motion.div variants={fadeInUp} initial="hidden" animate="visible">
           <PopularFoodGraph />
         </motion.div>
+        </FlexContainer2>
+      
         <motion.div variants={fadeInUp} initial="hidden" animate="visible">
-          <RecentOrdersCard />
+        <RecentOrdersCard />
         </motion.div>
+
       </FlexContainer>
+     
+
+      
     </ParentDiv>
   );
 };
