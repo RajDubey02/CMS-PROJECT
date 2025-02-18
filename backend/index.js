@@ -231,6 +231,34 @@ app.use((err, req, res, next) => {
   next();
 });
 
+
+
+const restaurantSchema = new mongoose.Schema({
+  name: String,
+  backgroundImage: String,
+  features: [String],
+});
+
+const Restaurant = mongoose.model("Restaurant", restaurantSchema);
+
+app.get("/api/restaurant", async (req, res) => {
+  let restaurant = await Restaurant.findOne();
+  if (!restaurant) {
+    restaurant = new Restaurant({
+      name: "My Awesome Restaurant",
+      backgroundImage: "/default-bg.jpg",
+      features: ["Delicious Food", "Cozy Ambience"],
+    });
+    await restaurant.save();  
+  }
+  res.json(restaurant);
+});
+
+app.post("/api/restaurant", async (req, res) => {
+  await Restaurant.findOneAndUpdate({}, req.body, { upsert: true, new: true });
+  res.json({ message: "Updated successfully" });
+});
+
 //  Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));

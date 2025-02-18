@@ -8,7 +8,8 @@ const userSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true },
     phone: { type: String, required: true },
     password: { type: String, required: true },
-    gender: { type: String, enum: ["male", "female"], required: true },
+    gender: { type: String, enum: ["male", "female", "custom"], required: true },
+    designation: { type: String, enum: ["Cashier", "Chef", "Worker"] }, // Added designation field
   },
   { timestamps: true }
 );
