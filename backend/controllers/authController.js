@@ -57,7 +57,51 @@ const login = async (req, res) => {
   }
 };
 
+const getUserProfile = async (req, res) => {
+  try {
+    const { email } = req.params;
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching profile data" });
+  }
+};
+
+// Update User Profile (Password Change)
+const updateUserProfile = async (req, res) => {
+  try {
+    const { email } = req.params;
+    const { oldPassword, newPassword } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Verify old password directly
+    if (user.password !== oldPassword) {
+      return res.status(400).json({ message: "Old password is incorrect" });
+    }
+
+    // Update password in database
+    user.password = newPassword;
+    await user.save();
+
+    res.status(200).json({ message: "Password updated successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error updating password" });
+  }
+};
 
 
 // Correctly export functions
-module.exports = { register, login };
+module.exports = { register, login , getUserProfile, updateUserProfile};

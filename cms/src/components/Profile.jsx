@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import { User, Lock, ShieldCheck, KeyRound } from 'lucide-react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { User, Lock } from "lucide-react";
+import { motion } from "framer-motion";
 import {
   ProfileContainer,
   ProfileCard,
@@ -13,94 +13,75 @@ import {
   IconWrapper,
   Button,
   ErrorMessage,
-  ToggleOptions,
   PopupOverlay,
-  PopupContent
-} from '../styles/ProfileStyles';
+  PopupContent,
+  ToggleOptions
+} from "../styles/ProfileStyles";
 
 const Profile = () => {
+  const [userData, setUserData] = useState({
+    name: "",
+    email: "",
+    role: "",
+  });
   const [formData, setFormData] = useState({
-    name: '',
-    oldPassword: '',
-    newPassword: '',
-    otp: '',
+    oldPassword: "",
+    newPassword: "",
+    confirmNewPassword: "",
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const [useOTP, setUseOTP] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+  const [isPasswordUpdate, setIsPasswordUpdate] = useState(false); // Track if the password update form is visible
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:5000/api/user/profile', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        setFormData((prevData) => ({
-          ...prevData,
+        const email = localStorage.getItem("email"); // Get email from storage
+        const response = await axios.get(
+          `http://localhost:5000/api/auth/user/profile/${email}`
+        );
+        setUserData({
           name: response.data.name,
-        }));
+          email: response.data.email,
+          role: response.data.role,
+        });
       } catch (error) {
-        toast.error('Failed to fetch profile data');
+        toast.error("Failed to fetch profile data");
       }
     };
     fetchProfile();
   }, []);
 
-  const validateForm = () => {
+  const validatePasswordForm = () => {
     const newErrors = {};
-    if (!formData.name) newErrors.name = 'Name is required';
-
-    if (!useOTP) {
-      if (!formData.oldPassword) newErrors.oldPassword = 'Old password is required';
-    } else {
-      if (!formData.otp) newErrors.otp = 'OTP is required';
-    }
-
-    if (formData.newPassword.length < 6) newErrors.newPassword = 'Password must be at least 6 characters';
+    if (!formData.oldPassword) newErrors.oldPassword = "Old password is required";
+    if (formData.newPassword.length < 6)
+      newErrors.newPassword = "Password must be at least 6 characters";
+    if (formData.newPassword !== formData.confirmNewPassword)
+      newErrors.confirmNewPassword = "Passwords do not match";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleRequestOTP = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      await axios.post('http://localhost:5000/api/user/request-otp', {}, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      toast.success('OTP sent to your registered mobile number!');
-    } catch (error) {
-      toast.error('Failed to send OTP');
-    }
-  };
-
-  const handleSubmit = async (e) => {
+  const handlePasswordUpdate = async (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
+    if (!validatePasswordForm()) return;
 
     setLoading(true);
     try {
-      const token = localStorage.getItem('token');
+      const email = localStorage.getItem("email");
       const payload = {
-        name: formData.name,
+        oldPassword: formData.oldPassword,
         newPassword: formData.newPassword,
       };
 
-      if (useOTP) {
-        payload.otp = formData.otp;
-      } else {
-        payload.oldPassword = formData.oldPassword;
-      }
-
-      await axios.put('http://localhost:5000/api/user/profile', payload, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-
+      await axios.put(`http://localhost:5000/api/auth/user/profile/${email}`, payload);
       setShowPopup(true);
+      setFormData({ oldPassword: "", newPassword: "", confirmNewPassword: "" }); // Clear form fields
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Profile update failed');
+      toast.error(error.response?.data?.message || "Profile update failed");
     } finally {
       setLoading(false);
     }
@@ -111,104 +92,80 @@ const Profile = () => {
       <motion.div
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: 'easeOut' }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
       >
         <ProfileCard>
-          <Title>Edit Profile</Title>
-          <Form onSubmit={handleSubmit}>
-            <InputGroup>
-              <IconWrapper>
-                <User size={20} />
-              </IconWrapper>
-              <Input
-                type="text"
-                placeholder="Name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                error={errors.name}
-              />
-            </InputGroup>
-            {errors.name && <ErrorMessage>{errors.name}</ErrorMessage>}
+          <Title>My Profile</Title>
+          <p style={{textAlign:"right"}}> <strong >Name:</strong> {userData.name}</p>
+          <p><strong>Email:</strong> {userData.email}</p>
+          <p><strong>Role:</strong> {userData.role}</p>
 
-            <ToggleOptions>
-              <button
-                type="button"
-                className={!useOTP ? 'active' : ''}
-                onClick={() => setUseOTP(false)}
-              >
-                <KeyRound size={16} /> Use Old Password
-              </button>
-              <button
-                type="button"
-                className={useOTP ? 'active' : ''}
-                onClick={() => setUseOTP(true)}
-              >
-                <ShieldCheck size={16} /> Use OTP
-              </button>
-            </ToggleOptions>
+          <ToggleOptions>
+            <Button onClick={() => setIsPasswordUpdate(!isPasswordUpdate)}>
+              {isPasswordUpdate ? "Cancel Password Update" : "Change Password"}
+            </Button>
+          </ToggleOptions>
 
-            {useOTP ? (
-              <>
-                <InputGroup>
-                  <IconWrapper>
-                    <ShieldCheck size={20} />
-                  </IconWrapper>
-                  <Input
-                    type="text"
-                    placeholder="Enter OTP"
-                    value={formData.otp}
-                    onChange={(e) => setFormData({ ...formData, otp: e.target.value })}
-                    error={errors.otp}
-                  />
-                </InputGroup>
-                {errors.otp && <ErrorMessage>{errors.otp}</ErrorMessage>}
+          {isPasswordUpdate && (
+            <Form onSubmit={handlePasswordUpdate}>
+              <InputGroup>
+                <IconWrapper>
+                  <Lock size={20} />
+                </IconWrapper>
+                <Input
+                  type="password"
+                  placeholder="Old Password"
+                  value={formData.oldPassword}
+                  onChange={(e) =>
+                    setFormData({ ...formData, oldPassword: e.target.value })
+                  }
+                  error={errors.oldPassword}
+                />
+              </InputGroup>
+              {errors.oldPassword && <ErrorMessage>{errors.oldPassword}</ErrorMessage>}
 
-                <Button type="button" onClick={handleRequestOTP}>
-                  Request OTP
+              <InputGroup>
+                <IconWrapper>
+                  <Lock size={20} />
+                </IconWrapper>
+                <Input
+                  type="password"
+                  placeholder="New Password"
+                  value={formData.newPassword}
+                  onChange={(e) =>
+                    setFormData({ ...formData, newPassword: e.target.value })
+                  }
+                  error={errors.newPassword}
+                />
+              </InputGroup>
+              {errors.newPassword && <ErrorMessage>{errors.newPassword}</ErrorMessage>}
+
+              <InputGroup>
+                <IconWrapper>
+                  <Lock size={20} />
+                </IconWrapper>
+                <Input
+                  type="password"
+                  placeholder="Confirm New Password"
+                  value={formData.confirmNewPassword}
+                  onChange={(e) =>
+                    setFormData({ ...formData, confirmNewPassword: e.target.value })
+                  }
+                  error={errors.confirmNewPassword}
+                />
+              </InputGroup>
+              {errors.confirmNewPassword && <ErrorMessage>{errors.confirmNewPassword}</ErrorMessage>}
+
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button type="submit" disabled={loading}>
+                  {loading ? "Updating..." : "Save Changes"}
                 </Button>
-              </>
-            ) : (
-              <>
-                <InputGroup>
-                  <IconWrapper>
-                    <Lock size={20} />
-                  </IconWrapper>
-                  <Input
-                    type="password"
-                    placeholder="Old Password"
-                    value={formData.oldPassword}
-                    onChange={(e) => setFormData({ ...formData, oldPassword: e.target.value })}
-                    error={errors.oldPassword}
-                  />
-                </InputGroup>
-                {errors.oldPassword && <ErrorMessage>{errors.oldPassword}</ErrorMessage>}
-              </>
-            )}
-
-            <InputGroup>
-              <IconWrapper>
-                <Lock size={20} />
-              </IconWrapper>
-              <Input
-                type="password"
-                placeholder="New Password"
-                value={formData.newPassword}
-                onChange={(e) => setFormData({ ...formData, newPassword: e.target.value })}
-                error={errors.newPassword}
-              />
-            </InputGroup>
-            {errors.newPassword && <ErrorMessage>{errors.newPassword}</ErrorMessage>}
-
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button type="submit" disabled={loading}>
-                {loading ? 'Updating...' : 'Save Changes'}
-              </Button>
-            </motion.div>
-          </Form>
+              </motion.div>
+            </Form>
+          )}
         </ProfileCard>
       </motion.div>
 
-      {/* Popup */}
       {showPopup && (
         <PopupOverlay>
           <PopupContent>

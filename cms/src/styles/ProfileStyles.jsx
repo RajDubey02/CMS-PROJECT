@@ -1,21 +1,117 @@
+import styled from "styled-components";
 
-import styled from 'styled-components';
-
+// Full Page Container
 export const ProfileContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: #f5f5f0;
-  justify-content: center;
+  background: linear-gradient(to bottom right, #f3e9dc, #e0c3a7);
+  padding: 20px;
 `;
-export const ToggleOptions = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin: 10px 0
-  `;
 
-  export const PopupOverlay = styled.div`
+// Profile Card Container
+export const ProfileCard = styled.div`
+  background: #fff;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+// Title
+export const Title = styled.h2`
+  margin-bottom: 1rem;
+  color: #5b3a29;
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+`;
+
+// Form Styling
+export const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`;
+
+// Input Group Wrapper
+export const InputGroup = styled.div`
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin-bottom: 1rem;
+  width: 100%;
+`;
+
+// Input Field
+export const Input = styled.input`
+  width: 100%;
+  padding: 12px;
+  padding-left: 45px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  background: ${(props) => (props.disabled ? "#f0f0f0" : "white")};
+  color: ${(props) => (props.disabled ? "#777" : "black")};
+  transition: border 0.3s ease-in-out;
+
+  &:focus {
+    border-color: #a8795d;
+    outline: none;
+    box-shadow: 0 0 5px rgba(168, 121, 93, 0.5);
+  }
+`;
+
+// Input Icon Wrapper
+export const IconWrapper = styled.div`
+  position: absolute;
+  left: 15px;
+  color: #a8795d;
+  font-size: 18px;
+`;
+
+// Error Message Styling
+export const ErrorMessage = styled.span`
+  color: red;
+  font-size: 12px;
+  margin-top: -8px;
+  margin-bottom: 10px;
+  text-align: left;
+  width: 100%;
+`;
+
+// Button Styling
+export const Button = styled.button`
+  background: #a8795d;
+  color: white;
+  border: none;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.3s ease-in-out, transform 0.2s;
+
+  &:hover {
+    background: #8f634b;
+    transform: translateY(-2px);
+  }
+
+  &:disabled {
+    background: #b9a398;
+    cursor: not-allowed;
+  }
+`;
+
+// Popup Overlay (for success messages)
+export const PopupOverlay = styled.div`
   position: fixed;
   top: 0;
   left: 0;
@@ -27,99 +123,20 @@ export const ToggleOptions = styled.div`
   justify-content: center;
 `;
 
+// Popup Content Styling
 export const PopupContent = styled.div`
   background: white;
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 12px;
   text-align: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  width: 320px;
 `;
 
-
-export const ProfileCard = styled.div`
-  background: #fff;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 350px;
-  margin-bottom: 10px;
-   
+// Toggle Button Container
+export const ToggleOptions = styled.div`
   display: flex;
-  flex-direction:column ;
-  align-items: center;
-  justify-content: center;
-`;
-
-export const Title = styled.h2`
-  margin-bottom: 1rem;
-  color: #3b2a2a;
-`;
-
-export const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-`;
-
-export const InputGroup = styled.div`
-  display: flex;
-  align-items: center;
-  position: relative;
-  margin-bottom: 0.5rem;
-`;
-
-export const Input = styled.input`
+  justify-content: space-between;
+  margin: 10px 0;
   width: 100%;
-  padding: 10px;
-  padding-left: 40px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
-  background: ${(props) => (props.disabled ? '#f0f0f0' : 'white')};
-  color: ${(props) => (props.disabled ? '#666' : 'black')};
-  
-
-  &:focus {
-    border-color: #6f4c3e;
-    outline: none;
-  }
-`;
-
-export const IconWrapper = styled.div`
-  position: absolute;
-  left: 10px;
-  color: #6f4c3e;
-`;
-
-export const ErrorMessage = styled.span`
-  color: red;
-  font-size: 12px;
-  margin-bottom: 10px;
-  display: block;
-  text-align: left;
-`;
-
-export const Button = styled.button`
-  background: #b97e67;
-  color: white;
-  border: none;
-  padding: 5px;
-  font-size: 16px;
-  border-radius: 5px;
-  text-align: center;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 70%;
-  transition: all 0.3s ease-in-out;
-  margin-bottom: 10px ;
-
-  &:hover {
-    background: #85593c;
-  }
-
-  &:disabled {
-    background: #aaa;
-    cursor: not-allowed;
-  }
 `;

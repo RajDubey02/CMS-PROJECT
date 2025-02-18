@@ -12,22 +12,6 @@ const UserLogSchema = new mongoose.Schema({
   },
 });
 
-// const User = mongoose.model("UserLog", UserLogSchema);
-// module.exports = User;
 
-
-// Encrypt password before saving
-// userLogSchema.pre('save', async function(next) {
-//   if (!this.isModified('password')) {
-//     next();
-//   }
-//   const salt = await bcrypt.genSalt(10);
-//   this.password = await bcrypt.hash(this.password, salt);
-// });
-
-// // Match password
-// userLogSchema.methods.matchPassword = async function(enteredPassword) {
-//   return await bcrypt.compare(enteredPassword, this.password);
-// };
 
 module.exports = mongoose.model('UserLog', UserLogSchema);

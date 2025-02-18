@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useNavigate,NavLink } from "react-router-dom";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { useNavigate, NavLink } from "react-router-dom";
 import styled from "styled-components";
 import { Search, User, Menu, LogOut } from "lucide-react";
 
@@ -46,9 +46,11 @@ const NavLeft = styled.div`
     margin-right: 10px;
   }
 `;
+
 const NavLinkStyled = styled(NavLink)`
   display: flex;
   align-items: center;
+  justify-content: center;
   color: #fff;
   background-color: #b37b57;
   text-decoration: none;
@@ -56,42 +58,14 @@ const NavLinkStyled = styled(NavLink)`
   transition: background-color 0.1s;
   margin-bottom: 6px;
   cursor: pointer;
-  width: 80px;
+  width: 100%;
   height: 35px;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 5px;
 
   &:hover {
-    /* background-color: #33333332; */
     background-color: rgba(10, 9, 7, 0.288);
-  }
-`;
-const NavItem = styled.div`
-  display: flex;
-  flex-direction: column;
-
-`;
-
-const Border = styled.div`
-  border: 1px solid #ecf0f1;
-  background-color: white;
-  border-radius: 1rem;
-  display: flex;
-  align-items: center;
-  padding-left: 1rem;
-`;
-
-const NavRight = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  position: relative;
-`;
-
-const IconWrapper = styled.div`
-  position: relative;
-  cursor: pointer;
-
-  &:hover {
-    color: #1abc9c;
   }
 `;
 
@@ -101,19 +75,15 @@ const ProfileMenu = styled.div`
   right: 0;
   background: #fcfeff;
   color: #8d5b3f;
-  padding: 20px;
+  padding: 15px;
   border-radius: 5px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  width: 150px;
+  width: 160px;
   display: ${(props) => (props.isVisible ? "block" : "none")};
   z-index: 100;
 
   & > div {
     margin-bottom: 10px;
-  }
-
-  & > div:last-child {
-    margin-bottom: 0;
   }
 `;
 
@@ -127,6 +97,26 @@ const ServiceName = styled.div`
   color: #bdc3c7;
 `;
 
+const LogoutButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background: #c0392b;
+  color: white;
+  border: none;
+  padding: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+
+  &:hover {
+    background: #a93226;
+  }
+`;
+
 export const Navbar = ({ toggleSidebar, serviceName = "Cafe Manager" }) => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -137,10 +127,19 @@ export const Navbar = ({ toggleSidebar, serviceName = "Cafe Manager" }) => {
     setShowProfileMenu((prev) => !prev);
   };
 
-  const closeProfileMenu = (e) => {
-    if (profileRef.current && !profileRef.current.contains(e.target)) {
-      setShowProfileMenu(false);
-    }
+  const closeProfileMenu = useCallback(
+    (e) => {
+      if (profileRef.current && !profileRef.current.contains(e.target)) {
+        setShowProfileMenu(false);
+      }
+    },
+    [setShowProfileMenu]
+  );
+
+  const handleLogout = () => {
+    localStorage.removeItem("userRole");
+    localStorage.removeItem("email");
+    navigate("/login");
   };
 
   const handleSearch = (e) => {
@@ -171,11 +170,16 @@ export const Navbar = ({ toggleSidebar, serviceName = "Cafe Manager" }) => {
     return () => {
       document.removeEventListener("click", closeProfileMenu);
     };
-  }, []);
+  }, [closeProfileMenu]);
 
   // Fetch user name from localStorage based on role
   const userRole = localStorage.getItem("userRole");
-  const userName = userRole === "admin" ? "Admin User" : userRole === "cashier" ? "Cashier User" : "John Doe"; // Replace with logic for actual names if needed
+  const userName =
+    userRole === "admin"
+      ? "Admin User"
+      : userRole === "cashier"
+      ? "Cashier User"
+      : "John Doe"; // Default name
 
   return (
     <Universal>
@@ -184,8 +188,8 @@ export const Navbar = ({ toggleSidebar, serviceName = "Cafe Manager" }) => {
           <button onClick={toggleSidebar}>
             <Menu size={24} />
           </button>
-          <Border>
-            <Search size={1} />
+          <div style={{ display: "flex", alignItems: "center", border: "1px solid white", borderRadius: "20px", paddingLeft: "10px" }}>
+            <Search size={18} />
             <input
               type="search"
               placeholder="Search for pages..."
@@ -193,24 +197,21 @@ export const Navbar = ({ toggleSidebar, serviceName = "Cafe Manager" }) => {
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={handleSearch}
             />
-          </Border>
+          </div>
         </NavLeft>
-        <NavRight>
-          <IconWrapper onClick={toggleProfileMenu} ref={profileRef}>
-            <User size={24} />
-            <ProfileMenu isVisible={showProfileMenu}>
-              <ProfileName>{userName}</ProfileName>
-              <ServiceName>{serviceName}</ServiceName>
-              <NavItem>
-                          <NavLinkStyled to="/logout">
-                          <LogOut color="white" />
-                           Log out
-                          </NavLinkStyled>
-                        </NavItem>
 
-            </ProfileMenu>
-          </IconWrapper>
-        </NavRight>
+        <div style={{ position: "relative" }}>
+          <User size={24} onClick={toggleProfileMenu} ref={profileRef} style={{ cursor: "pointer" }} />
+          <ProfileMenu isVisible={showProfileMenu}>
+            <ProfileName>{userName}</ProfileName>
+            <ServiceName>{serviceName}</ServiceName>
+
+            <LogoutButton onClick={handleLogout}>
+              <LogOut size={16} style={{ marginRight: "8px" }} />
+              Log Out
+            </LogoutButton>
+          </ProfileMenu>
+        </div>
       </NavbarContainer>
     </Universal>
   );

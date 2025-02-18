@@ -18,7 +18,7 @@ import Login from "./components/Login";
 import MenuSection from "./components/Menu";
 import Register from "./components/Register";
 import Home from "./components/Home";
-import ForgotPassword from "./components/ForgotPassword";
+// import ForgotPassword from "./components/ForgotPassword";
 import Profile from "./components/Profile";
 import History from "./components/History"
 import Logout from "./components/Logout";
@@ -34,7 +34,7 @@ const App = () => {
 
 <Router> 
     <Routes>
-    <Route path="/" element={<Login />} />
+    {/* <Route path="/" element={<Login />} /> */}
   </Routes>
   </Router>
 

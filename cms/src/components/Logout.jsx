@@ -5,6 +5,15 @@ import axios from 'axios';
 const Logout = () => {
   const navigate = useNavigate();
 
+  const handleLogout = () => {
+    localStorage.removeItem("userRole");
+    setRole(null);
+    localStorage.removeItem("email");
+    setEmail(null);
+    navigate("/login");
+  };
+
+
   useEffect(() => {
     const logoutUser = async () => {
       try {
@@ -12,9 +21,13 @@ const Logout = () => {
         await axios.post('http://localhost:5000/api/auth/logout'); // Adjust the endpoint as needed
 
         // Remove authentication data from localStorage or cookies (depending on your implementation)
-        localStorage.removeItem('authToken'); // Assuming the token is stored in localStorage
-        sessionStorage.removeItem('authToken'); // If using sessionStorage
-
+        
+          localStorage.removeItem("userRole");
+          // setRole(null);
+          localStorage.removeItem("email");
+          // setEmail(null);
+          // navigate("/login");
+       
         // Redirect the user to the login page after logout
         navigate('/login');
       } catch (error) {
@@ -27,7 +40,7 @@ const Logout = () => {
 
   return (
     <div>
-      <h2>Logging out...</h2>
+      {/* <h2>Logging out...</h2> */}
     </div>
   );
 };

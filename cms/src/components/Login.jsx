@@ -42,7 +42,9 @@ const Login = () => {
   
         // Store role in localStorage & confirm it's saved
         localStorage.setItem("userRole", role);
+        localStorage.setItem("email" , formData.email);
         console.log("Stored Role:", localStorage.getItem("userRole"));
+        console.log("Email:", localStorage.getItem("email"));
   
         // Redirect based on role
         if (role === "admin") {

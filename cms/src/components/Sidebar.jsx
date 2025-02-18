@@ -94,6 +94,7 @@ const LastDiv = styled.div`
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   const [activeDropdown, setActiveDropdown] = useState("");
   const [role, setRole] = useState(null);
+  const[email, setEmail] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -121,7 +122,9 @@ const SubMenu = styled.div`
   const handleLogout = () => {
     localStorage.removeItem("userRole");
     setRole(null);
-    navigate("/login");
+    localStorage.removeItem("email");
+    setEmail(null);
+    navigate("/login"); 
   };
 
   return (
