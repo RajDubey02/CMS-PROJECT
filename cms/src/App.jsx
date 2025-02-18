@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import { Navbar } from "./components/Navbar";
 import HeroSEction from "./components/HeroSEction";
-// import Admin from "./components/Admin";
+import Admin from "./components/Admin";
 import AddProduct from "./components/AddProduct";
 import ManageProduct from "./components/ManageProduct";
 import AddOrderPage from "./components/AddOrderPage";
@@ -61,7 +61,7 @@ const App = () => {
           </div>
           <div>
             <Routes>
-              {/* <Route path="/Admin" element={<Admin />} /> */}
+              <Route path="/Admin" element={<Admin />} />
               <Route path="/User" element={<User />} />
               <Route path="/AddProduct" element={<AddProduct />} />
               <Route path="/ManageProduct" element={<ManageProduct />} />

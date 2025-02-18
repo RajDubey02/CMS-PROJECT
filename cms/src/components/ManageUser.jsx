@@ -634,7 +634,12 @@ const UserList = () => {
                     required
                   />
                   <label>Designation: </label> {/* New input for designation */}
-                  
+                  <select name="designation" value={formData.designation} onChange={handleChange} required>
+            <option value="">Select Designation</option>
+            <option value="Cashier">Cashier</option>
+            <option value="Chef">Chef</option>
+            <option value="Worker">Worker</option>
+          </select>
                   <ModalButton type="submit">Save</ModalButton>
                 </form>
               </ModalContent>
