@@ -47,8 +47,10 @@ const Login = () => {
         // Redirect based on role
         if (role === "admin") {
           navigate('/Admin');
+          location.reload()
         } else if (role === "cashier") {
           navigate('/orders/add');
+          location.reload()
         } else {
           navigate('/MenuSection'); 
         }

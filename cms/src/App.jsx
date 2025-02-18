@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import { Navbar } from "./components/Navbar";
 import HeroSEction from "./components/HeroSEction";
-import Admin from "./components/Admin";
+// import Admin from "./components/Admin";
 import AddProduct from "./components/AddProduct";
 import ManageProduct from "./components/ManageProduct";
 import AddOrderPage from "./components/AddOrderPage";
@@ -34,7 +34,7 @@ const App = () => {
 
 <Router> 
     <Routes>
-    <Route path="/" element={<Login />} />
+    {/* <Route path="/" element={<Login />} /> */}
   </Routes>
   </Router>
 
@@ -61,7 +61,7 @@ const App = () => {
           </div>
           <div>
             <Routes>
-              <Route path="/Admin" element={<Admin />} />
+              {/* <Route path="/Admin" element={<Admin />} /> */}
               <Route path="/User" element={<User />} />
               <Route path="/AddProduct" element={<AddProduct />} />
               <Route path="/ManageProduct" element={<ManageProduct />} />
@@ -73,14 +73,17 @@ const App = () => {
               <Route path="/login" element={<Login />} />
               <Route path="/logout" element={<Logout />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/home" element={<Home />} />
+              
+
               {/* <Route path="/forgot-pass" element={<ForgotPassword />} /> */}
-              <Route path="/reset-pass" element={<ResetPassword />} />
-              <Route path="/forgot-pass" element={<ForgotPassword />} />
-              <Route path="/reset-pass" element={<ResetPassword />} />
+              {/* <Route path="/reset-pass" element={<ResetPassword />} /> */}
+              {/* <Route path="/forgot-pass" element={<ForgotPassword />} /> */}
+              {/* <Route path="/reset-pass" element={<ResetPassword />} /> */}
               <Route path="/profile" element={<Profile/>} />
               <Route path="/history" element={<History/>} />
                {/* <Route path="/home" element={<Home/>} /> */}
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={<HeroSEction />} />
               <Route path="/login" element={<Login role="admin" />} />
               {/* <Route path="/login" element={<Login role="cashier" />} /> */}
               <Route

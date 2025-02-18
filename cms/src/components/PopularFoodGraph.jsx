@@ -8,10 +8,10 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 // Styled Components
 const ChartContainer = styled.div`
-  width: 450px;
-  height: 500px;
-  max-width: 500px;
-  padding: 8px 10px;
+  width: 700px;
+  height: 450px;
+  max-width: 550px;
+  padding:0;
   background: linear-gradient(135deg, #f5f5f0, #e8d8b0);
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -25,9 +25,10 @@ const ChartContainer = styled.div`
 
 const Divv = styled.div`
   background-color: white;
-  height: 90%;
-  width: 90%;
-  margin: 15px;
+  height: 25rem;
+  width: 30rem;
+  
+
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -35,8 +36,8 @@ const Divv = styled.div`
 `;
 
 const StyledDoughnut = styled(Doughnut)`
-  height: 200px;
-  width: 200px;
+  height: 400px;
+  width: 400px;
   border-radius: 10px;
 `;
 
@@ -45,7 +46,7 @@ const Button = styled.button`
   border: none;
   background-color: #6f4c3e;
   color: white;
-  font-size: 14px;
+  font-size: 18px;
   border-radius: 5px;
   cursor: pointer;
   width: 120px;
@@ -131,10 +132,7 @@ const PopularFoodChart = () => {
   return (
     <ChartContainer>
       <h3>Popular Food</h3>
-      <Button onClick={fetchOrderData}>Refresh Data</Button>
-      {error ? (
-        <ErrorText>{error}</ErrorText>
-      ) : (
+
         <Divv>
           {chartData ? (
             <StyledDoughnut
@@ -154,7 +152,6 @@ const PopularFoodChart = () => {
             <p>Loading data...</p>
           )}
         </Divv>
-      )}
     </ChartContainer>
   );
 };

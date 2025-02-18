@@ -24,8 +24,8 @@ const ParentDiv = styled.div`
   padding: 15px;
   display: flex;
   flex-direction: column;
-  width: 460px;
-  height: 350px;
+  width: 550px;
+  height: 450px;
   align-items: center;
   justify-content: center;
   border-radius: 10px;
