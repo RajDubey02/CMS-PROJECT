@@ -38,6 +38,7 @@ const Container = styled.div`
   color: white;
   position: relative;
   padding-left: 50px; /* Adds left padding to create space */
+  
 
 `;
 

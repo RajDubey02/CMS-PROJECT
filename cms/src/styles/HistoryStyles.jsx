@@ -1,4 +1,18 @@
-import styled from "styled-components";
+
+import styled, { keyframes } from 'styled-components';
+
+// Fade-in animation for the main container
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
 
 export const Container = styled.div`
   max-width: 1200px;
@@ -7,6 +21,7 @@ export const Container = styled.div`
   background: #f5f5f0;
   border-radius: 10px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  animation: ${fadeIn} 0.5s ease-in-out;
 `;
 
 export const Title = styled.h2`
@@ -69,7 +84,7 @@ export const TableData = styled.td`
   border-bottom: 1px solid #c2b280;
   text-align: left;
   color: #3b2a2a;
-  font-size: 14px;
+  font-size: 18px;
 
   &.th {
     font-weight: bold;

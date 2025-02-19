@@ -1,11 +1,26 @@
 
-import styled from "styled-components";
+
+import styled, { keyframes } from 'styled-components';
+
+// Fade-in animation for the main container
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
 
 // Container styling
 export const Container = styled.div`
   padding: 20px;
   background-color: #f9f9f9;
   font-family: Arial, sans-serif;
+  animation: ${fadeIn} 0.5s ease-in-out;
 `;
 
 // Navbar styling
