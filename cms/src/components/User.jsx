@@ -291,6 +291,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import { Eye, EyeOff } from "lucide-react";
+import Swal from "sweetalert2";
 
 // Add the required styled-components code here
 
@@ -451,12 +452,35 @@ const UserForm = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const handleChan = (e) => {
+    const { name, value } = e.target;
+    if (name === "phone" && value.length > 10) return;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+// const Swalmessage = Swal.fire({
+//         title: "Success!",
+//         text: "Category added successfully.",
+//         icon: "success",
+//         confirmButtonText: "OK",
+//       });
+const validatePhone = (phone) => {
+  const phoneRegex = /^\d{10}$/; // Validates exactly 10 digits
+  return phoneRegex.test(phone);
+};
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Check if all fields are filled
     if (Object.values(formData).some((field) => field === "")) {
       setPopupMessage("All fields must be filled out!");
+      setShowPopup(true);
+      return;
+    }
+
+    
+    if (!validatePhone(formData.phone)) {
+      setErrorPopup("Phone number must be exactly 10 digits!");
       setShowPopup(true);
       return;
     }
@@ -469,7 +493,7 @@ const UserForm = () => {
 
     try {
       const response = await axios.post("http://localhost:5000/api/users/register", formData);
-      setPopupMessage(response.data.message || "User registered successfully!");
+      setPopupMessage(response.data.message || "User Registered Successfully");
       setShowPopup(true);
       setFormData({
         email: "",
@@ -507,7 +531,7 @@ const UserForm = () => {
           <Input type="email" name="email" value={formData.email} onChange={handleChange} required />
           
           <Label>Phone</Label>
-          <Input type="text" name="phone" value={formData.phone} onChange={handleChange} required />
+          <Input type="text" name="phone" value={formData.phone} onChange={handleChan} required />
 
           <Label>Password</Label>
           <InputContainer>

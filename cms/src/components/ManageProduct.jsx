@@ -206,6 +206,7 @@
 // export default ManageProduct;
 
 import React, { useState, useEffect, useRef } from "react";
+import Swal from "sweetalert2";
 import axios from "axios";
 import {
   Container,
@@ -284,16 +285,29 @@ const ManageProduct = () => {
     setIsModalOpen(true);
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this product?")) {
+const handleDelete = async (id) => {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won’t be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Yes, delete it!",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
       try {
         await axios.delete(`http://localhost:5000/api/products/${id}`);
         fetchProducts();
+        Swal.fire("Deleted!", "The product has been deleted.", "success");
       } catch (error) {
+        Swal.fire("Error!", "Failed to delete the product.", "error");
         console.error("Error deleting product:", error);
       }
     }
-  };
+  });
+};
+
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
@@ -310,21 +324,49 @@ const ManageProduct = () => {
   const handleSave = async () => {
     try {
       if (!currentProduct.name || !currentProduct.price || !currentProduct.category) {
-        alert("Please fill in all required fields.");
+        Swal.fire({
+          title: "Missing Fields!",
+          text: "Please fill in all required fields.",
+          icon: "warning",
+          confirmButtonText: "OK",
+        });
         return;
       }
-
+  
+      let response;
+  
       if (currentProduct._id) {
-        await axios.put(`http://localhost:5000/api/products/${currentProduct._id}`, currentProduct);
+        response = await axios.put(
+          `http://localhost:5000/api/products/${currentProduct._id}`,
+          currentProduct
+        );
       } else {
-        await axios.post("http://localhost:5000/api/products", currentProduct);
+        response = await axios.post(
+          "http://localhost:5000/api/products",
+          currentProduct
+        );
       }
-
+  
       fetchProducts();
       closeModal();
+  
+      Swal.fire({
+        title: "Success!",
+        text: currentProduct._id
+          ? "Product updated successfully."
+          : "Product added successfully.",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
     } catch (error) {
       console.error("Error saving product:", error);
-      alert("Failed to save product.");
+  
+      Swal.fire({
+        title: "Error!",
+        text: "Failed to save product. Please try again.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
     }
   };
 

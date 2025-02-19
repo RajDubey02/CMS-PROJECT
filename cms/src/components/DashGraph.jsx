@@ -84,7 +84,7 @@ const chartOptions = {
 };
 
 const BarChart = () => {
-  const [selectedTimePeriod, setSelectedTimePeriod] = useState("today");
+  const [selectedTimePeriod, setSelectedTimePeriod] = useState("week");
   const [chartLabels, setChartLabels] = useState([]);
   const [chartRevenue, setChartRevenue] = useState([]);
   const [chartOrders, setChartOrders] = useState([]);

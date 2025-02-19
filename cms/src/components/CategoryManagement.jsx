@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Swal from "sweetalert2";
 import {
   CategoryContainer,
   Table,
@@ -43,8 +44,21 @@ const CategoryManagement = () => {
 
   const handleAddCategory = async () => {
     if (!modalData.name.trim()) {
-      alert("Please enter a category name");
+      Swal.fire({
+        title: "Error!",
+        text: "Please Select a category.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+      
       return;
+    }else{
+      Swal.fire({
+        title: "Success!",
+        text: "Category added successfully.",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
     }
 
     try {
@@ -89,25 +103,38 @@ const CategoryManagement = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this category?")) return;
-
-    try {
-      const response = await fetch(`http://localhost:5000/api/categories/${id}`, {
-        method: "DELETE",
-      });
-
-      if (!response.ok) throw new Error("Error deleting category");
-
-      setCategories((prev) => prev.filter((cat) => cat._id !== id));
-
-      // Adjust page if last item on current page is deleted
-      if ((currentPage - 1) * entriesPerPage >= categories.length - 1) {
-        setCurrentPage((prev) => Math.max(prev - 1, 1));
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await fetch(`http://localhost:5000/api/categories/${id}`, {
+            method: "DELETE",
+          });
+  
+          if (!response.ok) throw new Error("Error deleting category");
+  
+          setCategories((prev) => prev.filter((cat) => cat._id !== id));
+  
+          // Adjust pagination if needed
+          if ((currentPage - 1) * entriesPerPage >= categories.length - 1) {
+            setCurrentPage((prev) => Math.max(prev - 1, 1));
+          }
+  
+          Swal.fire("Deleted!", "The category has been deleted.", "success");
+        } catch (error) {
+          Swal.fire("Error!", error.message, "error");
+        }
       }
-    } catch (error) {
-      alert(error.message);
-    }
+    });
   };
+  
 
   const searchFiltered = categories.filter((cat) =>
     cat.name.toLowerCase().includes(search.toLowerCase())

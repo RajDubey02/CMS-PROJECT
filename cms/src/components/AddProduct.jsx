@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import {
   Container,
@@ -114,17 +115,42 @@ const AddProduct = () => {
 
   const handleSaveProduct = async () => {
     try {
+      // Show loading popup while request is being processed
+      Swal.fire({
+        title: "Saving Product...",
+        text: "Please wait while the product is being saved.",
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+  
       const response = await axios.post("http://localhost:5000/api/products", {
         ...productData,
         category: productData.category, // Keep as an array
       });
-
+  
       console.log("Backend response:", response.data);
-      alert("Product saved successfully!");
+  
+      // Close loading and show success popup
+      Swal.fire({
+        title: "Success!",
+        text: "Product saved successfully.",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+  
       setProductData(initialProductData); // Reset form
     } catch (error) {
       console.error("Error saving product:", error);
-      alert(error.response?.data?.message || "Failed to save product.");
+  
+      // Show error popup
+      Swal.fire({
+        title: "Error!",
+        text: error.response?.data?.message || "Failed to save product.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
     }
   };
 
@@ -233,7 +259,7 @@ const AddProduct = () => {
         </div>
 
         <ButtonGroup>
-          <ActionButton className="secondary" onClick={() => navigate("/manage-products")}>
+          <ActionButton className="secondary" onClick={() => navigate("/ManageProduct")}>
             <ArrowLeft size={16} />
             Back to Products
           </ActionButton>

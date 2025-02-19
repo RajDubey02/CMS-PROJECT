@@ -122,9 +122,7 @@ const SubMenu = styled.div`
   const handleLogout = () => {
     localStorage.removeItem("userRole");
     setRole(null);
-    localStorage.removeItem("email");
-    setEmail(null);
-    navigate("/login"); 
+    navigate("/");
   };
 
   return (
