@@ -1,6 +1,22 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import styled from "styled-components";
+
+
+import styled, { keyframes } from 'styled-components';
+
+// Fade-in animation for the main container
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
+
 
 // Styled Components
 const MenuContainer = styled.div`
@@ -12,15 +28,13 @@ const MenuContainer = styled.div`
   align-items: start;
   background-color: #fff8f2;
   padding: 0 77px 0 77px;
-
-  @media (max-width: 768px) {
-    padding: 0 20px;
-  }
+  animation: ${fadeIn} 0.5s ease-in-out;
 `;
 
 const CategorySection = styled.div`
   width: 100%;
   margin-bottom: 30px;
+  animation: ${fadeIn} 0.5s ease-in-out;
 `;
 
 const CategoryTitle = styled.h2`

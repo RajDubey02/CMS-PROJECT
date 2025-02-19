@@ -38,6 +38,7 @@ const Container = styled.div`
   color: white;
   position: relative;
   padding-left: 50px; /* Adds left padding to create space */
+  
 
 `;
 
@@ -77,7 +78,6 @@ const SubTitle = styled.p`
   font-size: 1.6rem;
   color: #e6d3b3;  // Light beige color for subtitle
   margin-bottom: 40px;
-  
   max-width: 90%;
   margin-left: auto;
   margin-right: auto;

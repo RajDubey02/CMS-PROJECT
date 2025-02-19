@@ -75,19 +75,39 @@ const SubMenu = styled.div`
 `;
 
 const LastDiv = styled.div`
-  margin-left: 12px;
+  /* margin-left: 12px; */
   /* position: ; */
   bottom: 20px;
 
   & button {
     background-color: transparent;
     display: flex;
-    gap: 0.5rem;
+    gap: 0;
+    width: 210px;
+    height: 47px;
     align-items: center;
     border-color: transparent;
     color: white;
-    font-size: 1.1rem;
+    font-size: 15px;
     cursor: pointer;
+    padding: 12px 16px;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+  margin-bottom: 6px;
+    
+  &:hover {
+    background-color: rgba(212, 110, 42, 0.288);
+  }
+
+  &.active {
+    background-color: rgba(158, 97, 56, 0.61);
+  }
+
+  svg {
+    margin-right: 12px;
+  }
   }
 `;
 
@@ -122,8 +142,10 @@ const SubMenu = styled.div`
   const handleLogout = () => {
     localStorage.removeItem("userRole");
     setRole(null);
-    navigate("/");
+    toggleSidebar(false);  // Close the sidebar when logging out
+    navigate("/");  // Redirect to home or login page
   };
+  
 
   return (
     <>
@@ -248,12 +270,14 @@ const SubMenu = styled.div`
               </NavItem>
 
               {/* Logout */}
+              <NavItem>
           <LastDiv>
             <button onClick={handleLogout}>
-              <LogOut color="white" />
+              <LogOut color="white" size={20}/>
               Log Out
             </button>
           </LastDiv>
+          </NavItem>
             </>
           )}
 
