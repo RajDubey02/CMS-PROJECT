@@ -121,8 +121,10 @@ const SubMenu = styled.div`
   const handleLogout = () => {
     localStorage.removeItem("userRole");
     setRole(null);
-    navigate("/");
+    toggleSidebar(false);  // Close the sidebar when logging out
+    navigate("/");  // Redirect to home or login page
   };
+  
 
   return (
     <>

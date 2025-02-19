@@ -76,7 +76,6 @@ const SubTitle = styled.p`
   font-size: 1.6rem;
   color: #e6d3b3;  // Light beige color for subtitle
   margin-bottom: 40px;
-  
   max-width: 90%;
   margin-left: auto;
   margin-right: auto;
