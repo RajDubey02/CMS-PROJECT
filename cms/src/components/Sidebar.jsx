@@ -189,6 +189,39 @@ const SubMenu = styled.div`
               </NavItem>
 
               <NavItem>
+                <div
+                  onClick={() => toggleDropdown("orders")}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "12px 16px",
+                    color: "#fff",
+                    textDecoration: "none",
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                    backgroundColor: activeDropdown === "orders" ? "#4a4a4a1c" : "transparent",
+                    transition: "background-color 0.5s",
+                  }}
+                >
+                  <ArrowDownUp size={20} style={{ marginRight: "12px" }} />
+                  Orders
+                  {activeDropdown === "orders" ? (
+                    <ChevronUp size={20} style={{ marginLeft: "auto" }} />
+                  ) : (
+                    <ChevronDown size={20} style={{ marginLeft: "auto" }} />
+                  )}
+                </div>
+                <SubOrder isOpen={activeDropdown === "orders"}>
+                  <NavLinkStyled to="/orders/add">
+                    <CirclePlus size={20} />
+                    Add Order</NavLinkStyled>
+                  <NavLinkStyled to="/orders/manage"  >
+                    <PackageSearch size={20} />
+                    Manage Orders</NavLinkStyled>
+                </SubOrder>
+              </NavItem>
+
+              <NavItem>
                 <NavLinkStyled to="/ManageUser">
                   <Users size={20} />
                   Staff

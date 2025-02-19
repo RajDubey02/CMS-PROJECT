@@ -19,7 +19,6 @@ const NavbarContainer = styled.div`
   color: #ecf0f1;
   width: 100%;
   top: 0;
-  z-index: 1;
 `;
 
 const NavLeft = styled.div`
@@ -34,6 +33,7 @@ const NavLeft = styled.div`
     border-radius: 3rem;
     border-color: transparent;
     padding-left: 0.5rem;
+    /* z-index: 1; */
     outline: transparent;
   }
 
@@ -47,26 +47,9 @@ const NavLeft = styled.div`
   }
 `;
 
-const NavLinkStyled = styled(NavLink)`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  background-color: #b37b57;
-  text-decoration: none;
-  border-radius: 8px;
-  transition: background-color 0.1s;
-  margin-bottom: 6px;
-  cursor: pointer;
-  width: 100%;
-  height: 35px;
-  font-size: 14px;
-  font-weight: bold;
-  padding: 5px;
-
-  &:hover {
-    background-color: rgba(10, 9, 7, 0.288);
-  }
+const ProfileWrapper = styled.div`
+  position: relative;
+  display: inline-block;
 `;
 
 const ProfileMenu = styled.div`
@@ -81,10 +64,6 @@ const ProfileMenu = styled.div`
   width: 160px;
   display: ${(props) => (props.isVisible ? "block" : "none")};
   z-index: 100;
-
-  & > div {
-    margin-bottom: 10px;
-  }
 `;
 
 const ProfileName = styled.div`
@@ -97,51 +76,21 @@ const ServiceName = styled.div`
   color: #bdc3c7;
 `;
 
-const LogoutButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  background: #c0392b;
-  color: white;
-  border: none;
-  padding: 5px;
-  font-size: 14px;
-  font-weight: bold;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background 0.3s;
-
-  &:hover {
-    background: #a93226;
-  }
-`;
-
 export const Navbar = ({ toggleSidebar, serviceName = "Cafe Manager" }) => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const profileRef = useRef(null);
   const navigate = useNavigate();
 
-  const toggleProfileMenu = () => {
-    setShowProfileMenu((prev) => !prev);
-  };
+  // Fetch user name from localStorage based on role
+  const userRole = localStorage.getItem("userRole");
+  const userName =
+    userRole === "admin"
+      ? "Admin "
+      : userRole === "cashier"
+      ? "Cashier "
+      : "User"; // Default name
 
-  const closeProfileMenu = useCallback(
-    (e) => {
-      if (profileRef.current && !profileRef.current.contains(e.target)) {
-        setShowProfileMenu(false);
-      }
-    },
-    [setShowProfileMenu]
-  );
-
-  const handleLogout = () => {
-    localStorage.removeItem("userRole");
-    localStorage.removeItem("email");
-    navigate("/login");
-  };
-
+  // Handle search navigation
   const handleSearch = (e) => {
     if (e.key === "Enter" && searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
@@ -165,22 +114,6 @@ export const Navbar = ({ toggleSidebar, serviceName = "Cafe Manager" }) => {
     }
   };
 
-  useEffect(() => {
-    document.addEventListener("click", closeProfileMenu);
-    return () => {
-      document.removeEventListener("click", closeProfileMenu);
-    };
-  }, [closeProfileMenu]);
-
-  // Fetch user name from localStorage based on role
-  const userRole = localStorage.getItem("userRole");
-  const userName =
-    userRole === "admin"
-      ? "Admin User"
-      : userRole === "cashier"
-      ? "Cashier User"
-      : "John Doe"; // Default name
-
   return (
     <Universal>
       <NavbarContainer>
@@ -188,8 +121,16 @@ export const Navbar = ({ toggleSidebar, serviceName = "Cafe Manager" }) => {
           <button onClick={toggleSidebar}>
             <Menu size={24} />
           </button>
-          <div style={{ display: "flex", alignItems: "center", border: "1px solid white", borderRadius: "20px", paddingLeft: "10px" }}>
-            <Search size={18} />
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              // border: "1px solid white",
+              borderRadius: "20px",
+              paddingLeft: "10px",
+            }}
+          >
+            {/* <Search size={18} /> */}
             <input
               type="search"
               placeholder="Search for pages..."
@@ -200,18 +141,17 @@ export const Navbar = ({ toggleSidebar, serviceName = "Cafe Manager" }) => {
           </div>
         </NavLeft>
 
-        <div style={{ position: "relative" }}>
-          <User size={24} onClick={toggleProfileMenu} ref={profileRef} style={{ cursor: "pointer" }} />
+        {/* Profile Menu with Hover Effect */}
+        <ProfileWrapper
+          onMouseEnter={() => setShowProfileMenu(true)}
+          onMouseLeave={() => setShowProfileMenu(false)}
+        >
+          <User size={24} style={{ cursor: "pointer" }} />
           <ProfileMenu isVisible={showProfileMenu}>
             <ProfileName>{userName}</ProfileName>
             <ServiceName>{serviceName}</ServiceName>
-
-            <LogoutButton onClick={handleLogout}>
-              <LogOut size={16} style={{ marginRight: "8px" }} />
-              Log Out
-            </LogoutButton>
           </ProfileMenu>
-        </div>
+        </ProfileWrapper>
       </NavbarContainer>
     </Universal>
   );

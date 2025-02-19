@@ -7,7 +7,7 @@ export const AuthContainer = styled.div`
   justify-content: center;
   background: linear-gradient(135deg, #F5EFE6 0%, #C3A995 100%); /* Warm Cafe Gradient */
   padding: 2rem;
-  height: 100vh - 4vh ;
+  /* height: 100vh ; */
 `;
 
 export const AuthCard = styled.div`

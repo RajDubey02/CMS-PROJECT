@@ -299,20 +299,12 @@ const ManageProduct = () => {
     const file = event.target.files[0];
     if (!file) return;
 
-    const formData = new FormData();
-    formData.append("file", file);
-
-    try {
-      const response = await axios.post("http://localhost:5000/api/upload", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-
-      setImagePreview(`http://localhost:5000${response.data.filePath}`);
-      setCurrentProduct((prev) => ({ ...prev, image: `http://localhost:5000${response.data.filePath}` }));
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      alert("Image upload failed!");
-    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      setImagePreview(reader.result);
+      setCurrentProduct((prev) => ({ ...prev, image: reader.result }));
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleSave = async () => {
@@ -346,49 +338,51 @@ const ManageProduct = () => {
     <Container>
       <Navbar>
         <PageTitle>Manage Products</PageTitle>
-        <Button1 className="primary" onClick={() => setIsModalOpen(true)}>
+        <Button1 onClick={() => setIsModalOpen(true)}>
           <Plus size={16} /> Add Product
         </Button1>
       </Navbar>
-    
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableCell>Image</TableCell>
-            <TableCell>Name</TableCell>
-            <TableCell>Description</TableCell>
-            <TableCell>Price</TableCell>
-            <TableCell>Category</TableCell>
-            <TableCell>Active</TableCell>
-            <TableCell>Action</TableCell>
-          </TableRow>
-        </TableHeader>
-        <tbody>
-          {products.map((product) => (
-            <TableRow key={product._id}>
-              <TableCell>
-                <img src={product.image} alt={product.name} width={50} />
-              </TableCell>
-              <TableCell>{product.name}</TableCell>
-              <TableCell>{product.description}</TableCell>
-              <TableCell>
-                <IndianRupee size={15} />
-                {product.price}
-              </TableCell>
-              <TableCell>{product.category?.name || "Uncategorized"}</TableCell>
-              <TableCell>{product.active}</TableCell>
-              <TableCell>
-                <ActionButton onClick={() => handleEdit(product)}>
-                  <Edit size={16} />
-                </ActionButton>
-                <ActionButton onClick={() => handleDelete(product._id)}>
-                  <Trash2 size={16} />
-                </ActionButton>
-              </TableCell>
+
+      <div style={{ overflowX: "auto" }}>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableCell>Image</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Description</TableCell>
+              <TableCell>Price</TableCell>
+              <TableCell>Category</TableCell>
+              <TableCell>Active</TableCell>
+              <TableCell>Action</TableCell>
             </TableRow>
-          ))}
-        </tbody>
-      </Table>
+          </TableHeader>
+          <tbody>
+            {products.map((product) => (
+              <TableRow key={product._id}>
+                <TableCell>
+                  <img src={product.image} alt={product.name} width={50} />
+                </TableCell>
+                <TableCell>{product.name}</TableCell>
+                <TableCell>{product.description}</TableCell>
+                <TableCell>
+                  <IndianRupee size={15} />
+                  {product.price}
+                </TableCell>
+                <TableCell>{product.category?.name || "Uncategorized"}</TableCell>
+                <TableCell>{product.active}</TableCell>
+                <TableCell>
+                  <ActionButton onClick={() => handleEdit(product)}>
+                    <Edit size={16} />
+                  </ActionButton>
+                  <ActionButton onClick={() => handleDelete(product._id)}>
+                    <Trash2 size={16} />
+                  </ActionButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </tbody>
+        </Table>
+      </div>
 
       {isModalOpen && (
         <ModalOverlay>
@@ -406,28 +400,24 @@ const ManageProduct = () => {
             <Input
               type="text"
               value={currentProduct.name}
-              onChange={(e) => setCurrentProduct((prev) => ({ ...prev, name: e.target.value }))}
-            />
+              onChange={(e) => setCurrentProduct((prev) => ({ ...prev, name: e.target.value }))} />
 
             <label>Description</label>
             <Input
               type="text"
               value={currentProduct.description}
-              onChange={(e) => setCurrentProduct((prev) => ({ ...prev, description: e.target.value }))}
-            />
+              onChange={(e) => setCurrentProduct((prev) => ({ ...prev, description: e.target.value }))} />
 
             <label>Price</label>
             <Input
               type="number"
               value={currentProduct.price}
-              onChange={(e) => setCurrentProduct((prev) => ({ ...prev, price: e.target.value }))}
-            />
+              onChange={(e) => setCurrentProduct((prev) => ({ ...prev, price: e.target.value }))} />
 
             <label>Category</label>
             <Select
               value={currentProduct.category}
-              onChange={(e) => setCurrentProduct((prev) => ({ ...prev, category: e.target.value }))}
-            >
+              onChange={(e) => setCurrentProduct((prev) => ({ ...prev, category: e.target.value }))}>
               <option value="">Select Category</option>
               {categories.map((cat) => (
                 <option key={cat._id} value={cat._id}>
@@ -439,8 +429,7 @@ const ManageProduct = () => {
             <label>Active Status</label>
             <Select
               value={currentProduct.active}
-              onChange={(e) => setCurrentProduct((prev) => ({ ...prev, active: e.target.value }))}
-            >
+              onChange={(e) => setCurrentProduct((prev) => ({ ...prev, active: e.target.value }))}>
               <option value="Yes">Yes</option>
               <option value="No">No</option>
             </Select>

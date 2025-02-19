@@ -56,14 +56,10 @@ const Register = () => {
 
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/register', formData);
-      if (response.data.success) {
-        navigate('/login');
-      } else {
-        setErrors({ submit: response.data.message });
-      }
+      const { data } = await axios.post("http://localhost:5000/api/auth/register", formData);
+      navigate("/login");
     } catch (error) {
-      setErrors({ submit: 'An error occurred during registration' });
+      setErrors({ submit: error.response?.data?.message || "Registration failed" });
     } finally {
       setLoading(false);
     }

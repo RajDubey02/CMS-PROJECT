@@ -43,9 +43,13 @@ const AddOrderPage = () => {
 
   // Fetch tables from backend
   useEffect(() => {
-    axios.get("http://localhost:5000/api/tables")
-      .then(response => setTables(response.data))
-      .catch(error => console.error("Error fetching tables:", error));
+    axios
+      .get("http://localhost:5000/api/tables")
+      .then((response) => {
+        const activeTables = response.data.filter((tbl) => tbl.status === "active");
+        setTables(activeTables);
+      })
+      .catch((error) => console.error("Error fetching tables:", error));
   }, []);
 
   // Fetch products from backend
@@ -150,12 +154,11 @@ const AddOrderPage = () => {
       return;
     }
   
-  
     const newOrder = {
       tableNumber: selectedTableNumber,
       tableName: selectedTableName,
       items: currentOrder.map(order => ({
-        productName: order.productName, // Use productName instead of ObjectId
+        productName: order.productName,
         quantity: order.quantity,
         rate: order.rate,
         amount: order.amount,
@@ -164,18 +167,29 @@ const AddOrderPage = () => {
       summary,
       status: "Unpaid",
     };
-
-    axios.post("http://localhost:5000/api/orders", newOrder)
-    .then(response => {
-      setOrders([...orders, response.data]);
-      resetForm();
-      setSuccessMessage("Order successfully added!");
-    })
-    .catch(error => {
-      setErrorMessage("Error adding order. Please try again.");
-      console.error(error);
-    });
-};
+  
+    // Update table availability to 'Occupied' before submitting the order
+    const tableId = tables.find(tbl => `${tbl.tableNumber} - ${tbl.name}` === table)._id;
+  
+    axios.patch(`http://localhost:5000/api/tables/${tableId}/toggle-availability`)
+      .then(() => {
+        axios.post("http://localhost:5000/api/orders", newOrder)
+          .then(response => {
+            setOrders([...orders, response.data]);
+            resetForm();
+            setSuccessMessage("Order successfully added!");
+          })
+          .catch(error => {
+            setErrorMessage("Error adding order. Please try again.");
+            console.error(error);
+          });
+      })
+      .catch(error => {
+        setErrorMessage("Error updating table availability. Please try again.");
+        console.error(error);
+      });
+  };
+  
 
   const resetForm = () => {
     setTable("");

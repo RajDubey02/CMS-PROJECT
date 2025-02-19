@@ -1,6 +1,7 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import bgImage from "../assets/bg.jpg"; // Import the image
 
 const Container = styled.div`
   display: flex;
@@ -8,7 +9,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("https://source.unsplash.com/1600x900/?coffee,cafe") no-repeat center/cover;
+  background-image:url(${bgImage});
   color: white;
   text-align: center;
   padding: 20px;
@@ -35,14 +36,14 @@ const Button = styled.button`
   border: none;
   border-radius: 12px;
   cursor: pointer;
-  background: rgba(255, 255, 255, 0.2);
+  /* background: rgba(255, 255, 255, 0.2); */
   color: white;
   backdrop-filter: blur(10px);
   transition: all 0.3s ease-in-out;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 
   &:hover {
-    background: rgba(255, 255, 255, 0.4);
+    /* background: rgba(255, 255, 255, 0.4); */
     transform: scale(1.05);
   }
 `;
@@ -55,21 +56,8 @@ const LandingPage = () => {
       <Title>Welcome to Cafe Management System</Title>
       <Subtitle>Effortless Management for Your Cafe Business ☕</Subtitle>
       <Button onClick={() => navigate("/login")}>Login</Button>
-      {/* <Button onClick={() => navigate("/login/cashier")}>Cashier Login</Button> */}
     </Container>
   );
 };
 
-// const App = () => {
-//   return (
-//     <Router>
-//       <Routes>
-//         <Route path="/" element={<LandingPage />} />
-//       </Routes>
-//     </Router>
-//   );
-// };
-
 export default LandingPage;
-
-//  This is the sidebar of my page but i want different sidebars for admin and cashier  

@@ -9,6 +9,7 @@ import {
   Modal,
   ModalContent,
   ModalButtons,
+  Buttons,
   AdminSection,
   TableGrid,
   TableSquare,
@@ -21,6 +22,9 @@ const App = () => {
   const [formData, setFormData] = useState({ name: "", capacity: "", status: "active" });
   const [searchTerm, setSearchTerm] = useState("");
   const [editingId, setEditingId] = useState(null);
+  // const[role,setRole]
+
+
 
   useEffect(() => {
     fetchTables();
@@ -74,8 +78,10 @@ const App = () => {
         setTables(tables.map(table =>
           table._id === id ? { ...table, availability: response.data.availability } : table
         ));
-      });
+      })
+      .catch(error => console.error(error));
   };
+  
 
   const filteredTables = tables.filter(table =>
     table.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -117,13 +123,13 @@ const App = () => {
                 <td>{table.availability ? "Available" : "Occupied"}</td>
                 <td>{table.status}</td>
                 <td>
-                  <ModalButtons>
+                  <Buttons>
                     <button onClick={() => toggleTableAvailability(table._id)}>
                       {table.availability ? <Utensils size={18} /> : <UtensilsCrossed size={18} />}
                     </button>
                     <button onClick={() => openTableModal(table)}><Pencil size={18}/></button>
                     <button onClick={() => deleteTable(table._id)}><Trash2 size={18}/></button>
-                  </ModalButtons>
+                  </Buttons>
                 </td>
               </tr>
             ))}

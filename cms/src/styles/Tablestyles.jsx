@@ -75,9 +75,10 @@ export const SearchBar = styled.div`
   }
 
   button {
-    padding: 10px 20px;
+    padding: 10px 30px 10px 30px;
     border: 1px solid #a36a3f;
     background-color: #a36a3f;
+    /* text-align: center; */
     color: white;
     border-radius: 4px;
     transition: all 0.3s ease;
@@ -101,7 +102,7 @@ export const SearchBar = styled.div`
       width: 95%;
     }
     button {
-      width: 27%;
+      width: 37%;
     }
   }
 `;
@@ -183,6 +184,18 @@ export const ModalContent = styled.div`
   @media (max-width: 768px) {
     width: 90%;
     padding: 15px;
+
+    label {
+    display: block;
+    margin-bottom: 20px;
+
+    input {
+      margin-top: 5px;
+      width: 60%;
+      padding: 8px;
+      outline: none;
+    }
+  }
   }
 `;
 
@@ -216,8 +229,53 @@ export const ModalButtons = styled.div`
   @media (max-width: 768px) {
     flex-direction: column;
     button {
-      width: 100%;
+      width: 20%;
+      height: 40%;
       padding: 12px 20px;
+      padding: 5px 10px;
+      border-radius: 4px;
+    transition: all 0.3s ease;
+    }
+  }
+`;
+
+export const Buttons = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 20px;
+
+  button {
+    padding: 5px 10px;
+    border: 1px solid #a36a3f;
+    background-color: rgba(182, 105, 54, 0.81);
+    color: white;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: white;
+      border: 1px solid rgba(189, 102, 45, 0.81);
+      color: black;
+      transform: scale(1.05);
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    /* width: 10%; */
+    button {
+      width: 100%;
+      height: 30%;
+      padding: 12px 20px;
+      padding: 5px 10px;
+      border-radius: 4px;
+    transition: all 0.3s ease;
     }
   }
 `;

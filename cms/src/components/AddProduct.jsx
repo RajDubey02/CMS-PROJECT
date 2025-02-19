@@ -182,7 +182,7 @@ const AddProduct = () => {
 
         <div>
           <Label>Description</Label>
-          <TextFormatToolbar>
+          {/* <TextFormatToolbar>
             <FormatButton onClick={() => applyTextFormat("bold")}>
               <Bold size={16} />
             </FormatButton>
@@ -195,7 +195,7 @@ const AddProduct = () => {
             <FormatButton onClick={() => applyTextFormat("quote")}>
               <Quote size={16} />
             </FormatButton>
-          </TextFormatToolbar>
+          </TextFormatToolbar> */}
           <DescriptionInput
             name="description"
             value={productData.description}

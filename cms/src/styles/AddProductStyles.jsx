@@ -82,7 +82,7 @@ export const Input = styled.input`
 
 export const DescriptionInput = styled.textarea`
   width: 100%;
-  min-height: 100px;
+  min-height: 50px;
   padding: 10px;
   font-size: 14px;
   border: 1px solid #ccc;
@@ -129,7 +129,7 @@ export const UploadButton = styled.label`
   text-align: center;
 
   &:hover {
-    boder: solid  rgba(83, 58, 42, 0.958);
+    border: solid  rgba(219, 96, 19);
   }
 
   input {

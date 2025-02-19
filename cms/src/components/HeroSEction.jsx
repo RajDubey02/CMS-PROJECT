@@ -34,20 +34,23 @@ const Container = styled.div`
   color: white;
   text-shadow: 2px 2px 10px rgba(75, 57, 36, 0.7);
   animation: ${fadeIn} 1.2s ease-in-out;
+  position: relative; /* Ensures proper stacking of child elements */
+  overflow: hidden; /* Prevents scrolling */
 `;
 
 const Overlay = styled.div`
   width: 100%;
   height: 100%;
-  background: rgba(238, 223, 223, 0.6); /* Dark overlay for readability */
+  background: rgba(0, 0, 0, 0.5); /* Dark overlay for readability */
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 1; /* Lower z-index to stay behind content */
 `;
 
 const Content = styled.div`
   position: relative;
-  z-index: 2;
+  z-index: 2; /* Higher z-index to keep content above overlay */
 `;
 
 const Title = styled.h1`
@@ -58,16 +61,24 @@ const Title = styled.h1`
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: ${fadeIn} 1.5s ease-in-out;
+
+  @media (max-width: 768px) {
+    font-size: 3rem;
+  }
 `;
 
 const SubTitle = styled.p`
   font-size: 1.5rem;
   margin-bottom: 30px;
   animation: ${fadeIn} 1.8s ease-in-out;
+
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+  }
 `;
 
 const Button = styled.button`
-  padding: 15px 30px;
+  padding: 25px 30px;
   font-size: 1.2rem;
   border: none;
   border-radius: 50px;
@@ -81,6 +92,11 @@ const Button = styled.button`
   &:hover {
     background: #3b2a2a;
     transform: scale(1.05);
+  }
+
+  @media (max-width: 768px) {
+    padding: 12px 24px;
+    font-size: 1rem;
   }
 `;
 
